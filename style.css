@@ -29,6 +29,11 @@
     --accent-sage: #92A78B;
     --accent-peach: #E6A98A;
 
+    /* Gradient System */
+    --gradient-cta: linear-gradient(135deg, #7C9CBF 0%, #90B4D3 100%);
+    --gradient-subtle-bg: radial-gradient(ellipse 1200px 800px at 50% -10%, rgba(124, 156, 191, 0.08), transparent 60%);
+    --gradient-card-hover: linear-gradient(135deg, rgba(124, 156, 191, 0.05), rgba(155, 143, 201, 0.05));
+
     /* Typography */
     --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
@@ -52,6 +57,7 @@
     --text-secondary: var(--dark-text-secondary);
     --border: var(--dark-border);
     --accent: var(--dark-accent);
+    --gradient-subtle-bg: radial-gradient(ellipse 1200px 800px at 50% -10%, rgba(144, 180, 211, 0.12), transparent 60%);
 }
 
 html {
@@ -91,9 +97,24 @@ body {
     transition: all 0.3s ease;
 }
 
+.theme-toggle::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: var(--gradient-cta);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
 .theme-toggle:hover {
-    transform: scale(1.1);
+    transform: rotate(15deg) scale(1.1);
     border-color: var(--accent);
+}
+
+.theme-toggle:hover::before {
+    opacity: 0.2;
 }
 
 .theme-toggle svg {
@@ -125,10 +146,15 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    background: var(--bg);
+    background: rgba(250, 249, 247, 0.85);
     border-bottom: 1px solid var(--border);
     z-index: 100;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+[data-theme="dark"] .nav {
+    background: rgba(26, 26, 26, 0.85);
 }
 
 .nav-content {
@@ -178,21 +204,29 @@ body {
 
 .btn-cta {
     padding: 1.25rem 3rem;
-    background: var(--accent);
+    background: var(--gradient-cta);
     color: white;
     text-decoration: none;
     border-radius: 1rem;
     font-weight: 700;
     font-size: 1.125rem;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-block;
-    box-shadow: 0 4px 20px rgba(124, 156, 191, 0.25);
+    box-shadow: 0 4px 20px rgba(124, 156, 191, 0.3);
+    will-change: transform;
 }
 
 .btn-cta:hover {
-    opacity: 0.9;
     transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(124, 156, 191, 0.35);
+    box-shadow: 0 6px 30px rgba(124, 156, 191, 0.4);
+}
+
+[data-theme="dark"] .btn-cta {
+    box-shadow: 0 4px 20px rgba(144, 180, 211, 0.35);
+}
+
+[data-theme="dark"] .btn-cta:hover {
+    box-shadow: 0 8px 32px rgba(144, 180, 211, 0.45);
 }
 
 /* Hero Section */
@@ -204,6 +238,19 @@ body {
     align-items: center;
     padding-top: 5rem;
     text-align: center;
+    position: relative;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 600px;
+    background: var(--gradient-subtle-bg);
+    z-index: -1;
+    pointer-events: none;
 }
 
 .hero-content {
@@ -214,15 +261,17 @@ body {
 .hero-badge {
     display: inline-block;
     padding: 0.75rem 1.5rem;
-    background: var(--accent);
-    color: white;
+    background: linear-gradient(135deg, rgba(124, 156, 191, 0.15), rgba(155, 143, 201, 0.12));
+    border: 1px solid rgba(124, 156, 191, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--text);
     border-radius: 2rem;
     font-size: 0.875rem;
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 12px rgba(124, 156, 191, 0.25);
 }
 
 .hero-tagline {
@@ -289,13 +338,14 @@ body {
     background: var(--bg);
     border: 2px solid var(--border);
     border-radius: 1rem;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    will-change: transform;
 }
 
 .stat-card:hover {
     border-color: var(--accent-coral);
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(224, 142, 123, 0.15);
+    box-shadow: 0 12px 40px rgba(224, 142, 123, 0.15), 0 0 0 1px rgba(224, 142, 123, 0.1);
 }
 
 .stat-number {
@@ -373,13 +423,14 @@ body {
     border: 2px solid var(--border);
     border-radius: 1rem;
     text-align: left;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    will-change: transform;
 }
 
 .diff-card:hover {
     border-color: var(--accent);
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(124, 156, 191, 0.12);
+    box-shadow: 0 12px 40px rgba(124, 156, 191, 0.15), 0 0 0 1px rgba(124, 156, 191, 0.1);
 }
 
 .diff-card h3 {
@@ -474,13 +525,15 @@ body {
     border-radius: 2rem;
     font-size: 1rem;
     font-weight: 600;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
+    cursor: default;
 }
 
 .template-tag:hover {
-    border-color: var(--accent);
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(124, 156, 191, 0.12);
+    background: var(--gradient-card-hover);
+    border-color: rgba(124, 156, 191, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 156, 191, 0.15);
 }
 
 .templates-note {
@@ -565,12 +618,13 @@ body {
     border-radius: 1.5rem;
     border: 2px solid var(--border);
     position: relative;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    will-change: transform;
 }
 
 .tier:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(124, 156, 191, 0.15);
+    box-shadow: 0 12px 40px rgba(124, 156, 191, 0.18);
     border-color: var(--accent);
 }
 
@@ -762,10 +816,11 @@ body {
         font-size: 0.8125rem;
     }
 
-    /* Theme Toggle */
+    /* Theme Toggle - Move to left on mobile to avoid overlap */
     .theme-toggle {
         top: 1rem;
-        right: 1rem;
+        left: 1rem;
+        right: auto;
         width: 2.5rem;
         height: 2.5rem;
     }
@@ -773,6 +828,11 @@ body {
     .theme-toggle svg {
         width: 1.25rem;
         height: 1.25rem;
+    }
+
+    /* Reduce gradient intensity on mobile for performance */
+    .hero::before {
+        opacity: 0.6;
     }
 
     /* Hero Section */
@@ -993,6 +1053,30 @@ body {
     }
 }
 
+/* Accessibility - Reduce Motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .theme-toggle:hover {
+        transform: scale(1.05);
+    }
+
+    .btn-cta:hover,
+    .stat-card:hover,
+    .diff-card:hover,
+    .tier:hover,
+    .template-tag:hover {
+        transform: none;
+    }
+
+    .screenshot-container:hover .app-screenshot {
+        transform: none;
+    }
+}
+
 /* Screenshot Showcases */
 .steps-with-screenshots {
     display: flex;
@@ -1046,17 +1130,25 @@ body {
     max-width: 300px;
     height: auto;
     border-radius: 24px;
-    box-shadow: 
+    box-shadow:
         0 20px 40px rgba(0, 0, 0, 0.15),
         0 0 0 1px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.app-screenshot:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.2),
+.screenshot-container:hover .app-screenshot {
+    transform: scale(1.02);
+    box-shadow:
+        0 25px 50px rgba(0, 0, 0, 0.18),
+        0 0 60px rgba(124, 156, 191, 0.08),
         0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .screenshot-container:hover .app-screenshot {
+    box-shadow:
+        0 25px 50px rgba(0, 0, 0, 0.4),
+        0 0 80px rgba(144, 180, 211, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 /* Voice Showcase */
