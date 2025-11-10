@@ -15,6 +15,22 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Fall Is Coming';
+    src: url('assets/fonts/FallIsComing.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Big Scratch Brush';
+    src: url('assets/fonts/BigScratchBrush.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Reset & Base */
 * {
     margin: 0;
@@ -51,10 +67,11 @@
     --gradient-subtle-bg: radial-gradient(ellipse 1200px 800px at 50% -10%, rgba(124, 156, 191, 0.08), transparent 60%);
     --gradient-card-hover: linear-gradient(135deg, rgba(124, 156, 191, 0.05), rgba(155, 143, 201, 0.05));
 
-    /* Typography */
-    --font-brand: 'Bad Unicorn', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-display: 'Ecoplanet', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    /* Typography - Clean & Professional with Handcrafted Accents */
+    --font-hero: 'Big Scratch Brush', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-numbers: 'Big Scratch Brush', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-titles: 'Ecoplanet', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Light Mode Colors */
@@ -293,11 +310,11 @@ body {
 }
 
 .hero-tagline {
-    font-family: var(--font-brand);
+    font-family: var(--font-hero);
     font-size: clamp(2.5rem, 8vw, 5rem);
     font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+    line-height: 1.2;
+    letter-spacing: 0;
     margin-bottom: 2rem;
 }
 
@@ -337,7 +354,7 @@ body {
 }
 
 .problem h2 {
-    font-family: var(--font-display);
+    font-family: var(--font-titles);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     margin-bottom: 3rem;
@@ -367,7 +384,7 @@ body {
 }
 
 .stat-number {
-    font-family: var(--font-display);
+    font-family: var(--font-numbers);
     font-size: 4rem;
     font-weight: 800;
     color: var(--accent-coral);
@@ -404,7 +421,7 @@ body {
 }
 
 .solution h2 {
-    font-family: var(--font-display);
+    font-family: var(--font-titles);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     margin-bottom: 2rem;
@@ -452,7 +469,7 @@ body {
 }
 
 .diff-card h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-hero);
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 0.75rem;
@@ -471,11 +488,15 @@ body {
 }
 
 .section-title {
-    font-family: var(--font-display);
+    font-family: var(--font-titles);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     text-align: center;
     margin-bottom: 4rem;
+}
+
+.section-title .number-accent {
+    font-family: var(--font-numbers);
 }
 
 .steps {
@@ -500,11 +521,11 @@ body {
     font-size: 2rem;
     font-weight: 800;
     margin: 0 auto 1.5rem;
-    font-family: var(--font-display);
+    font-family: var(--font-numbers);
 }
 
 .step h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-titles);
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 0.75rem;
@@ -545,6 +566,13 @@ body {
     font-weight: 600;
     transition: all 0.2s ease;
     cursor: default;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.template-tag i {
+    font-size: 1.25rem;
 }
 
 .template-tag:hover {
@@ -574,7 +602,7 @@ body {
 }
 
 .why-voice h2 {
-    font-family: var(--font-display);
+    font-family: var(--font-titles);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     margin-bottom: 2rem;
@@ -607,7 +635,7 @@ body {
 }
 
 .support-content h2 {
-    font-family: var(--font-display);
+    font-family: var(--font-titles);
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 700;
     margin-bottom: 1rem;
@@ -647,7 +675,7 @@ body {
 }
 
 .tier h4 {
-    font-family: var(--font-display);
+    font-family: var(--font-titles);
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -658,7 +686,7 @@ body {
     font-weight: 800;
     color: var(--accent);
     margin-bottom: 1rem;
-    font-family: var(--font-display);
+    font-family: var(--font-numbers);
 }
 
 .tier-period {
@@ -701,7 +729,7 @@ body {
 }
 
 .cta-content h2 {
-    font-family: var(--font-display);
+    font-family: var(--font-titles);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     margin-bottom: 1rem;
@@ -1124,7 +1152,7 @@ body {
 }
 
 .step-content h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-hero);
     font-size: 2rem;
     font-weight: 700;
     margin-top: 1rem;
@@ -1209,7 +1237,7 @@ body {
 }
 
 .tracking-content h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-hero);
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -1266,7 +1294,7 @@ body {
 }
 
 .invite-content h2 {
-    font-family: var(--font-display);
+    font-family: var(--font-titles);
     font-size: clamp(2.5rem, 5vw, 3.5rem);
     font-weight: 800;
     margin-bottom: 2rem;
