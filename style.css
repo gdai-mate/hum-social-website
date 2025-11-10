@@ -31,6 +31,22 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Coconutz';
+    src: url('assets/fonts/Coconutz.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Zrtw Bokerough';
+    src: url('assets/fonts/ZrtwBokerough.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 /* Reset & Base */
 * {
     margin: 0;
@@ -71,7 +87,7 @@
     --font-hero: 'Big Scratch Brush', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-numbers: 'Big Scratch Brush', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-titles: 'Ecoplanet', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: 'Coconutz', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Light Mode Colors */
