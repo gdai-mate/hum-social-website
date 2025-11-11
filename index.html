@@ -715,7 +715,12 @@
                 currentBubble = null;
             }
 
-            // Try to find a suitable hand (not behind content, in visible area)
+            // Get hero section bounds - only show bubbles in hero
+            const heroSection = document.querySelector('.hero');
+            if (!heroSection) return;
+            const heroRect = heroSection.getBoundingClientRect();
+
+            // Try to find a suitable hand (not behind content, in visible area, within hero section)
             let randomIndex;
             let randomHand;
             let attempts = 0;
@@ -727,12 +732,19 @@
                 rect = randomHand.getBoundingClientRect();
                 attempts++;
 
-                // Check if hand is in a good position (upper 60% of viewport, visible)
-                const isInGoodPosition = rect.top > 0 && rect.top < window.innerHeight * 0.6 &&
-                                        rect.left > 0 && rect.right < window.innerWidth;
+                // Check if hand is in hero section and in a good position
+                const isInHeroSection = rect.top >= heroRect.top && rect.bottom <= heroRect.bottom &&
+                                       rect.left >= heroRect.left && rect.right <= heroRect.right;
+                const isVisible = rect.top > 0 && rect.left > 0 && rect.right < window.innerWidth;
+                const isInGoodPosition = isInHeroSection && isVisible;
 
                 if (isInGoodPosition || attempts > 20) break;
             } while (attempts < 20);
+
+            // If we couldn't find a hand in the hero section, don't show a bubble
+            const isInHeroSection = rect.top >= heroRect.top && rect.bottom <= heroRect.bottom &&
+                                   rect.left >= heroRect.left && rect.right <= heroRect.right;
+            if (!isInHeroSection) return;
 
             const randomMessage = bubbleMessages[Math.floor(Math.random() * bubbleMessages.length)];
 
