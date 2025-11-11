@@ -1571,7 +1571,7 @@ button, a, input, textarea, select {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 400px;
+    min-height: 1000px;
     padding: 2rem;
 }
 
@@ -1582,44 +1582,51 @@ button, a, input, textarea, select {
     opacity: 0.9;
 }
 
-.rule-icon-1 {
-    top: 15%;
-    left: 8%;
-}
-
+/* Rule 1 icons - Voice-Only Communication (top ~40%) */
 .rule-icon-2 {
-    top: 50%;
+    top: 15%;
     right: 10%;
+    transform: translateY(130px);
 }
 
+.rule-icon-7 {
+    top: 20%;
+    left: 15%;
+    width: 160px;
+    height: 160px;
+    transform: scaleX(-1) translateY(180px);
+}
+
+/* Rule 2 icons - In-the-Moment Content Only (bottom ~60%) */
+.rule-icon-1 {
+    bottom: 8%;
+    left: 8%;
+    transform: translateY(20px);
+}
+
+.rule-icon-4 {
+    bottom: 2%;
+    left: 22%;
+    transform: translateX(10px);
+}
+
+.rule-icon-5 {
+    top: 68%;
+    right: 10%;
+    width: 104px;
+    height: 104px;
+    transform: translateY(50px);
+}
+
+/* Unused icons */
 .rule-icon-3 {
     bottom: 5%;
     left: 8%;
 }
 
-.rule-icon-4 {
-    top: 35%;
-    left: 15%;
-}
-
-.rule-icon-5 {
-    top: 10%;
-    right: 8%;
-    width: 104px;
-    height: 104px;
-}
-
 .rule-icon-6 {
     top: 65%;
     right: 35%;
-}
-
-.rule-icon-7 {
-    bottom: 5%;
-    left: 50%;
-    width: 160px;
-    height: 160px;
-    transform: translateX(-50%) scaleX(-1);
 }
 
 [data-theme="dark"] .rule-icon {
