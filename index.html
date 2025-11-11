@@ -121,9 +121,18 @@
                         <p>Pick from 15 templates (Body, Mind, Heart, Spirit, Knowledge) or create your own custom quest. Go solo or make it shared—invite friends to join you. Minimum 30 days. Commit to something that matters.</p>
                     </div>
                     <div class="screenshot-cluster">
-                        <img src="assets/screenshots/quest-templates.png" alt="Quest template selection" class="app-screenshot cluster-img-1">
-                        <img src="assets/screenshots/quest-list.png" alt="Your active quests" class="app-screenshot cluster-img-2">
-                        <img src="assets/screenshots/quest-detail.png" alt="Quest detail view" class="app-screenshot cluster-img-3">
+                        <div class="screenshot-wrapper" data-position="1">
+                            <img src="assets/screenshots/quest-templates.png" alt="Quest template selection" class="app-screenshot cluster-img-1">
+                            <span class="screenshot-label">1</span>
+                        </div>
+                        <div class="screenshot-wrapper" data-position="2">
+                            <img src="assets/screenshots/quest-list.png" alt="Your active quests" class="app-screenshot cluster-img-2">
+                            <span class="screenshot-label">2</span>
+                        </div>
+                        <div class="screenshot-wrapper" data-position="3">
+                            <img src="assets/screenshots/quest-detail.png" alt="Quest detail view" class="app-screenshot cluster-img-3">
+                            <span class="screenshot-label">3</span>
+                        </div>
                     </div>
                 </div>
 
@@ -134,9 +143,18 @@
                         <p>Open the in-app camera. Capture a photo or video—right now, not from your camera roll. Add a voice caption. Tag it to your quest. Post it. No curating. No performing. Just real progress from your actual life.</p>
                     </div>
                     <div class="screenshot-cluster">
-                        <img src="assets/screenshots/new-post.png" alt="New post interface" class="app-screenshot cluster-img-1">
-                        <img src="assets/screenshots/post-detail.png" alt="Completed post with voice caption" class="app-screenshot cluster-img-2">
-                        <img src="assets/screenshots/daily-tasks.png" alt="Task completion" class="app-screenshot cluster-img-3">
+                        <div class="screenshot-wrapper" data-position="1">
+                            <img src="assets/screenshots/new-post.png" alt="New post interface" class="app-screenshot cluster-img-1">
+                            <span class="screenshot-label">1</span>
+                        </div>
+                        <div class="screenshot-wrapper" data-position="2">
+                            <img src="assets/screenshots/post-detail.png" alt="Completed post with voice caption" class="app-screenshot cluster-img-2">
+                            <span class="screenshot-label">2</span>
+                        </div>
+                        <div class="screenshot-wrapper" data-position="3">
+                            <img src="assets/screenshots/daily-tasks.png" alt="Task completion" class="app-screenshot cluster-img-3">
+                            <span class="screenshot-label">3</span>
+                        </div>
                     </div>
                 </div>
 
@@ -147,9 +165,18 @@
                         <p>Leave voice comments (hums) on posts you vibe with. Send voice DMs. Have real conversations with real people. No typing. No captions. Just your actual voice. You can't fake authenticity.</p>
                     </div>
                     <div class="screenshot-cluster">
-                        <img src="assets/screenshots/hums-modal.png" alt="Voice comments interface" class="app-screenshot cluster-img-1">
-                        <img src="assets/screenshots/explore.png" alt="Explore community" class="app-screenshot cluster-img-2">
-                        <img src="assets/screenshots/post-detail.png" alt="Community engagement" class="app-screenshot cluster-img-3">
+                        <div class="screenshot-wrapper" data-position="1">
+                            <img src="assets/screenshots/hums-modal.png" alt="Voice comments interface" class="app-screenshot cluster-img-1">
+                            <span class="screenshot-label">1</span>
+                        </div>
+                        <div class="screenshot-wrapper" data-position="2">
+                            <img src="assets/screenshots/explore.png" alt="Explore community" class="app-screenshot cluster-img-2">
+                            <span class="screenshot-label">2</span>
+                        </div>
+                        <div class="screenshot-wrapper" data-position="3">
+                            <img src="assets/screenshots/post-detail.png" alt="Community engagement" class="app-screenshot cluster-img-3">
+                            <span class="screenshot-label">3</span>
+                        </div>
                     </div>
                 </div>
 
@@ -160,9 +187,18 @@
                         <p>Build your streak. Watch your progress grow. Your profile shows what you actually do—posts, vibers, quests, and streak. Not followers. Not likes. Just the work you're putting in, day after day.</p>
                     </div>
                     <div class="screenshot-cluster">
-                        <img src="assets/screenshots/profile.png" alt="Your profile stats" class="app-screenshot cluster-img-1">
-                        <img src="assets/screenshots/quest-detail.png" alt="Quest progress tracking" class="app-screenshot cluster-img-2">
-                        <img src="assets/screenshots/daily-tasks.png" alt="Daily check-ins" class="app-screenshot cluster-img-3">
+                        <div class="screenshot-wrapper" data-position="1">
+                            <img src="assets/screenshots/profile.png" alt="Your profile stats" class="app-screenshot cluster-img-1">
+                            <span class="screenshot-label">1</span>
+                        </div>
+                        <div class="screenshot-wrapper" data-position="2">
+                            <img src="assets/screenshots/quest-detail.png" alt="Quest progress tracking" class="app-screenshot cluster-img-2">
+                            <span class="screenshot-label">2</span>
+                        </div>
+                        <div class="screenshot-wrapper" data-position="3">
+                            <img src="assets/screenshots/daily-tasks.png" alt="Daily check-ins" class="app-screenshot cluster-img-3">
+                            <span class="screenshot-label">3</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -927,6 +963,24 @@
             // Also update interactive elements
             document.querySelectorAll('button, a, input, textarea, select').forEach(el => {
                 el.style.cursor = cursorUrl.replace('auto', 'pointer');
+            });
+        });
+
+        // Screenshot cluster click to bring to front
+        document.querySelectorAll('.screenshot-wrapper').forEach(wrapper => {
+            wrapper.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                // Get the parent cluster
+                const cluster = wrapper.closest('.screenshot-cluster');
+
+                // Remove active class from all wrappers in this cluster
+                cluster.querySelectorAll('.screenshot-wrapper').forEach(w => {
+                    w.classList.remove('active');
+                });
+
+                // Add active class to clicked wrapper
+                wrapper.classList.add('active');
             });
         });
     </script>
