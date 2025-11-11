@@ -367,6 +367,10 @@ button, a, input, textarea, select {
     border-top: 6px solid var(--surface);
 }
 
+[data-theme="dark"] .high-five-bubble {
+    border: 1px solid rgba(255, 255, 255, 1);
+}
+
 @keyframes bubbleBounce {
     0% {
         transform: translateY(10px) scale(0.8);
