@@ -1083,13 +1083,18 @@ button, a, input, textarea, select {
         padding: 1rem 0;
     }
 
+    .nav-content {
+        gap: 0.75rem;
+    }
+
     .logo-img {
         height: 1.5rem;
     }
 
     .btn-primary {
-        padding: 0.625rem 1.25rem;
+        padding: 0.625rem 1rem;
         font-size: 0.8125rem;
+        white-space: nowrap;
     }
 
     .theme-toggle svg {
@@ -1110,12 +1115,10 @@ button, a, input, textarea, select {
 
     /* Hero Hands Pattern - Responsive on mobile */
     .hands-pattern {
-        grid-template-columns: repeat(14, 1fr);
-        grid-template-rows: repeat(14, 1fr);
+        grid-template-columns: repeat(20, 1fr);
+        grid-template-rows: repeat(15, 1fr);
         gap: 0.25rem;
-        width: 200%;
-        height: 200%;
-        opacity: 0.15;
+        opacity: 0.12;
     }
 
     .hero-badge {
@@ -1125,13 +1128,14 @@ button, a, input, textarea, select {
     }
 
     .hero-tagline {
-        font-size: clamp(2rem, 10vw, 3rem);
-        margin-bottom: 1.5rem;
+        font-size: clamp(1.75rem, 9vw, 2.5rem);
+        margin-bottom: 1.25rem;
+        line-height: 1.25;
     }
 
     .hero-subtitle {
-        font-size: 1rem;
-        line-height: 1.7;
+        font-size: 0.9375rem;
+        line-height: 1.65;
         margin-bottom: 2rem;
     }
 
@@ -1425,6 +1429,62 @@ button, a, input, textarea, select {
     box-shadow:
         0 25px 50px rgba(0, 0, 0, 0.4),
         0 0 80px rgba(144, 180, 211, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Screenshot Cluster */
+.screenshot-cluster {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+    padding: 2rem;
+}
+
+.screenshot-cluster .app-screenshot {
+    position: absolute;
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    border-radius: 24px;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, z-index 0s ease;
+}
+
+.screenshot-cluster .cluster-img-1 {
+    z-index: 3;
+    transform: rotate(-3deg) translateX(-60px);
+}
+
+.screenshot-cluster .cluster-img-2 {
+    z-index: 2;
+    transform: rotate(2deg) translateX(10px) translateY(30px);
+}
+
+.screenshot-cluster .cluster-img-3 {
+    z-index: 1;
+    transform: rotate(-2deg) translateX(80px) translateY(-20px);
+}
+
+.screenshot-cluster:hover .cluster-img-1 {
+    transform: rotate(-3deg) translateX(-60px) scale(1.05);
+    z-index: 5;
+}
+
+.screenshot-cluster:hover .cluster-img-2 {
+    transform: rotate(2deg) translateX(10px) translateY(30px) scale(1.03);
+}
+
+.screenshot-cluster:hover .cluster-img-3 {
+    transform: rotate(-2deg) translateX(80px) translateY(-20px) scale(1.03);
+}
+
+[data-theme="dark"] .screenshot-cluster .app-screenshot {
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.3),
         0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
