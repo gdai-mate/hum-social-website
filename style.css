@@ -1514,6 +1514,75 @@ button, a, input, textarea, select {
         0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
+/* Rules Icons */
+.rules-icons-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    padding: 2rem;
+}
+
+.rule-icon {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    opacity: 0.9;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.rule-icon:hover {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.rule-icon-1 {
+    top: 10%;
+    left: 15%;
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+.rule-icon-2 {
+    top: 20%;
+    right: 10%;
+    animation: floatIcon 3.5s ease-in-out infinite 0.5s;
+}
+
+.rule-icon-3 {
+    bottom: 25%;
+    left: 10%;
+    animation: floatIcon 4s ease-in-out infinite 1s;
+}
+
+.rule-icon-4 {
+    bottom: 15%;
+    right: 15%;
+    animation: floatIcon 3.2s ease-in-out infinite 1.5s;
+}
+
+.rule-icon-5 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    animation: floatIcon 3.8s ease-in-out infinite 0.8s;
+}
+
+@keyframes floatIcon {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+[data-theme="dark"] .rule-icon {
+    filter: invert(1) brightness(0.9);
+}
+
 [data-theme="dark"] .screenshot-container:hover .app-screenshot {
     box-shadow:
         0 25px 50px rgba(0, 0, 0, 0.4),
@@ -1762,5 +1831,20 @@ button, a, input, textarea, select {
 
     .tracking-showcase {
         margin-bottom: 4rem;
+    }
+
+    .rules-icons-container {
+        min-height: 300px;
+        padding: 1rem;
+    }
+
+    .rule-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .rule-icon-5 {
+        width: 80px;
+        height: 80px;
     }
 }
