@@ -999,6 +999,14 @@ button, a, input, textarea, select {
     margin-right: auto;
 }
 
+.completely-free {
+    font-size: 1.75rem;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    color: var(--accent);
+}
+
 .support-tiers {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
