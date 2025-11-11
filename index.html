@@ -89,20 +89,65 @@
                 </p>
                 <div class="differences">
                     <div class="diff-card">
-                        <h3>In-the-Moment Only</h3>
-                        <p>Post photos and videos—but only as they happen. No camera roll uploads. No curating. No performing. Just real moments from your actual life.</p>
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <svg viewBox="0 0 100 100" class="card-icon">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <circle cx="50" cy="50" r="8" fill="currentColor"/>
+                                </svg>
+                            </div>
+                            <div class="card-back">
+                                <h3>In-the-Moment Only</h3>
+                                <p>Post photos and videos—but only as they happen. No camera roll uploads. No curating. No performing. Just real moments from your actual life.</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="diff-card">
-                        <h3>Voice-Only Communication</h3>
-                        <p>Add voice captions to posts. Leave voice comments. Send voice DMs. You can't fake authenticity in your voice—and that's the point.</p>
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <svg viewBox="0 0 100 100" class="card-icon">
+                                    <rect x="35" y="30" width="30" height="50" rx="15" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <circle cx="50" cy="50" r="8" fill="currentColor"/>
+                                    <line x1="50" y1="20" x2="50" y2="30" stroke="currentColor" stroke-width="3"/>
+                                </svg>
+                            </div>
+                            <div class="card-back">
+                                <h3>Voice-Only Communication</h3>
+                                <p>Add voice captions to posts. Leave voice comments. Send voice DMs. You can't fake authenticity in your voice—and that's the point.</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="diff-card">
-                        <h3>Quest System</h3>
-                        <p>Join quests—learn a language, start a book club, build a morning routine. Or create shared quests with friends. Show up for what matters to you.</p>
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <svg viewBox="0 0 100 100" class="card-icon">
+                                    <path d="M 20 80 L 20 30 L 30 30 L 50 20 L 50 80 L 30 70 L 20 70 Z" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <circle cx="80" cy="50" r="25" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <path d="M 65 35 L 95 65" stroke="currentColor" stroke-width="3"/>
+                                </svg>
+                            </div>
+                            <div class="card-back">
+                                <h3>Quest System</h3>
+                                <p>Join quests—learn a language, start a book club, build a morning routine. Or create shared quests with friends. Show up for what matters to you.</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="diff-card">
-                        <h3>Real Community</h3>
-                        <p>Ad-free. Bot-free. Invite-only. Everyone here is a doer. No passive scrollers. Just people building the life they want.</p>
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <svg viewBox="0 0 100 100" class="card-icon">
+                                    <circle cx="35" cy="30" r="12" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <circle cx="65" cy="30" r="12" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <path d="M 35 42 Q 35 60, 25 70 L 45 70 Q 35 60, 35 42" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <path d="M 65 42 Q 65 60, 55 70 L 75 70 Q 65 60, 65 42" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <circle cx="50" cy="75" r="8" fill="none" stroke="currentColor" stroke-width="3"/>
+                                </svg>
+                            </div>
+                            <div class="card-back">
+                                <h3>Real Community</h3>
+                                <p>Ad-free. Bot-free. Invite-only. Everyone here is a doer. No passive scrollers. Just people building the life they want.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -954,6 +999,13 @@
             showHighFiveBubble();
             scheduleNextBubble();
         }, 3000);
+
+        // Flip cards on click
+        document.querySelectorAll('.diff-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('flipped');
+            });
+        });
 
         // Cursor color cycling on click
         const cursorColors = ['hand-cursor.png', 'hand-cursor-brown.png', 'hand-cursor-coral.png', 'hand-cursor-cream.png', 'hand-cursor-peach.png'];
