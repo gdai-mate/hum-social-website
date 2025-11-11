@@ -1714,6 +1714,14 @@ button, a, input, textarea, select {
     text-align: left;
 }
 
+.voice-rule {
+    margin-bottom: 3rem;
+}
+
+.voice-rule:last-child {
+    margin-bottom: 0;
+}
+
 .voice-rule h3 {
     font-family: var(--font-hero);
     font-size: 2.5rem;
