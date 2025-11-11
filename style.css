@@ -731,10 +731,10 @@ button, a, input, textarea, select {
 }
 
 .card-icon {
-    width: 100px;
-    height: 100px;
-    color: var(--accent);
+    width: 120px;
+    height: 120px;
     animation: cardWave 1.5s ease-in-out infinite;
+    object-fit: contain;
 }
 
 .diff-card:nth-child(1) .card-icon {
@@ -1290,8 +1290,8 @@ button, a, input, textarea, select {
     }
 
     .card-icon {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
     }
 
     .diff-card h3 {
