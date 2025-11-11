@@ -1529,36 +1529,26 @@ button, a, input, textarea, select {
     width: 80px;
     height: 80px;
     opacity: 0.9;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.rule-icon:hover {
-    transform: scale(1.1);
-    opacity: 1;
 }
 
 .rule-icon-1 {
     top: 10%;
     left: 15%;
-    animation: floatIcon 3s ease-in-out infinite;
 }
 
 .rule-icon-2 {
     top: 20%;
     right: 10%;
-    animation: floatIcon 3.5s ease-in-out infinite 0.5s;
 }
 
 .rule-icon-3 {
     bottom: 25%;
     left: 10%;
-    animation: floatIcon 4s ease-in-out infinite 1s;
 }
 
 .rule-icon-4 {
     bottom: 15%;
     right: 15%;
-    animation: floatIcon 3.2s ease-in-out infinite 1.5s;
 }
 
 .rule-icon-5 {
@@ -1567,16 +1557,11 @@ button, a, input, textarea, select {
     transform: translate(-50%, -50%);
     width: 100px;
     height: 100px;
-    animation: floatIcon 3.8s ease-in-out infinite 0.8s;
 }
 
-@keyframes floatIcon {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-15px);
-    }
+.rule-icon-6 {
+    top: 60%;
+    right: 25%;
 }
 
 [data-theme="dark"] .rule-icon {
