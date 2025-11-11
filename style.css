@@ -212,9 +212,12 @@ button, a, input, textarea, select {
 
 .nav-content {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
+}
+
+.nav-content .btn-primary {
+    margin-left: auto;
 }
 
 .logo-img {
@@ -316,8 +319,8 @@ button, a, input, textarea, select {
     width: 120%;
     height: 120%;
     display: grid;
-    grid-template-columns: repeat(40, 1fr);
-    grid-template-rows: repeat(25, 1fr);
+    grid-template-columns: repeat(30, 1fr);
+    grid-template-rows: repeat(20, 1fr);
     gap: 0.25rem;
     opacity: 0.15;
     pointer-events: none;
@@ -325,8 +328,8 @@ button, a, input, textarea, select {
 }
 
 .pattern-hand {
-    width: 120%;
-    height: 120%;
+    width: 180%;
+    height: 180%;
     object-fit: contain;
     shape-rendering: geometricPrecision;
     will-change: transform;
@@ -427,13 +430,13 @@ button, a, input, textarea, select {
 
     /* Reduce hand count and size on tablet */
     .hands-pattern {
-        grid-template-columns: repeat(25, 1fr);
-        grid-template-rows: repeat(18, 1fr);
+        grid-template-columns: repeat(20, 1fr);
+        grid-template-rows: repeat(15, 1fr);
     }
 
     .pattern-hand {
-        width: 90%;
-        height: 90%;
+        width: 150%;
+        height: 150%;
     }
 }
 
@@ -472,27 +475,13 @@ button, a, input, textarea, select {
 
     /* Further reduce hand count and size on mobile */
     .hands-pattern {
-        grid-template-columns: repeat(20, 1fr);
-        grid-template-rows: repeat(15, 1fr);
+        grid-template-columns: repeat(15, 1fr);
+        grid-template-rows: repeat(12, 1fr);
     }
 
     .pattern-hand {
-        width: 80%;
-        height: 80%;
-    }
-
-    /* Swap button order on mobile */
-    .nav-content {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .theme-toggle {
-        order: 2;
-    }
-
-    .btn-primary {
-        order: 1;
+        width: 130%;
+        height: 130%;
     }
 }
 

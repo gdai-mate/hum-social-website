@@ -18,6 +18,8 @@
                 <img src="assets/logos/hum-logo-dark.svg" alt="hüm" class="logo-img logo-light">
                 <img src="assets/logos/hum-logo-light.svg" alt="hüm" class="logo-img logo-dark">
 
+                <a href="https://app.hum-social.com" class="btn-primary">Launch App</a>
+
                 <!-- Theme Toggle -->
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                     <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -35,8 +37,6 @@
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                     </svg>
                 </button>
-
-                <a href="https://app.hum-social.com" class="btn-primary">Launch App</a>
             </div>
         </div>
     </nav>
@@ -419,15 +419,15 @@
 
         // Generate hands in alternating checkerboard pattern (responsive grid)
         // Adjust grid size based on screen width for performance
-        let cols = 40;
-        let rows = 25;
+        let cols = 30;
+        let rows = 20;
 
         if (window.innerWidth <= 480) {
+            cols = 15;
+            rows = 12;
+        } else if (window.innerWidth <= 768) {
             cols = 20;
             rows = 15;
-        } else if (window.innerWidth <= 768) {
-            cols = 25;
-            rows = 18;
         }
 
         let handIndex = 0;
@@ -589,15 +589,37 @@
             });
         }
 
-        // Mouse events
+        // Performance optimization: throttle cursor tracking with requestAnimationFrame
+        let isTracking = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        function throttledUpdate() {
+            if (isTracking) {
+                updateHandRotations(lastX, lastY);
+                isTracking = false;
+            }
+        }
+
+        // Mouse events with throttling
         document.addEventListener('mousemove', (e) => {
-            updateHandRotations(e.clientX, e.clientY);
+            lastX = e.clientX;
+            lastY = e.clientY;
+            if (!isTracking) {
+                isTracking = true;
+                requestAnimationFrame(throttledUpdate);
+            }
         });
 
-        // Touch events for mobile
+        // Touch events for mobile with throttling
         document.addEventListener('touchmove', (e) => {
             if (e.touches.length > 0) {
-                updateHandRotations(e.touches[0].clientX, e.touches[0].clientY);
+                lastX = e.touches[0].clientX;
+                lastY = e.touches[0].clientY;
+                if (!isTracking) {
+                    isTracking = true;
+                    requestAnimationFrame(throttledUpdate);
+                }
             }
         }, { passive: true });
 
