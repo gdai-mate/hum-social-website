@@ -1532,23 +1532,23 @@ button, a, input, textarea, select {
 }
 
 .rule-icon-1 {
-    top: 10%;
-    left: 15%;
+    top: 5%;
+    left: 5%;
 }
 
 .rule-icon-2 {
-    top: 20%;
-    right: 10%;
+    top: 8%;
+    right: 5%;
 }
 
 .rule-icon-3 {
-    bottom: 25%;
-    left: 10%;
+    bottom: 5%;
+    left: 8%;
 }
 
 .rule-icon-4 {
-    bottom: 15%;
-    right: 15%;
+    bottom: 8%;
+    right: 5%;
 }
 
 .rule-icon-5 {
@@ -1560,8 +1560,13 @@ button, a, input, textarea, select {
 }
 
 .rule-icon-6 {
-    top: 60%;
-    right: 25%;
+    top: 65%;
+    right: 35%;
+}
+
+.rule-icon-7 {
+    top: 30%;
+    left: 15%;
 }
 
 [data-theme="dark"] .rule-icon {
