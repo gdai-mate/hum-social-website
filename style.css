@@ -695,12 +695,20 @@ button, a, input, textarea, select {
     height: 100%;
     min-height: 320px;
     text-align: left;
-    transition: transform 0.6s;
+    transition: transform 0.6s, opacity 0.3s;
     transform-style: preserve-3d;
 }
 
 .diff-card.flipped .card-inner {
     transform: rotateY(180deg);
+}
+
+@keyframes hideOnFlip {
+    0% { opacity: 1; }
+    49% { opacity: 1; }
+    50% { opacity: 0; }
+    51% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 .card-front,
@@ -733,39 +741,64 @@ button, a, input, textarea, select {
 .card-icon {
     width: 120px;
     height: 120px;
-    animation: cardWave 1.5s ease-in-out infinite;
     object-fit: contain;
 }
 
 .diff-card:nth-child(1) .card-icon {
-    animation-delay: 0s;
+    animation: cardWave1 4.2s ease-in-out infinite;
+    animation-delay: 0.3s;
 }
 
 .diff-card:nth-child(2) .card-icon {
-    animation-delay: 0.4s;
+    animation: cardWave2 5.1s ease-in-out infinite;
+    animation-delay: 1.7s;
 }
 
 .diff-card:nth-child(3) .card-icon {
-    animation-delay: 0.8s;
+    animation: cardWave3 4.7s ease-in-out infinite;
+    animation-delay: 2.9s;
 }
 
 .diff-card:nth-child(4) .card-icon {
-    animation-delay: 1.2s;
+    animation: cardWave4 5.5s ease-in-out infinite;
+    animation-delay: 0.8s;
 }
 
-@keyframes cardWave {
-    0%, 100% {
-        transform: rotate(0deg) translateY(0px);
-    }
-    10%, 30% {
-        transform: rotate(-8deg) translateY(-3px);
-    }
-    20% {
-        transform: rotate(8deg) translateY(-6px);
-    }
-    40% {
-        transform: rotate(0deg) translateY(0px);
-    }
+@keyframes cardWave1 {
+    0%, 100% { transform: rotate(0deg) translateY(0px); }
+    5% { transform: rotate(-6deg) translateY(-4px); }
+    10% { transform: rotate(7deg) translateY(-5px); }
+    15% { transform: rotate(-5deg) translateY(-3px); }
+    20% { transform: rotate(0deg) translateY(0px); }
+    25%, 100% { transform: rotate(0deg) translateY(0px); }
+}
+
+@keyframes cardWave2 {
+    0%, 100% { transform: rotate(0deg) translateY(0px); }
+    6% { transform: rotate(8deg) translateY(-6px); }
+    12% { transform: rotate(-7deg) translateY(-4px); }
+    18% { transform: rotate(6deg) translateY(-5px); }
+    24% { transform: rotate(0deg) translateY(0px); }
+    30%, 100% { transform: rotate(0deg) translateY(0px); }
+}
+
+@keyframes cardWave3 {
+    0%, 100% { transform: rotate(0deg) translateY(0px); }
+    7% { transform: rotate(-9deg) translateY(-3px); }
+    14% { transform: rotate(8deg) translateY(-7px); }
+    21% { transform: rotate(-6deg) translateY(-4px); }
+    28% { transform: rotate(0deg) translateY(0px); }
+    35%, 100% { transform: rotate(0deg) translateY(0px); }
+}
+
+@keyframes cardWave4 {
+    0%, 100% { transform: rotate(0deg) translateY(0px); }
+    4% { transform: rotate(7deg) translateY(-5px); }
+    8% { transform: rotate(-8deg) translateY(-6px); }
+    12% { transform: rotate(9deg) translateY(-4px); }
+    16% { transform: rotate(-7deg) translateY(-3px); }
+    20% { transform: rotate(0deg) translateY(0px); }
+    25%, 100% { transform: rotate(0deg) translateY(0px); }
 }
 
 .diff-card:hover .card-front {

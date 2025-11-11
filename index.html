@@ -982,6 +982,17 @@
         // Flip cards on click
         document.querySelectorAll('.diff-card').forEach(card => {
             card.addEventListener('click', () => {
+                const cardInner = card.querySelector('.card-inner');
+
+                // Add flipping class and hide during invisible part
+                cardInner.style.opacity = '1';
+                setTimeout(() => {
+                    cardInner.style.opacity = '0';
+                }, 150);
+                setTimeout(() => {
+                    cardInner.style.opacity = '1';
+                }, 450);
+
                 card.classList.toggle('flipped');
             });
         });
