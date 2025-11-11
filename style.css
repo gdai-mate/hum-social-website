@@ -1438,48 +1438,48 @@ button, a, input, textarea, select {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 500px;
+    min-height: 300px;
     padding: 2rem;
 }
 
 .screenshot-cluster .app-screenshot {
     position: absolute;
     width: 100%;
-    max-width: 280px;
+    max-width: 140px;
     height: auto;
-    border-radius: 24px;
+    border-radius: 12px;
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 10px 20px rgba(0, 0, 0, 0.15),
         0 0 0 1px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease, z-index 0s ease;
 }
 
 .screenshot-cluster .cluster-img-1 {
     z-index: 3;
-    transform: rotate(-3deg) translateX(-60px);
+    transform: rotate(-2deg) translateX(-110px);
 }
 
 .screenshot-cluster .cluster-img-2 {
     z-index: 2;
-    transform: rotate(2deg) translateX(10px) translateY(30px);
+    transform: rotate(1deg) translateX(0px) translateY(10px);
 }
 
 .screenshot-cluster .cluster-img-3 {
     z-index: 1;
-    transform: rotate(-2deg) translateX(80px) translateY(-20px);
+    transform: rotate(-1deg) translateX(110px) translateY(-5px);
 }
 
 .screenshot-cluster:hover .cluster-img-1 {
-    transform: rotate(-3deg) translateX(-60px) scale(1.05);
+    transform: rotate(-2deg) translateX(-110px) scale(1.05);
     z-index: 5;
 }
 
 .screenshot-cluster:hover .cluster-img-2 {
-    transform: rotate(2deg) translateX(10px) translateY(30px) scale(1.03);
+    transform: rotate(1deg) translateX(0px) translateY(10px) scale(1.03);
 }
 
 .screenshot-cluster:hover .cluster-img-3 {
-    transform: rotate(-2deg) translateX(80px) translateY(-20px) scale(1.03);
+    transform: rotate(-1deg) translateX(110px) translateY(-5px) scale(1.03);
 }
 
 [data-theme="dark"] .screenshot-cluster .app-screenshot {
