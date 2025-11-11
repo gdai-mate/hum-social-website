@@ -979,9 +979,19 @@
             scheduleNextBubble();
         }, 3000);
 
-        // Flip cards on click
+        // Flip cards on click - only one at a time
         document.querySelectorAll('.diff-card').forEach(card => {
             card.addEventListener('click', () => {
+                const isAlreadyFlipped = card.classList.contains('flipped');
+
+                // Unflip all other cards
+                document.querySelectorAll('.diff-card').forEach(c => {
+                    if (c !== card) {
+                        c.classList.remove('flipped');
+                    }
+                });
+
+                // Toggle the clicked card
                 card.classList.toggle('flipped');
             });
         });
