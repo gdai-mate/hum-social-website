@@ -1714,6 +1714,14 @@ button, a, input, textarea, select {
     text-align: left;
 }
 
+.voice-rule h3 {
+    font-family: var(--font-hero);
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+}
+
 /* Profile & Tracking Section */
 .profile-tracking {
     padding: 6rem 0;
