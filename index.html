@@ -847,13 +847,7 @@
                     const isMirrored = randomHand.dataset.mirrored === 'true';
                     const waveAngle = baseAngle + Math.sin(waveCount * waveSpeed) * waveAmplitude;
                     randomHand.style.transition = 'transform 0.1s ease-in-out';
-                    // Scale up the hand to 2x while waving to make it more clickable and obvious
-                    // If mirrored, combine scale with scaleX(-1)
-                    if (isMirrored) {
-                        randomHand.style.transform = `rotate(${waveAngle}deg) scale(2, 2) scaleX(-1)`;
-                    } else {
-                        randomHand.style.transform = `rotate(${waveAngle}deg) scale(2)`;
-                    }
+                    randomHand.style.transform = `rotate(${waveAngle}deg) ${isMirrored ? 'scaleX(-1)' : ''}`;
                     waveCount++;
                 }, waveInterval_ms);
             }
