@@ -358,8 +358,15 @@ button, a, input, textarea, select {
     cursor: pointer !important;
     filter: drop-shadow(0 0 20px rgba(255, 200, 100, 0.8)) !important;
     animation: wavingGlow 1s ease-in-out infinite;
-    position: relative !important;
-    z-index: 99999 !important;
+}
+
+/* Invisible click overlay for waving hand */
+.waving-hand-overlay {
+    position: fixed;
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 99999;
+    /* Debug: background: rgba(255, 0, 0, 0.3); */
 }
 
 @keyframes wavingGlow {

@@ -854,19 +854,24 @@
 
             // Celebration function (defined before hand click handler so it can access it)
             let handClickHandler;
+            let overlay;
+            let overlayUpdateInterval;
 
             const triggerCelebration = () => {
                 // Stop waving
                 clearInterval(waveInterval);
+                if (overlayUpdateInterval) clearInterval(overlayUpdateInterval);
                 handsAnimating[randomIndex] = false;
 
                 // Reset hand styles
                 randomHand.classList.remove('waving');
-                randomHand.style.zIndex = '';
 
-                // Remove hand click and touch listeners (must match capture phase)
-                randomHand.removeEventListener('click', handClickHandler, true);
-                randomHand.removeEventListener('touchstart', handClickHandler, true);
+                // Remove overlay and its listeners
+                if (overlay && overlay.parentNode) {
+                    overlay.removeEventListener('click', handClickHandler);
+                    overlay.removeEventListener('touchstart', handClickHandler);
+                    overlay.remove();
+                }
 
                 // Get the hand's position
                 const handRect = randomHand.getBoundingClientRect();
@@ -928,9 +933,27 @@
             handsAnimating[randomIndex] = true;
             handAngles[randomIndex] = 0; // Reset to upright
 
-            // Make hand more clickable - add waving class, bring to front
+            // Make hand more clickable - add waving class
             randomHand.classList.add('waving');
-            randomHand.style.zIndex = '9999';
+
+            // Create invisible clickable overlay above content
+            overlay = document.createElement('div');
+            overlay.className = 'waving-hand-overlay';
+
+            // Function to update overlay position
+            function updateOverlayPosition() {
+                const rect = randomHand.getBoundingClientRect();
+                overlay.style.left = `${rect.left}px`;
+                overlay.style.top = `${rect.top}px`;
+                overlay.style.width = `${rect.width}px`;
+                overlay.style.height = `${rect.height}px`;
+            }
+
+            updateOverlayPosition();
+            document.body.appendChild(overlay);
+
+            // Update overlay position periodically as hand waves
+            overlayUpdateInterval = setInterval(updateOverlayPosition, 50);
 
             startWaving();
 
@@ -948,16 +971,16 @@
                 triggerCelebration();
             });
 
-            // Click/tap handler for the hand itself
+            // Click/tap handler for the overlay
             handClickHandler = (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                console.log('Hand clicked!', randomIndex); // Debug log
+                console.log('Hand overlay clicked!', randomIndex); // Debug log
                 triggerCelebration();
             };
-            // Add listeners with capture phase to ensure they fire first
-            randomHand.addEventListener('click', handClickHandler, true);
-            randomHand.addEventListener('touchstart', handClickHandler, { passive: false, capture: true });
+            // Add listeners to overlay (it's already at high z-index)
+            overlay.addEventListener('click', handClickHandler);
+            overlay.addEventListener('touchstart', handClickHandler, { passive: false });
 
             // Auto-remove bubble after 5 seconds
             setTimeout(() => {
@@ -973,12 +996,15 @@
                     clearInterval(waveInterval);
                     handsAnimating[randomIndex] = false;
                 }
+                if (overlayUpdateInterval) clearInterval(overlayUpdateInterval);
                 // Reset hand styles
                 randomHand.classList.remove('waving');
-                randomHand.style.zIndex = '';
-                // Remove hand click and touch listeners (must match capture phase)
-                randomHand.removeEventListener('click', handClickHandler, true);
-                randomHand.removeEventListener('touchstart', handClickHandler, true);
+                // Remove overlay and its listeners
+                if (overlay && overlay.parentNode) {
+                    overlay.removeEventListener('click', handClickHandler);
+                    overlay.removeEventListener('touchstart', handClickHandler);
+                    overlay.remove();
+                }
             }, 5000);
         }
 
