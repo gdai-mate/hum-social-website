@@ -356,8 +356,6 @@ button, a, input, textarea, select {
 .pattern-hand.waving {
     pointer-events: auto !important;
     cursor: pointer !important;
-    filter: drop-shadow(0 0 20px rgba(255, 200, 100, 0.8)) !important;
-    animation: wavingGlow 1s ease-in-out infinite;
 }
 
 /* Invisible click overlay for waving hand */
@@ -367,30 +365,6 @@ button, a, input, textarea, select {
     cursor: pointer;
     z-index: 99999;
     /* Debug: background: rgba(255, 0, 0, 0.3); */
-}
-
-@keyframes wavingGlow {
-    0%, 100% {
-        filter: drop-shadow(0 0 15px rgba(255, 200, 100, 0.6));
-    }
-    50% {
-        filter: drop-shadow(0 0 25px rgba(255, 200, 100, 1));
-    }
-}
-
-@media (max-width: 768px) {
-    .pattern-hand.waving {
-        filter: drop-shadow(0 0 15px rgba(255, 200, 100, 0.9)) !important;
-    }
-
-    @keyframes wavingGlow {
-        0%, 100% {
-            filter: drop-shadow(0 0 12px rgba(255, 200, 100, 0.7));
-        }
-        50% {
-            filter: drop-shadow(0 0 20px rgba(255, 200, 100, 1));
-        }
-    }
 }
 
 /* Speech bubble for high five prompts */
