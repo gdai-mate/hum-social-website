@@ -847,7 +847,13 @@
                     const isMirrored = randomHand.dataset.mirrored === 'true';
                     const waveAngle = baseAngle + Math.sin(waveCount * waveSpeed) * waveAmplitude;
                     randomHand.style.transition = 'transform 0.1s ease-in-out';
-                    randomHand.style.transform = `rotate(${waveAngle}deg) ${isMirrored ? 'scaleX(-1)' : ''}`;
+                    // Scale up the hand to 2x while waving to make it more clickable and obvious
+                    // If mirrored, combine scale with scaleX(-1)
+                    if (isMirrored) {
+                        randomHand.style.transform = `rotate(${waveAngle}deg) scale(2, 2) scaleX(-1)`;
+                    } else {
+                        randomHand.style.transform = `rotate(${waveAngle}deg) scale(2)`;
+                    }
                     waveCount++;
                 }, waveInterval_ms);
             }
@@ -864,9 +870,9 @@
                 randomHand.classList.remove('waving');
                 randomHand.style.zIndex = '';
 
-                // Remove hand click and touch listeners
-                randomHand.removeEventListener('click', handClickHandler);
-                randomHand.removeEventListener('touchstart', handClickHandler);
+                // Remove hand click and touch listeners (must match capture phase)
+                randomHand.removeEventListener('click', handClickHandler, true);
+                randomHand.removeEventListener('touchstart', handClickHandler, true);
 
                 // Get the hand's position
                 const handRect = randomHand.getBoundingClientRect();
@@ -952,10 +958,12 @@
             handClickHandler = (e) => {
                 e.stopPropagation();
                 e.preventDefault();
+                console.log('Hand clicked!', randomIndex); // Debug log
                 triggerCelebration();
             };
-            randomHand.addEventListener('click', handClickHandler);
-            randomHand.addEventListener('touchstart', handClickHandler, { passive: false });
+            // Add listeners with capture phase to ensure they fire first
+            randomHand.addEventListener('click', handClickHandler, true);
+            randomHand.addEventListener('touchstart', handClickHandler, { passive: false, capture: true });
 
             // Auto-remove bubble after 5 seconds
             setTimeout(() => {
@@ -974,9 +982,9 @@
                 // Reset hand styles
                 randomHand.classList.remove('waving');
                 randomHand.style.zIndex = '';
-                // Remove hand click and touch listeners
-                randomHand.removeEventListener('click', handClickHandler);
-                randomHand.removeEventListener('touchstart', handClickHandler);
+                // Remove hand click and touch listeners (must match capture phase)
+                randomHand.removeEventListener('click', handClickHandler, true);
+                randomHand.removeEventListener('touchstart', handClickHandler, true);
             }, 5000);
         }
 

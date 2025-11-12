@@ -358,6 +358,9 @@ button, a, input, textarea, select {
     cursor: pointer !important;
     filter: drop-shadow(0 0 20px rgba(255, 200, 100, 0.8)) !important;
     animation: wavingGlow 1s ease-in-out infinite;
+    /* Increase clickable area */
+    padding: 30px !important;
+    box-sizing: content-box !important;
 }
 
 @keyframes wavingGlow {
@@ -372,6 +375,7 @@ button, a, input, textarea, select {
 @media (max-width: 768px) {
     .pattern-hand.waving {
         filter: drop-shadow(0 0 15px rgba(255, 200, 100, 0.9)) !important;
+        padding: 20px !important;
     }
 
     @keyframes wavingGlow {
