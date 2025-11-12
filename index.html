@@ -861,12 +861,12 @@
                 handsAnimating[randomIndex] = false;
 
                 // Reset hand styles
+                randomHand.classList.remove('waving');
                 randomHand.style.zIndex = '';
-                randomHand.style.pointerEvents = '';
-                randomHand.style.cursor = '';
 
-                // Remove hand click listener
+                // Remove hand click and touch listeners
                 randomHand.removeEventListener('click', handClickHandler);
+                randomHand.removeEventListener('touchstart', handClickHandler);
 
                 // Get the hand's position
                 const handRect = randomHand.getBoundingClientRect();
@@ -928,10 +928,9 @@
             handsAnimating[randomIndex] = true;
             handAngles[randomIndex] = 0; // Reset to upright
 
-            // Make hand more clickable - bring to front, enable pointer events, and change cursor
+            // Make hand more clickable - add waving class, bring to front
+            randomHand.classList.add('waving');
             randomHand.style.zIndex = '9999';
-            randomHand.style.pointerEvents = 'auto';
-            randomHand.style.cursor = 'pointer';
 
             startWaving();
 
@@ -952,9 +951,11 @@
             // Click/tap handler for the hand itself
             handClickHandler = (e) => {
                 e.stopPropagation();
+                e.preventDefault();
                 triggerCelebration();
             };
             randomHand.addEventListener('click', handClickHandler);
+            randomHand.addEventListener('touchstart', handClickHandler, { passive: false });
 
             // Auto-remove bubble after 5 seconds
             setTimeout(() => {
@@ -971,11 +972,11 @@
                     handsAnimating[randomIndex] = false;
                 }
                 // Reset hand styles
+                randomHand.classList.remove('waving');
                 randomHand.style.zIndex = '';
-                randomHand.style.pointerEvents = '';
-                randomHand.style.cursor = '';
-                // Remove hand click listener
+                // Remove hand click and touch listeners
                 randomHand.removeEventListener('click', handClickHandler);
+                randomHand.removeEventListener('touchstart', handClickHandler);
             }, 5000);
         }
 
