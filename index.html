@@ -862,6 +862,7 @@
 
                 // Reset hand styles
                 randomHand.style.zIndex = '';
+                randomHand.style.pointerEvents = '';
                 randomHand.style.cursor = '';
 
                 // Remove hand click listener
@@ -927,8 +928,9 @@
             handsAnimating[randomIndex] = true;
             handAngles[randomIndex] = 0; // Reset to upright
 
-            // Make hand more clickable - bring to front and change cursor
+            // Make hand more clickable - bring to front, enable pointer events, and change cursor
             randomHand.style.zIndex = '9999';
+            randomHand.style.pointerEvents = 'auto';
             randomHand.style.cursor = 'pointer';
 
             startWaving();
@@ -970,6 +972,7 @@
                 }
                 // Reset hand styles
                 randomHand.style.zIndex = '';
+                randomHand.style.pointerEvents = '';
                 randomHand.style.cursor = '';
                 // Remove hand click listener
                 randomHand.removeEventListener('click', handClickHandler);
