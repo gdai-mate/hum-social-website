@@ -860,6 +860,10 @@
                 clearInterval(waveInterval);
                 handsAnimating[randomIndex] = false;
 
+                // Reset hand styles
+                randomHand.style.zIndex = '';
+                randomHand.style.cursor = '';
+
                 // Remove hand click listener
                 randomHand.removeEventListener('click', handClickHandler);
 
@@ -922,6 +926,11 @@
             // Start waving
             handsAnimating[randomIndex] = true;
             handAngles[randomIndex] = 0; // Reset to upright
+
+            // Make hand more clickable - bring to front and change cursor
+            randomHand.style.zIndex = '9999';
+            randomHand.style.cursor = 'pointer';
+
             startWaving();
 
             // Stop waving after 2 seconds (not the full bubble duration)
@@ -959,6 +968,9 @@
                     clearInterval(waveInterval);
                     handsAnimating[randomIndex] = false;
                 }
+                // Reset hand styles
+                randomHand.style.zIndex = '';
+                randomHand.style.cursor = '';
                 // Remove hand click listener
                 randomHand.removeEventListener('click', handClickHandler);
             }, 5000);
