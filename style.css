@@ -204,6 +204,10 @@ button, a, input, textarea, select {
     z-index: 100;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 [data-theme="dark"] .nav {
@@ -252,6 +256,10 @@ button, a, input, textarea, select {
     font-size: 0.875rem;
     transition: all 0.2s;
     display: inline-block;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .btn-primary:hover {
@@ -271,6 +279,10 @@ button, a, input, textarea, select {
     display: inline-block;
     box-shadow: 0 4px 20px rgba(210, 145, 111, 0.3);
     will-change: transform;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .btn-cta:hover {
@@ -297,6 +309,10 @@ button, a, input, textarea, select {
     text-align: center;
     position: relative;
     overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .hero::before {
@@ -537,6 +553,10 @@ button, a, input, textarea, select {
     letter-spacing: 0.05em;
     text-transform: uppercase;
     margin-bottom: 2rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .hero-tagline {
@@ -546,6 +566,10 @@ button, a, input, textarea, select {
     line-height: 1.2;
     letter-spacing: 0;
     margin-bottom: 2rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .hero-subtitle {
@@ -553,6 +577,10 @@ button, a, input, textarea, select {
     color: var(--text-secondary);
     margin-bottom: 3rem;
     line-height: 1.8;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .hero-subtitle strong {
@@ -571,6 +599,10 @@ button, a, input, textarea, select {
     font-size: 0.875rem;
     color: var(--text-secondary);
     font-weight: 500;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 /* Problem Section */
@@ -589,6 +621,10 @@ button, a, input, textarea, select {
     font-weight: 800;
     margin-bottom: 3rem;
     color: var(--accent-tan);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .stats-grid {
@@ -620,6 +656,10 @@ button, a, input, textarea, select {
     color: var(--accent-tan);
     line-height: 1;
     margin-bottom: 1rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .stat-card p {
@@ -655,6 +695,10 @@ button, a, input, textarea, select {
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     margin-bottom: 2rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .solution h2 em {
@@ -731,6 +775,10 @@ button, a, input, textarea, select {
 .card-front {
     background: linear-gradient(135deg, var(--surface) 0%, rgba(124, 156, 191, 0.05) 100%);
     z-index: 2;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .card-back {
@@ -841,6 +889,10 @@ button, a, input, textarea, select {
     font-weight: 800;
     text-align: center;
     margin-bottom: 4rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .section-title .number-accent {
@@ -870,6 +922,10 @@ button, a, input, textarea, select {
     font-weight: 800;
     margin: 0 auto 1.5rem;
     font-family: var(--font-numbers);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .step h3 {
@@ -954,6 +1010,10 @@ button, a, input, textarea, select {
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     margin-bottom: 2rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .voice-statement {
@@ -987,6 +1047,10 @@ button, a, input, textarea, select {
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 700;
     margin-bottom: 1rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .support-intro {
@@ -1005,6 +1069,10 @@ button, a, input, textarea, select {
     text-decoration-thickness: 2px;
     text-underline-offset: 4px;
     color: var(--accent);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .support-tiers {
@@ -1043,6 +1111,10 @@ button, a, input, textarea, select {
     color: var(--accent);
     margin-bottom: 1rem;
     font-family: var(--font-numbers);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .tier-period {
@@ -1089,6 +1161,10 @@ button, a, input, textarea, select {
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     margin-bottom: 1rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .cta-content p {
