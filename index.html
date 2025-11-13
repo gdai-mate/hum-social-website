@@ -6,59 +6,15 @@
     <title>hüm - Social Media That Makes You Better, Not Bitter</title>
     <meta name="description" content="Tired of doomscrolling? Join hüm - the invite-only platform where young entrepreneurs build real habits, share real progress, and find their people. Zero AI. Zero bullshit.">
     <meta name="keywords" content="accountability, habits, voice-first, anti-doomscroll, mental health, purpose, entrepreneurship, Gen Z, millennials">
-
-    <!-- Anti-Bot & Anti-Scraping Meta Tags -->
-    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate">
-    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
-    <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet">
-    <meta name="slurp" content="noindex, nofollow, noarchive">
-    <meta name="GPTBot" content="noindex, nofollow">
-    <meta name="ChatGPT-User" content="noindex, nofollow">
-    <meta name="Google-Extended" content="noindex, nofollow">
-    <meta name="CCBot" content="noindex, nofollow">
-    <meta name="anthropic-ai" content="noindex, nofollow">
-    <meta name="ClaudeBot" content="noindex, nofollow">
-    <meta name="Omgilibot" content="noindex, nofollow">
-    <meta name="Applebot" content="noindex, nofollow">
-    <meta name="PerplexityBot" content="noindex, nofollow">
-    <meta name="FacebookBot" content="noindex, nofollow">
-    <meta name="ImagesiftBot" content="noindex, nofollow">
-    <meta name="cohere-ai" content="noindex, nofollow">
-    <meta http-equiv="X-Robots-Tag" content="noindex, nofollow, noarchive, nosnippet">
-
     <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preload critical fonts for faster loading -->
+    <link rel="preload" href="assets/fonts/BigScratchBrush.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="assets/fonts/Ecoplanet.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="assets/fonts/Coconutz.ttf" as="font" type="font/ttf" crossorigin>
+
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
-
-    <style>
-        /* Global text unselectable */
-        * {
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
-            -webkit-touch-callout: none !important;
-        }
-
-        /* Prevent text dragging */
-        * {
-            -webkit-user-drag: none !important;
-            -khtml-user-drag: none !important;
-            -moz-user-drag: none !important;
-            -o-user-drag: none !important;
-            user-drag: none !important;
-        }
-
-        /* Hide text when selected */
-        ::selection {
-            background: transparent !important;
-            color: inherit !important;
-        }
-        ::-moz-selection {
-            background: transparent !important;
-            color: inherit !important;
-        }
-    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -133,7 +89,7 @@
     <section class="solution">
         <div class="container">
             <div class="solution-content">
-                <h2>Social Media for Your Journey, Not Your Aesthetic</h2>
+                <h2>Social Media for Your Journey, Not Your Performance</h2>
                 <p class="solution-intro">
                     hüm is social media built around what you're working on—not what you look like. Document your progress. Connect with people on similar paths. Build a community that gives a hüm.
                 </p>
@@ -904,14 +860,24 @@
 
             // Celebration function (defined before hand click handler so it can access it)
             let handClickHandler;
+            let overlay;
+            let overlayUpdateInterval;
 
             const triggerCelebration = () => {
                 // Stop waving
                 clearInterval(waveInterval);
+                if (overlayUpdateInterval) clearInterval(overlayUpdateInterval);
                 handsAnimating[randomIndex] = false;
 
-                // Remove hand click listener
-                randomHand.removeEventListener('click', handClickHandler);
+                // Reset hand styles
+                randomHand.classList.remove('waving');
+
+                // Remove overlay and its listeners
+                if (overlay && overlay.parentNode) {
+                    overlay.removeEventListener('click', handClickHandler);
+                    overlay.removeEventListener('touchstart', handClickHandler);
+                    overlay.remove();
+                }
 
                 // Get the hand's position
                 const handRect = randomHand.getBoundingClientRect();
@@ -972,6 +938,29 @@
             // Start waving
             handsAnimating[randomIndex] = true;
             handAngles[randomIndex] = 0; // Reset to upright
+
+            // Make hand more clickable - add waving class
+            randomHand.classList.add('waving');
+
+            // Create invisible clickable overlay above content
+            overlay = document.createElement('div');
+            overlay.className = 'waving-hand-overlay';
+
+            // Function to update overlay position
+            function updateOverlayPosition() {
+                const rect = randomHand.getBoundingClientRect();
+                overlay.style.left = `${rect.left}px`;
+                overlay.style.top = `${rect.top}px`;
+                overlay.style.width = `${rect.width}px`;
+                overlay.style.height = `${rect.height}px`;
+            }
+
+            updateOverlayPosition();
+            document.body.appendChild(overlay);
+
+            // Update overlay position periodically as hand waves
+            overlayUpdateInterval = setInterval(updateOverlayPosition, 50);
+
             startWaving();
 
             // Stop waving after 2 seconds (not the full bubble duration)
@@ -988,12 +977,16 @@
                 triggerCelebration();
             });
 
-            // Click/tap handler for the hand itself
+            // Click/tap handler for the overlay
             handClickHandler = (e) => {
                 e.stopPropagation();
+                e.preventDefault();
+                console.log('Hand overlay clicked!', randomIndex); // Debug log
                 triggerCelebration();
             };
-            randomHand.addEventListener('click', handClickHandler);
+            // Add listeners to overlay (it's already at high z-index)
+            overlay.addEventListener('click', handClickHandler);
+            overlay.addEventListener('touchstart', handClickHandler, { passive: false });
 
             // Auto-remove bubble after 5 seconds
             setTimeout(() => {
@@ -1009,8 +1002,15 @@
                     clearInterval(waveInterval);
                     handsAnimating[randomIndex] = false;
                 }
-                // Remove hand click listener
-                randomHand.removeEventListener('click', handClickHandler);
+                if (overlayUpdateInterval) clearInterval(overlayUpdateInterval);
+                // Reset hand styles
+                randomHand.classList.remove('waving');
+                // Remove overlay and its listeners
+                if (overlay && overlay.parentNode) {
+                    overlay.removeEventListener('click', handClickHandler);
+                    overlay.removeEventListener('touchstart', handClickHandler);
+                    overlay.remove();
+                }
             }, 5000);
         }
 
@@ -1078,173 +1078,6 @@
                 wrapper.classList.add('active');
             });
         });
-
-        // ============================================
-        // ANTI-SCRAPING & ANTI-BOT PROTECTION
-        // ============================================
-
-        // Prevent right-click context menu
-        document.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            return false;
-        });
-
-        // Prevent text selection via JavaScript
-        document.addEventListener('selectstart', (e) => {
-            e.preventDefault();
-            return false;
-        });
-
-        // Prevent copy (Ctrl+C / Cmd+C)
-        document.addEventListener('copy', (e) => {
-            e.preventDefault();
-            e.clipboardData.setData('text/plain', '');
-            return false;
-        });
-
-        // Prevent cut (Ctrl+X / Cmd+X)
-        document.addEventListener('cut', (e) => {
-            e.preventDefault();
-            return false;
-        });
-
-        // Prevent paste (Ctrl+V / Cmd+V)
-        document.addEventListener('paste', (e) => {
-            e.preventDefault();
-            return false;
-        });
-
-        // Prevent common keyboard shortcuts for dev tools and text manipulation
-        document.addEventListener('keydown', (e) => {
-            // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, F12 (dev tools)
-            if (
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
-                (e.ctrlKey && e.key === 'u') ||
-                e.key === 'F12'
-            ) {
-                e.preventDefault();
-                return false;
-            }
-
-            // Prevent Ctrl+S (save page)
-            if (e.ctrlKey && e.key === 's') {
-                e.preventDefault();
-                return false;
-            }
-
-            // Prevent Ctrl+P (print)
-            if (e.ctrlKey && e.key === 'p') {
-                e.preventDefault();
-                return false;
-            }
-
-            // Prevent Ctrl+A (select all)
-            if (e.ctrlKey && e.key === 'a') {
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // Detect and deter automated scraping via mouse/touch behavior
-        let humanActivity = false;
-        let activityCheckInterval;
-
-        document.addEventListener('mousemove', () => {
-            humanActivity = true;
-        });
-
-        document.addEventListener('touchmove', () => {
-            humanActivity = true;
-        }, { passive: true });
-
-        document.addEventListener('scroll', () => {
-            humanActivity = true;
-        });
-
-        // Check for human activity every 5 seconds
-        activityCheckInterval = setInterval(() => {
-            if (!humanActivity) {
-                // Potential bot detected - could log this or take action
-                console.warn('Potential automated access detected');
-            }
-            humanActivity = false;
-        }, 5000);
-
-        // Detect dev tools (rough heuristic)
-        const devtoolsCheck = () => {
-            const threshold = 160;
-            const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-            const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-
-            if (widthThreshold || heightThreshold) {
-                // Dev tools might be open - could redirect or show warning
-                console.warn('Developer tools detected');
-            }
-        };
-
-        // Check on load and resize
-        window.addEventListener('resize', devtoolsCheck);
-        devtoolsCheck();
-
-        // Prevent text selection via mouse events
-        document.addEventListener('mousedown', (e) => {
-            // Allow normal clicking but prevent drag-to-select
-            if (e.detail > 1) { // double-click or more
-                e.preventDefault();
-                return false;
-            }
-        });
-
-        // Disable drag events globally
-        document.addEventListener('dragstart', (e) => {
-            e.preventDefault();
-            return false;
-        });
-
-        document.addEventListener('drop', (e) => {
-            e.preventDefault();
-            return false;
-        });
-
-        // Obfuscate page source - add invisible random characters
-        (function() {
-            const addInvisibleChars = () => {
-                const invisibleChars = ['\u200B', '\u200C', '\u200D', '\uFEFF'];
-                document.querySelectorAll('p, h1, h2, h3, h4, li, span').forEach(el => {
-                    if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
-                        const text = el.textContent;
-                        let obfuscated = '';
-                        for (let i = 0; i < text.length; i++) {
-                            obfuscated += text[i];
-                            if (Math.random() > 0.7) {
-                                obfuscated += invisibleChars[Math.floor(Math.random() * invisibleChars.length)];
-                            }
-                        }
-                        el.textContent = obfuscated;
-                    }
-                });
-            };
-            // Run after page loads
-            setTimeout(addInvisibleChars, 100);
-        })();
-
-        // Honeypot: Add hidden elements that bots might interact with
-        (function() {
-            const honeypot = document.createElement('div');
-            honeypot.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;';
-            honeypot.innerHTML = '<a href="/admin">Admin Panel</a><a href="/api/users">User Data</a>';
-
-            // Track if honeypot is accessed
-            honeypot.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    console.warn('Honeypot triggered - potential bot detected');
-                    // Could send this to server for logging/blocking
-                });
-            });
-
-            document.body.appendChild(honeypot);
-        })();
     </script>
 </body>
 </html>

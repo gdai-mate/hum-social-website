@@ -204,6 +204,10 @@ button, a, input, textarea, select {
     z-index: 100;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 [data-theme="dark"] .nav {
@@ -252,6 +256,10 @@ button, a, input, textarea, select {
     font-size: 0.875rem;
     transition: all 0.2s;
     display: inline-block;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .btn-primary:hover {
@@ -271,6 +279,10 @@ button, a, input, textarea, select {
     display: inline-block;
     box-shadow: 0 4px 20px rgba(210, 145, 111, 0.3);
     will-change: transform;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .btn-cta:hover {
@@ -297,6 +309,10 @@ button, a, input, textarea, select {
     text-align: center;
     position: relative;
     overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .hero::before {
@@ -335,6 +351,20 @@ button, a, input, textarea, select {
     will-change: transform;
     transform-origin: 50% 70%;
     position: relative;
+}
+
+.pattern-hand.waving {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Invisible click overlay for waving hand */
+.waving-hand-overlay {
+    position: fixed;
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 99999;
+    /* Debug: background: rgba(255, 0, 0, 0.3); */
 }
 
 /* Speech bubble for high five prompts */
@@ -537,6 +567,10 @@ button, a, input, textarea, select {
     letter-spacing: 0.05em;
     text-transform: uppercase;
     margin-bottom: 2rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .hero-tagline {
@@ -546,6 +580,10 @@ button, a, input, textarea, select {
     line-height: 1.2;
     letter-spacing: 0;
     margin-bottom: 2rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .hero-subtitle {
@@ -553,6 +591,10 @@ button, a, input, textarea, select {
     color: var(--text-secondary);
     margin-bottom: 3rem;
     line-height: 1.8;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .hero-subtitle strong {
@@ -571,6 +613,10 @@ button, a, input, textarea, select {
     font-size: 0.875rem;
     color: var(--text-secondary);
     font-weight: 500;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 /* Problem Section */
@@ -589,6 +635,10 @@ button, a, input, textarea, select {
     font-weight: 800;
     margin-bottom: 3rem;
     color: var(--accent-tan);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .stats-grid {
@@ -620,6 +670,10 @@ button, a, input, textarea, select {
     color: var(--accent-tan);
     line-height: 1;
     margin-bottom: 1rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .stat-card p {
@@ -655,6 +709,10 @@ button, a, input, textarea, select {
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     margin-bottom: 2rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .solution h2 em {
@@ -731,6 +789,10 @@ button, a, input, textarea, select {
 .card-front {
     background: linear-gradient(135deg, var(--surface) 0%, rgba(124, 156, 191, 0.05) 100%);
     z-index: 2;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .card-back {
@@ -841,6 +903,10 @@ button, a, input, textarea, select {
     font-weight: 800;
     text-align: center;
     margin-bottom: 4rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .section-title .number-accent {
@@ -870,6 +936,10 @@ button, a, input, textarea, select {
     font-weight: 800;
     margin: 0 auto 1.5rem;
     font-family: var(--font-numbers);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .step h3 {
@@ -954,6 +1024,10 @@ button, a, input, textarea, select {
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     margin-bottom: 2rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .voice-statement {
@@ -987,6 +1061,10 @@ button, a, input, textarea, select {
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 700;
     margin-bottom: 1rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .support-intro {
@@ -1005,6 +1083,10 @@ button, a, input, textarea, select {
     text-decoration-thickness: 2px;
     text-underline-offset: 4px;
     color: var(--accent);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .support-tiers {
@@ -1043,6 +1125,10 @@ button, a, input, textarea, select {
     color: var(--accent);
     margin-bottom: 1rem;
     font-family: var(--font-numbers);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .tier-period {
@@ -1089,6 +1175,10 @@ button, a, input, textarea, select {
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     margin-bottom: 1rem;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .cta-content p {
@@ -1230,7 +1320,7 @@ button, a, input, textarea, select {
 
     /* Reduce gradient intensity on mobile for performance */
     .hero::before {
-        opacity: 0.6;
+        opacity: 0.5;
     }
 
     /* Hero Section */
@@ -1239,12 +1329,17 @@ button, a, input, textarea, select {
         padding: 2rem 0 3rem;
     }
 
-    /* Hero Hands Pattern - Responsive on mobile */
+    /* Hero Hands Pattern - Much more subtle on mobile for clean professional look */
     .hands-pattern {
-        grid-template-columns: repeat(20, 1fr);
-        grid-template-rows: repeat(15, 1fr);
-        gap: 0.25rem;
-        opacity: 0.12;
+        grid-template-columns: repeat(15, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+        gap: 0.5rem;
+        opacity: 0.08;
+    }
+
+    .pattern-hand {
+        width: 120%;
+        height: 120%;
     }
 
     .hero-badge {
@@ -1329,6 +1424,8 @@ button, a, input, textarea, select {
 
     .diff-card {
         min-height: 280px;
+        /* Better touch target on mobile */
+        -webkit-tap-highlight-color: transparent;
     }
 
     .card-inner {
@@ -1347,6 +1444,11 @@ button, a, input, textarea, select {
 
     .diff-card h3 {
         font-size: 1.25rem;
+    }
+
+    .diff-card p {
+        font-size: 0.9375rem;
+        line-height: 1.6;
     }
 
     /* How It Works */
@@ -1390,6 +1492,12 @@ button, a, input, textarea, select {
         margin-bottom: 2rem;
     }
 
+    .completely-free {
+        font-size: 1.5rem;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 3px;
+    }
+
     .support-tiers {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -1405,6 +1513,11 @@ button, a, input, textarea, select {
 
     .tier-price {
         font-size: 2rem;
+    }
+
+    .tier li {
+        font-size: 0.9375rem;
+        padding: 0.4rem 0 0.4rem 1.5rem;
     }
 
     /* CTA Section */
@@ -1444,6 +1557,166 @@ button, a, input, textarea, select {
 
 /* Extra Small Devices */
 @media (max-width: 480px) {
+    /* Hero background - Ultra clean on small phones */
+    .hands-pattern {
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        gap: 0.75rem;
+        opacity: 0.05;
+    }
+
+    .pattern-hand {
+        width: 100%;
+        height: 100%;
+    }
+
+    .hero::before {
+        opacity: 0.4;
+    }
+
+    /* Screenshot clusters - extra compact on small phones */
+    .screenshot-cluster {
+        min-height: 180px;
+        padding: 1rem 0.25rem;
+    }
+
+    .screenshot-cluster .app-screenshot {
+        max-width: 85px;
+        border-radius: 8px;
+    }
+
+    .screenshot-wrapper[data-position="1"] {
+        transform: rotate(-4deg) translateX(-60px);
+    }
+
+    .screenshot-wrapper[data-position="2"] {
+        transform: rotate(3deg) translateX(0px) translateY(6px);
+    }
+
+    .screenshot-wrapper[data-position="3"] {
+        transform: rotate(-3deg) translateX(60px) translateY(-4px);
+    }
+
+    /* Flip cards - more compact on small phones */
+    .diff-card {
+        min-height: 260px;
+    }
+
+    .card-inner {
+        min-height: 260px;
+    }
+
+    .card-front,
+    .card-back {
+        padding: 1.75rem 1.25rem;
+    }
+
+    .card-icon {
+        width: 85px;
+        height: 85px;
+    }
+
+    .diff-card h3 {
+        font-size: 1.125rem;
+    }
+
+    .diff-card p {
+        font-size: 0.875rem;
+    }
+
+    /* Rules section - extra compact on small phones */
+    .voice-rule h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.875rem;
+    }
+
+    .voice-rule {
+        margin-bottom: 2rem;
+    }
+
+    .voice-detail {
+        font-size: 0.9375rem;
+    }
+
+    .rules-icons-container {
+        min-height: 250px;
+        padding: 0.75rem;
+    }
+
+    .rule-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .rule-icon-5 {
+        width: 65px;
+        height: 65px;
+    }
+
+    .rule-icon-7 {
+        width: 100px;
+        height: 100px;
+    }
+
+    /* Further adjust icon positions for small phones */
+    .rule-icon-2 {
+        top: 8%;
+        right: 5%;
+        transform: translateY(80px);
+    }
+
+    .rule-icon-7 {
+        top: 12%;
+        left: 5%;
+        transform: scaleX(-1) translateY(100px);
+    }
+
+    .rule-icon-1 {
+        bottom: 15%;
+        left: 5%;
+        transform: translateY(10px);
+    }
+
+    .rule-icon-4 {
+        bottom: 8%;
+        left: 18%;
+        transform: translateX(5px);
+    }
+
+    .rule-icon-5 {
+        top: 72%;
+        right: 5%;
+        transform: translateY(30px);
+    }
+
+    /* Support section - compact on small phones */
+    .completely-free {
+        font-size: 1.375rem;
+        text-decoration-thickness: 1.5px;
+        text-underline-offset: 2px;
+    }
+
+    .support-intro {
+        font-size: 0.9375rem;
+    }
+
+    .tier {
+        padding: 1.75rem 1.25rem;
+    }
+
+    .tier h4 {
+        font-size: 1.125rem;
+    }
+
+    .tier-price {
+        font-size: 1.75rem;
+    }
+
+    .tier li {
+        font-size: 0.875rem;
+        padding: 0.35rem 0 0.35rem 1.25rem;
+    }
+
     .hero-tagline {
         font-size: 1.75rem;
     }
@@ -1900,6 +2173,55 @@ button, a, input, textarea, select {
         margin-bottom: 4rem;
     }
 
+    /* Screenshot clusters - optimized for mobile */
+    .screenshot-cluster {
+        min-height: 200px;
+        padding: 1.5rem 0.5rem;
+    }
+
+    .screenshot-cluster .app-screenshot {
+        max-width: 100px;
+        border-radius: 10px;
+    }
+
+    .screenshot-wrapper[data-position="1"] {
+        transform: rotate(-3deg) translateX(-75px);
+    }
+
+    .screenshot-wrapper[data-position="2"] {
+        transform: rotate(2deg) translateX(0px) translateY(8px);
+    }
+
+    .screenshot-wrapper[data-position="3"] {
+        transform: rotate(-2deg) translateX(75px) translateY(-5px);
+    }
+
+    .screenshot-wrapper[data-position="1"]:hover {
+        transform: rotate(-3deg) translateX(-75px) scale(1.05);
+    }
+
+    .screenshot-wrapper[data-position="2"]:hover {
+        transform: rotate(2deg) translateX(0px) translateY(8px) scale(1.03);
+    }
+
+    .screenshot-wrapper[data-position="3"]:hover {
+        transform: rotate(-2deg) translateX(75px) translateY(-5px) scale(1.03);
+    }
+
+    /* Rules section - mobile optimized */
+    .voice-rule h3 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .voice-rule {
+        margin-bottom: 2.5rem;
+    }
+
+    .voice-detail {
+        font-size: 1rem;
+    }
+
     .rules-icons-container {
         min-height: 300px;
         padding: 1rem;
@@ -1918,5 +2240,36 @@ button, a, input, textarea, select {
     .rule-icon-7 {
         width: 120px;
         height: 120px;
+    }
+
+    /* Adjust icon positions for mobile layout */
+    .rule-icon-2 {
+        top: 10%;
+        right: 8%;
+        transform: translateY(100px);
+    }
+
+    .rule-icon-7 {
+        top: 15%;
+        left: 8%;
+        transform: scaleX(-1) translateY(120px);
+    }
+
+    .rule-icon-1 {
+        bottom: 12%;
+        left: 8%;
+        transform: translateY(15px);
+    }
+
+    .rule-icon-4 {
+        bottom: 5%;
+        left: 20%;
+        transform: translateX(8px);
+    }
+
+    .rule-icon-5 {
+        top: 70%;
+        right: 8%;
+        transform: translateY(40px);
     }
 }
