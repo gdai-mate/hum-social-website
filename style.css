@@ -462,6 +462,19 @@ button, a, input, textarea, select {
         text-align: center;
     }
 
+    /* Tablet hero optimization - swap to mobile subtitle */
+    .hero-subtitle-desktop {
+        display: none;
+    }
+
+    .hero-subtitle-mobile {
+        display: block;
+        font-size: 1.35rem;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--text);
+    }
+
     /* Reduce hand count and size on tablet */
     .hands-pattern {
         grid-template-columns: repeat(20, 1fr);
@@ -505,6 +518,25 @@ button, a, input, textarea, select {
 
     .hero-content {
         text-align: center;
+    }
+
+    /* Mobile hero optimization - bigger tagline, punchier subtitle */
+    .hero-tagline {
+        font-size: clamp(3rem, 10vw, 4.5rem);
+        margin-bottom: 1.5rem;
+    }
+
+    /* Hide desktop subtitle, show mobile subtitle */
+    .hero-subtitle-desktop {
+        display: none;
+    }
+
+    .hero-subtitle-mobile {
+        display: block;
+        font-size: 1.25rem;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--text);
     }
 
     /* Further reduce hand count and size on mobile */
@@ -595,6 +627,15 @@ button, a, input, textarea, select {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+}
+
+/* Show desktop subtitle by default, hide mobile subtitle */
+.hero-subtitle-mobile {
+    display: none;
+}
+
+.hero-subtitle-desktop {
+    display: block;
 }
 
 .hero-subtitle strong {
