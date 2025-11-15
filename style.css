@@ -539,6 +539,153 @@ button, a, input, textarea, select {
         color: var(--text);
     }
 
+    /* Difference cards: 2x2 grid on mobile */
+    .differences {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .diff-card {
+        min-height: 240px;
+    }
+
+    .card-inner {
+        min-height: 240px;
+    }
+
+    .card-front,
+    .card-back {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .card-icon {
+        width: 80px;
+        height: 80px;
+    }
+
+    .card-back h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .card-back p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* Template tags - optimize sizing for mobile */
+    .template-tag {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+        gap: 0.375rem;
+    }
+
+    .template-tag i {
+        font-size: 1rem;
+    }
+
+    /* Quest Templates section - reduce spacing */
+    .templates-preview {
+        padding: 4rem 0;
+    }
+
+    .section-title {
+        font-size: clamp(2rem, 8vw, 3rem);
+        margin-bottom: 2.5rem;
+    }
+
+    .templates-intro {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .templates-note {
+        font-size: 0.95rem;
+    }
+
+    /* Support/Pricing tiers - stack vertically on mobile */
+    .support {
+        padding: 4rem 0;
+    }
+
+    .support-tiers {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .tier {
+        padding: 2rem 1.5rem;
+    }
+
+    .tier h4 {
+        font-size: 1.375rem;
+    }
+
+    .tier-price {
+        font-size: 2rem;
+    }
+
+    .tier ul li {
+        font-size: 0.9375rem;
+    }
+
+    .completely-free {
+        font-size: 1.5rem;
+    }
+
+    /* Problem section - reduce padding */
+    .problem {
+        padding: 4rem 0;
+    }
+
+    .problem h2 {
+        font-size: clamp(2rem, 7vw, 2.5rem);
+        margin-bottom: 2rem;
+    }
+
+    /* Solution section - reduce padding */
+    .solution {
+        padding: 4rem 0;
+    }
+
+    .solution h2 {
+        font-size: clamp(2rem, 7vw, 2.5rem);
+    }
+
+    .solution-intro {
+        font-size: 1rem;
+        margin-bottom: 3rem;
+    }
+
+    /* How It Works - reduce padding */
+    .how-it-works {
+        padding: 4rem 0;
+    }
+
+    /* Why Voice - reduce padding */
+    .why-voice {
+        padding: 4rem 0;
+    }
+
+    .why-voice h2 {
+        font-size: clamp(2rem, 7vw, 2.5rem);
+    }
+
+    /* Profile & Tracking - reduce padding */
+    .profile-tracking {
+        padding: 4rem 0;
+    }
+
+    /* Invite section - reduce padding */
+    .invite-system {
+        padding: 4rem 0;
+    }
+
+    /* CTA section - reduce padding */
+    .cta-section {
+        padding: 4rem 0;
+    }
+
     /* Further reduce hand count and size on mobile */
     .hands-pattern {
         grid-template-columns: repeat(15, 1fr);
@@ -1638,32 +1785,7 @@ button, a, input, textarea, select {
         transform: rotate(-3deg) translateX(60px) translateY(-4px);
     }
 
-    /* Flip cards - more compact on small phones */
-    .diff-card {
-        min-height: 260px;
-    }
-
-    .card-inner {
-        min-height: 260px;
-    }
-
-    .card-front,
-    .card-back {
-        padding: 1.75rem 1.25rem;
-    }
-
-    .card-icon {
-        width: 85px;
-        height: 85px;
-    }
-
-    .diff-card h3 {
-        font-size: 1.125rem;
-    }
-
-    .diff-card p {
-        font-size: 0.875rem;
-    }
+    /* Flip cards already optimized in main 480px breakpoint above - skip duplication */
 
     /* Rules section - extra compact on small phones */
     .voice-rule h3 {
