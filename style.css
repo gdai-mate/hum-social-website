@@ -520,10 +520,13 @@ button, a, input, textarea, select {
         text-align: center;
     }
 
-    /* Mobile hero optimization - bigger tagline, punchier subtitle */
+    /* Mobile hero optimization - MUCH bigger tagline, punchier subtitle */
     .hero-tagline {
-        font-size: clamp(3rem, 10vw, 4.5rem);
+        font-size: clamp(3.5rem, 12vw, 5rem);
         margin-bottom: 1.5rem;
+        line-height: 1.1;
+        hyphens: none;
+        -webkit-hyphens: none;
     }
 
     /* Hide desktop subtitle, show mobile subtitle */
@@ -633,7 +636,7 @@ button, a, input, textarea, select {
         font-size: 1.5rem;
     }
 
-    /* Problem section - reduce padding */
+    /* Problem section - reduce padding + prevent word breaks */
     .problem {
         padding: 4rem 0;
     }
@@ -641,15 +644,21 @@ button, a, input, textarea, select {
     .problem h2 {
         font-size: clamp(2rem, 7vw, 2.5rem);
         margin-bottom: 2rem;
+        hyphens: none;
+        -webkit-hyphens: none;
     }
 
-    /* Solution section - reduce padding */
+    /* Solution section - reduce padding + fix word breaks */
     .solution {
         padding: 4rem 0;
     }
 
     .solution h2 {
-        font-size: clamp(2rem, 7vw, 2.5rem);
+        font-size: clamp(1.75rem, 6vw, 2.5rem);
+        hyphens: none;
+        -webkit-hyphens: none;
+        word-break: keep-all;
+        overflow-wrap: normal;
     }
 
     .solution-intro {
@@ -2371,14 +2380,14 @@ button, a, input, textarea, select {
         transform: rotate(-2deg) translateX(75px) translateY(-5px) scale(1.03);
     }
 
-    /* Rules section - mobile optimized */
+    /* Rules section - mobile optimized with better spacing */
     .voice-rule h3 {
         font-size: 1.75rem;
         margin-bottom: 1rem;
     }
 
     .voice-rule {
-        margin-bottom: 2.5rem;
+        margin-bottom: 3rem;
     }
 
     .voice-detail {
@@ -2386,53 +2395,53 @@ button, a, input, textarea, select {
     }
 
     .rules-icons-container {
-        min-height: 300px;
-        padding: 1rem;
+        min-height: 400px;
+        padding: 1.5rem 0.5rem;
     }
 
     .rule-icon {
-        width: 60px;
-        height: 60px;
+        width: 55px;
+        height: 55px;
     }
 
     .rule-icon-5 {
-        width: 78px;
-        height: 78px;
+        width: 70px;
+        height: 70px;
     }
 
     .rule-icon-7 {
-        width: 120px;
-        height: 120px;
+        width: 105px;
+        height: 105px;
     }
 
-    /* Adjust icon positions for mobile layout */
+    /* Adjust icon positions for mobile - prevent stacking */
     .rule-icon-2 {
-        top: 10%;
-        right: 8%;
-        transform: translateY(100px);
+        top: 8%;
+        right: 10%;
+        transform: translateY(80px);
     }
 
     .rule-icon-7 {
-        top: 15%;
-        left: 8%;
-        transform: scaleX(-1) translateY(120px);
+        top: 12%;
+        left: 5%;
+        transform: scaleX(-1) translateY(100px);
     }
 
     .rule-icon-1 {
-        bottom: 12%;
-        left: 8%;
-        transform: translateY(15px);
+        bottom: 15%;
+        left: 5%;
+        transform: translateY(10px);
     }
 
     .rule-icon-4 {
-        bottom: 5%;
-        left: 20%;
-        transform: translateX(8px);
+        bottom: 8%;
+        left: 22%;
+        transform: translateX(5px);
     }
 
     .rule-icon-5 {
-        top: 70%;
-        right: 8%;
-        transform: translateY(40px);
+        top: 72%;
+        right: 6%;
+        transform: translateY(35px);
     }
 }
