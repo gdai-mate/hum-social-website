@@ -1776,8 +1776,10 @@ button, a, input, textarea, select {
         font-size: clamp(3.5rem, 12vw, 5rem) !important;
         margin-bottom: 1.5rem;
         line-height: 1.1;
-        hyphens: none;
-        -webkit-hyphens: none;
+        hyphens: none !important;
+        -webkit-hyphens: none !important;
+        word-break: keep-all !important;
+        overflow-wrap: normal !important;
     }
 
     .hero-subtitle-desktop {
@@ -1790,6 +1792,58 @@ button, a, input, textarea, select {
         font-weight: 600;
         line-height: 1.5;
         color: var(--text);
+        hyphens: none;
+        -webkit-hyphens: none;
+        word-break: keep-all;
+    }
+
+    /* COMPREHENSIVE WORD-BREAK PREVENTION - Apply to all headings and key text */
+    h1, h2, h3, h4, h5, h6,
+    .section-title,
+    .problem h2,
+    .solution h2,
+    .how-it-works h2,
+    .how-it-works h3,
+    .why-voice h2,
+    .voice-rule h3,
+    .profile-tracking h2,
+    .invite-system h2,
+    .support h2,
+    .cta-section h2,
+    .card-back h3,
+    .step-content h3,
+    .tier h4 {
+        hyphens: none !important;
+        -webkit-hyphens: none !important;
+        word-break: keep-all !important;
+        overflow-wrap: normal !important;
+    }
+
+    /* Prevent awkward line breaks in body text */
+    p, li, .voice-detail, .solution-intro, .problem-statement,
+    .templates-intro, .support-intro {
+        hyphens: none;
+        -webkit-hyphens: none;
+        word-break: normal;
+    }
+
+    /* Enhance readability with better line spacing on mobile */
+    .section-title {
+        line-height: 1.2;
+        margin-bottom: 2rem;
+    }
+
+    .problem-statement,
+    .solution-intro,
+    .voice-detail,
+    .step-content p,
+    .tracking-content p {
+        line-height: 1.65;
+    }
+
+    /* Ensure adequate spacing between sections on mobile */
+    section {
+        scroll-margin-top: 4rem;
     }
 
     /* Screenshot clusters - extra compact on small phones */
