@@ -1756,6 +1756,8 @@ button, a, input, textarea, select {
 @media (max-width: 480px) {
     /* Hero background - Larger non-interactive hands on mobile */
     .hands-pattern {
+        left: -25%; /* Shift further left to fill empty space */
+        width: 140%; /* Wider to ensure coverage */
         grid-template-columns: repeat(8, 1fr);
         grid-template-rows: repeat(6, 1fr);
         gap: 1rem;
