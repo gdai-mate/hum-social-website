@@ -1771,6 +1771,27 @@ button, a, input, textarea, select {
         opacity: 0.4;
     }
 
+    /* MOBILE HERO OPTIMIZATION - Override earlier media queries */
+    .hero-tagline {
+        font-size: clamp(3.5rem, 12vw, 5rem) !important;
+        margin-bottom: 1.5rem;
+        line-height: 1.1;
+        hyphens: none;
+        -webkit-hyphens: none;
+    }
+
+    .hero-subtitle-desktop {
+        display: none !important;
+    }
+
+    .hero-subtitle-mobile {
+        display: block !important;
+        font-size: 1.25rem;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--text);
+    }
+
     /* Screenshot clusters - extra compact on small phones */
     .screenshot-cluster {
         min-height: 180px;
