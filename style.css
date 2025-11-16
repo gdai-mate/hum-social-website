@@ -1849,6 +1849,28 @@ button, a, input, textarea, select {
         margin-top: 2rem;
     }
 
+    /* Profile & Tracking section - ensure image/text/image/text pattern on mobile */
+    .tracking-showcase {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .screenshot-container {
+        order: -1; /* Always put screenshot first on mobile */
+        margin: 0 auto;
+    }
+
+    .tracking-content {
+        order: 1;
+    }
+
+    .app-screenshot {
+        max-width: 280px;
+        margin: 0 auto;
+    }
+
     /* COMPREHENSIVE WORD-BREAK PREVENTION - Apply to all headings and key text */
     h1, h2, h3, h4, h5, h6,
     .section-title,
