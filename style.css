@@ -1754,14 +1754,30 @@ button, a, input, textarea, select {
 
 /* Extra Small Devices */
 @media (max-width: 480px) {
-    /* Hero background - Clean and minimal on mobile */
+    /* Hero background - Larger non-interactive hands on mobile */
     .hands-pattern {
-        display: none; /* Remove hands pattern entirely on mobile for clean look */
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+        gap: 1rem;
+        opacity: 0.08;
+        pointer-events: none !important; /* Make completely non-interactive */
+    }
+
+    .pattern-hand {
+        width: 140%;
+        height: 140%;
+        pointer-events: none !important;
+        cursor: default !important;
+    }
+
+    /* Disable all hand interactions on mobile */
+    .pattern-hand.waving {
+        pointer-events: none !important;
+        cursor: default !important;
     }
 
     .hero::before {
-        background: linear-gradient(135deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%);
-        opacity: 0.6;
+        opacity: 0.5;
         height: 100%;
     }
 
