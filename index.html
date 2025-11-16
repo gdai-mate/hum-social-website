@@ -33,7 +33,7 @@
     <link rel="preload" href="assets/fonts/Ecoplanet.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="assets/fonts/Coconutz.ttf" as="font" type="font/ttf" crossorigin>
 
-    <link rel="stylesheet" href="style.css?v=20251116h">
+    <link rel="stylesheet" href="style.css?v=20251116i">
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
 
     <style>
@@ -528,17 +528,20 @@
         const hands = [];
         const handAngles = []; // Store previous angles for continuous rotation
 
+        // Detect mobile devices - disable ALL interactivity on mobile
+        const isMobile = window.innerWidth <= 480;
+
         // Generate hands in alternating checkerboard pattern (responsive grid)
         // Adjust grid size based on screen width for performance
         let cols = 30;
         let rows = 20;
 
-        if (window.innerWidth <= 480) {
-            cols = 15;
-            rows = 12;
+        if (isMobile) {
+            cols = 8;
+            rows = 6;
         } else if (window.innerWidth <= 768) {
-            cols = 20;
-            rows = 15;
+            cols = 12;
+            rows = 8;
         }
 
         let handIndex = 0;
@@ -701,38 +704,41 @@
         }
 
         // Performance optimization: throttle cursor tracking with requestAnimationFrame
-        let isTracking = false;
-        let lastX = 0;
-        let lastY = 0;
+        // ONLY on desktop - completely disabled on mobile
+        if (!isMobile) {
+            let isTracking = false;
+            let lastX = 0;
+            let lastY = 0;
 
-        function throttledUpdate() {
-            if (isTracking) {
-                updateHandRotations(lastX, lastY);
-                isTracking = false;
+            function throttledUpdate() {
+                if (isTracking) {
+                    updateHandRotations(lastX, lastY);
+                    isTracking = false;
+                }
             }
-        }
 
-        // Mouse events with throttling
-        document.addEventListener('mousemove', (e) => {
-            lastX = e.clientX;
-            lastY = e.clientY;
-            if (!isTracking) {
-                isTracking = true;
-                requestAnimationFrame(throttledUpdate);
-            }
-        });
-
-        // Touch events for mobile with throttling
-        document.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                lastX = e.touches[0].clientX;
-                lastY = e.touches[0].clientY;
+            // Mouse events with throttling
+            document.addEventListener('mousemove', (e) => {
+                lastX = e.clientX;
+                lastY = e.clientY;
                 if (!isTracking) {
                     isTracking = true;
                     requestAnimationFrame(throttledUpdate);
                 }
-            }
-        }, { passive: true });
+            });
+
+            // Touch events for tablet with throttling
+            document.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    lastX = e.touches[0].clientX;
+                    lastY = e.touches[0].clientY;
+                    if (!isTracking) {
+                        isTracking = true;
+                        requestAnimationFrame(throttledUpdate);
+                    }
+                }
+            }, { passive: true });
+        }
 
         // Ripple/wave effect on click/tap
         function createRippleEffect(clickX, clickY) {
@@ -1070,19 +1076,22 @@
         }
 
         // Show first bubble after random delay, then continue with random intervals
-        function scheduleNextBubble() {
-            const randomDelay = Math.random() * 10000 + 10000; // Between 10-20 seconds
+        // ONLY on desktop - completely disabled on mobile
+        if (!isMobile) {
+            function scheduleNextBubble() {
+                const randomDelay = Math.random() * 10000 + 10000; // Between 10-20 seconds
+                setTimeout(() => {
+                    showHighFiveBubble();
+                    scheduleNextBubble(); // Schedule the next one
+                }, randomDelay);
+            }
+
+            // Start after initial 3 second delay
             setTimeout(() => {
                 showHighFiveBubble();
-                scheduleNextBubble(); // Schedule the next one
-            }, randomDelay);
+                scheduleNextBubble();
+            }, 3000);
         }
-
-        // Start after initial 3 second delay
-        setTimeout(() => {
-            showHighFiveBubble();
-            scheduleNextBubble();
-        }, 3000);
 
         // Flip cards on click - only one at a time
         document.querySelectorAll('.diff-card').forEach(card => {
