@@ -1773,13 +1773,22 @@ button, a, input, textarea, select {
 
     /* MOBILE HERO OPTIMIZATION - Override earlier media queries */
     .hero-tagline {
-        font-size: clamp(3.5rem, 12vw, 5rem) !important;
+        font-family: var(--font-body) !important; /* Use Coconutz instead of Ecoplanet outline font */
+        font-size: clamp(2.5rem, 10vw, 3.5rem) !important; /* Smaller, more readable size */
+        font-weight: 700 !important;
         margin-bottom: 1.5rem;
-        line-height: 1.1;
+        line-height: 1.15;
+        letter-spacing: -0.02em; /* Tighter letter spacing for better fit */
+        text-transform: none !important; /* Keep original casing */
         hyphens: none !important;
         -webkit-hyphens: none !important;
         word-break: keep-all !important;
         overflow-wrap: normal !important;
+    }
+
+    /* Prevent word breaks on specific phrases */
+    .nowrap {
+        white-space: nowrap;
     }
 
     .hero-subtitle-desktop {
@@ -1788,13 +1797,26 @@ button, a, input, textarea, select {
 
     .hero-subtitle-mobile {
         display: block !important;
-        font-size: 1.25rem;
-        font-weight: 600;
-        line-height: 1.5;
+        font-size: 1.1rem;
+        font-weight: 500;
+        line-height: 1.6;
         color: var(--text);
         hyphens: none;
         -webkit-hyphens: none;
         word-break: keep-all;
+        max-width: 90%;
+        margin: 0 auto 2rem;
+    }
+
+    /* Improve hero badge spacing */
+    .hero-badge {
+        margin-bottom: 1.5rem;
+        font-size: 0.85rem;
+    }
+
+    /* Better CTA spacing on mobile */
+    .hero-cta {
+        margin-top: 2rem;
     }
 
     /* COMPREHENSIVE WORD-BREAK PREVENTION - Apply to all headings and key text */
