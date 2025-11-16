@@ -135,6 +135,15 @@ button, a, input, textarea, select {
     padding: 0 1.5rem;
 }
 
+/* Line break utilities */
+.mobile-break {
+    display: none; /* Hide by default on desktop */
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
 /* Theme Toggle */
 .theme-toggle {
     width: 2.5rem;
@@ -1801,6 +1810,17 @@ button, a, input, textarea, select {
         display: none;
     }
 
+    /* Show mobile line breaks only on mobile */
+    .mobile-break {
+        display: inline; /* Show on mobile */
+    }
+
+    /* Ensure 2x2 grid for difference cards on mobile */
+    .differences {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem;
+    }
+
     /* MOBILE HERO OPTIMIZATION - Override earlier media queries */
     .hero-tagline {
         font-family: var(--font-body) !important; /* Use Coconutz instead of Ecoplanet outline font */
@@ -1814,11 +1834,6 @@ button, a, input, textarea, select {
         -webkit-hyphens: none !important;
         word-break: keep-all !important;
         overflow-wrap: normal !important;
-    }
-
-    /* Prevent word breaks on specific phrases */
-    .nowrap {
-        white-space: nowrap;
     }
 
     .hero-subtitle-desktop {
