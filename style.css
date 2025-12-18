@@ -282,7 +282,7 @@ button, a, input, textarea, select {
     color: white;
     text-decoration: none;
     border-radius: 1rem;
-    font-family: var(--font-titles);
+    font-family: var(--font-body);
     font-weight: 700;
     font-size: 1.125rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
