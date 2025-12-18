@@ -1061,13 +1061,9 @@ body:not(.journey-complete) footer {
     width: 80%;
     height: 55%;
     z-index: 1;
-    pointer-events: none;
+    pointer-events: auto;
     overflow: hidden;
     border-radius: 50% 50% 0 0 / 60% 60% 0 0;
-}
-
-.hands-sea.interactive {
-    pointer-events: auto;
 }
 
 .sea-hand {
@@ -1077,6 +1073,7 @@ body:not(.journey-complete) footer {
     opacity: 0;
     transform-origin: bottom center;
     cursor: pointer;
+    pointer-events: auto;
 }
 
 .sea-hand svg {

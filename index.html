@@ -2344,7 +2344,10 @@
                     setTimeout(() => hand.classList.add('visible'), stragglerDelay + i * 80);
                 }
 
-                // Cursor tracking - hands reach toward cursor
+                // Track which hands are animating
+                const seaHandsAnimating = new Array(handData.length).fill(false);
+
+                // Cursor tracking - hands point toward cursor ANYWHERE on page
                 let mouseX = window.innerWidth / 2;
                 let mouseY = window.innerHeight / 2;
 
@@ -2353,40 +2356,236 @@
                     mouseY = e.clientY;
                 });
 
-                function updateHands() {
+                document.addEventListener('touchmove', (e) => {
+                    if (e.touches.length > 0) {
+                        mouseX = e.touches[0].clientX;
+                        mouseY = e.touches[0].clientY;
+                    }
+                }, { passive: true });
+
+                function updateSeaHands() {
                     const seaRect = handsSea.getBoundingClientRect();
-                    if (seaRect.top > window.innerHeight || seaRect.bottom < 0) {
-                        requestAnimationFrame(updateHands);
+                    // Only update if section is somewhat visible
+                    if (seaRect.top > window.innerHeight + 200 || seaRect.bottom < -200) {
+                        requestAnimationFrame(updateSeaHands);
                         return;
                     }
 
-                    handData.forEach(({ el, baseRotation }) => {
+                    handData.forEach(({ el, baseRotation }, index) => {
+                        // Skip if hand is animating (celebrating)
+                        if (seaHandsAnimating[index]) return;
+
                         const rect = el.getBoundingClientRect();
                         const handX = rect.left + rect.width / 2;
                         const handY = rect.top + rect.height / 2;
 
                         const dx = mouseX - handX;
                         const dy = mouseY - handY;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
 
-                        const maxDist = 200;
-                        const influence = Math.max(0, 1 - distance / maxDist);
+                        // Calculate angle to cursor - hands always point toward it
                         const angleToMouse = Math.atan2(dy, dx) * (180 / Math.PI);
-                        const rotation = baseRotation + (angleToMouse - 90) * influence * 0.4;
+                        const targetRotation = angleToMouse + 90; // +90 because hands point up by default
 
-                        el.style.setProperty('--rotation', `${rotation}deg`);
+                        // Smooth interpolation toward target
+                        const currentRotation = parseFloat(el.style.getPropertyValue('--rotation')) || baseRotation;
+                        let diff = targetRotation - currentRotation;
 
-                        if (influence > 0.5) {
-                            el.classList.add('waving');
-                        } else {
-                            el.classList.remove('waving');
-                        }
+                        // Normalize to shortest path
+                        while (diff > 180) diff -= 360;
+                        while (diff < -180) diff += 360;
+
+                        const newRotation = currentRotation + diff * 0.08; // Smooth follow
+                        el.style.setProperty('--rotation', `${newRotation}deg`);
                     });
 
-                    requestAnimationFrame(updateHands);
+                    requestAnimationFrame(updateSeaHands);
                 }
 
-                updateHands();
+                updateSeaHands();
+
+                // Confetti creation for celebrations
+                function createSeaConfetti(x, y) {
+                    const confettiColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#DDA0DD'];
+                    const confettiCount = 60;
+
+                    for (let i = 0; i < confettiCount; i++) {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                        confetti.style.left = `${x}px`;
+                        confetti.style.top = `${y}px`;
+
+                        const angle = Math.random() * Math.PI * 2;
+                        const velocity = Math.random() * 350 + 150;
+                        const tx = Math.cos(angle) * velocity;
+                        const ty = Math.sin(angle) * velocity;
+
+                        confetti.style.setProperty('--tx', `${tx}px`);
+                        confetti.style.setProperty('--ty', `${ty}px`);
+
+                        const delay = Math.random() * 0.1;
+                        const duration = Math.random() * 1 + 1.5;
+                        confetti.style.animation = `confettiExplode ${duration}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}s forwards`;
+
+                        document.body.appendChild(confetti);
+                        setTimeout(() => confetti.remove(), (duration + delay) * 1000);
+                    }
+                }
+
+                // Celebration - all hands spin 360°
+                function triggerSeaCelebration(centerX, centerY) {
+                    createSeaConfetti(centerX, centerY);
+
+                    // Sort hands by distance from click point
+                    const handDistances = handData.map((data, index) => {
+                        const rect = data.el.getBoundingClientRect();
+                        const hx = rect.left + rect.width / 2;
+                        const hy = rect.top + rect.height / 2;
+                        const distance = Math.sqrt((hx - centerX) ** 2 + (hy - centerY) ** 2);
+                        return { ...data, index, distance };
+                    });
+
+                    handDistances.sort((a, b) => a.distance - b.distance);
+
+                    // Wave of 360° spins
+                    handDistances.forEach((item, i) => {
+                        const delay = i * 3;
+
+                        setTimeout(() => {
+                            seaHandsAnimating[item.index] = true;
+                            const currentRotation = parseFloat(item.el.style.getPropertyValue('--rotation')) || item.baseRotation;
+
+                            item.el.style.transition = 'transform 0.5s ease-in-out';
+                            item.el.style.setProperty('--rotation', `${currentRotation + 360}deg`);
+
+                            setTimeout(() => {
+                                item.el.style.transition = '';
+                                // Normalize angle
+                                const normalized = (currentRotation + 360) % 360;
+                                item.el.style.setProperty('--rotation', `${normalized}deg`);
+                                seaHandsAnimating[item.index] = false;
+                            }, 500);
+                        }, delay);
+                    });
+                }
+
+                // Click/tap on hands sea triggers celebration
+                handsSea.addEventListener('click', (e) => {
+                    triggerSeaCelebration(e.clientX, e.clientY);
+                });
+
+                handsSea.addEventListener('touchstart', (e) => {
+                    if (e.touches.length > 0) {
+                        triggerSeaCelebration(e.touches[0].clientX, e.touches[0].clientY);
+                    }
+                }, { passive: true });
+
+                // Speech bubble system
+                let seaBubble = null;
+                let seaWavingHand = null;
+                let seaWaveInterval = null;
+                const seaBubbleMessages = ['Hey!', 'Over here!', 'Tap me!', 'Hello!', 'Hi there!', 'Wave!'];
+
+                function showSeaBubble() {
+                    if (seaBubble) {
+                        seaBubble.remove();
+                        seaBubble = null;
+                    }
+                    if (seaWaveInterval) {
+                        clearInterval(seaWaveInterval);
+                        seaWaveInterval = null;
+                    }
+
+                    // Only show if hands section is visible
+                    const seaRect = handsSea.getBoundingClientRect();
+                    if (seaRect.top > window.innerHeight || seaRect.bottom < 0) {
+                        return;
+                    }
+
+                    // Pick a random visible hand
+                    const visibleHands = handData.filter((data, index) => {
+                        const rect = data.el.getBoundingClientRect();
+                        return rect.top > 0 && rect.bottom < window.innerHeight &&
+                               rect.left > 50 && rect.right < window.innerWidth - 50;
+                    });
+
+                    if (visibleHands.length === 0) return;
+
+                    const randomData = visibleHands[Math.floor(Math.random() * visibleHands.length)];
+                    const randomIndex = handData.indexOf(randomData);
+                    seaWavingHand = { data: randomData, index: randomIndex };
+
+                    const rect = randomData.el.getBoundingClientRect();
+                    const message = seaBubbleMessages[Math.floor(Math.random() * seaBubbleMessages.length)];
+
+                    // Create bubble
+                    const bubble = document.createElement('div');
+                    bubble.className = 'high-five-bubble sea-bubble';
+                    bubble.textContent = message;
+                    bubble.style.position = 'fixed';
+                    bubble.style.left = `${rect.left + rect.width / 2}px`;
+                    bubble.style.top = `${rect.top - 40}px`;
+                    bubble.style.transform = 'translateX(-50%)';
+                    bubble.style.zIndex = '10001';
+
+                    document.body.appendChild(bubble);
+                    seaBubble = bubble;
+
+                    // Make hand wave
+                    let waveCount = 0;
+                    const baseRotation = parseFloat(randomData.el.style.getPropertyValue('--rotation')) || randomData.baseRotation;
+                    const waveAmplitude = 30;
+
+                    seaHandsAnimating[randomIndex] = true;
+
+                    seaWaveInterval = setInterval(() => {
+                        const waveAngle = baseRotation + Math.sin(waveCount * 0.3) * waveAmplitude;
+                        randomData.el.style.setProperty('--rotation', `${waveAngle}deg`);
+                        waveCount++;
+                    }, 50);
+
+                    // Click bubble to celebrate
+                    bubble.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const r = randomData.el.getBoundingClientRect();
+                        triggerSeaCelebration(r.left + r.width / 2, r.top + r.height / 2);
+                        cleanupSeaBubble();
+                    });
+
+                    // Auto cleanup after 4 seconds
+                    setTimeout(cleanupSeaBubble, 4000);
+                }
+
+                function cleanupSeaBubble() {
+                    if (seaBubble) {
+                        seaBubble.remove();
+                        seaBubble = null;
+                    }
+                    if (seaWaveInterval) {
+                        clearInterval(seaWaveInterval);
+                        seaWaveInterval = null;
+                    }
+                    if (seaWavingHand) {
+                        seaHandsAnimating[seaWavingHand.index] = false;
+                        seaWavingHand = null;
+                    }
+                }
+
+                // Schedule random bubbles (only on desktop)
+                if (window.innerWidth > 480) {
+                    function scheduleSeaBubble() {
+                        const delay = Math.random() * 12000 + 8000; // 8-20 seconds
+                        setTimeout(() => {
+                            showSeaBubble();
+                            scheduleSeaBubble();
+                        }, delay);
+                    }
+                    // Start after 5 seconds
+                    setTimeout(() => {
+                        showSeaBubble();
+                        scheduleSeaBubble();
+                    }, 5000);
+                }
             }
 
         })();
