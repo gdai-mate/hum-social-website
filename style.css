@@ -1061,7 +1061,7 @@ body:not(.journey-complete) footer {
     width: 80%;
     height: 55%;
     z-index: 1;
-    pointer-events: auto;
+    pointer-events: none;
     overflow: hidden;
     border-radius: 50% 50% 0 0 / 60% 60% 0 0;
 }
@@ -2090,6 +2090,8 @@ button, a, input, textarea, select {
     perspective: 1000px;
     cursor: pointer;
     min-height: 320px;
+    position: relative;
+    z-index: 10;
 }
 
 .card-inner {
@@ -2236,10 +2238,170 @@ button, a, input, textarea, select {
     line-height: 1.7;
 }
 
-/* How It Works */
+/* How It Works - Philosophy Section */
 .how-it-works {
     padding: 6rem 0;
     background: var(--surface);
+}
+
+.section-intro {
+    font-size: clamp(1.125rem, 2vw, 1.35rem);
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 600px;
+    margin: -2rem auto 4rem;
+    line-height: 1.6;
+}
+
+.philosophy-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.philosophy-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    position: relative;
+}
+
+.philosophy-card-featured {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 3rem;
+    align-items: center;
+    background: linear-gradient(135deg, var(--bg) 0%, rgba(124, 156, 191, 0.08) 100%);
+    border: 2px solid var(--accent);
+}
+
+.philosophy-content {
+    flex: 1;
+}
+
+.philosophy-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.philosophy-screenshot {
+    max-width: 100%;
+    height: auto;
+    border-radius: 1rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.philosophy-number {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+    font-family: var(--font-numbers);
+    margin-bottom: 1rem;
+}
+
+.philosophy-card h3 {
+    font-family: var(--font-titles);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+}
+
+.philosophy-problem,
+.philosophy-solution,
+.philosophy-why {
+    margin-bottom: 1.25rem;
+}
+
+.philosophy-card .label {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.philosophy-problem .label {
+    color: var(--text-secondary);
+}
+
+.philosophy-solution .label {
+    color: var(--accent);
+}
+
+.philosophy-why .label {
+    color: var(--accent-coral);
+}
+
+.philosophy-card p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.philosophy-problem p {
+    font-style: italic;
+}
+
+.philosophy-why p {
+    color: var(--text);
+    font-weight: 500;
+}
+
+/* Philosophy cards 2x2 grid for smaller cards */
+.philosophy-grid .philosophy-card:not(.philosophy-card-featured) {
+    /* These will stack on mobile, 2-col on desktop handled by media query */
+}
+
+@media (min-width: 768px) {
+    .philosophy-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    /* Make the non-featured cards a 2x2 grid */
+    .philosophy-card:not(.philosophy-card-featured) {
+        /* Will be handled by wrapper if needed */
+    }
+}
+
+@media (max-width: 900px) {
+    .philosophy-card-featured {
+        grid-template-columns: 1fr;
+    }
+
+    .philosophy-visual {
+        order: -1;
+    }
+
+    .philosophy-screenshot {
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    .philosophy-card {
+        padding: 1.75rem;
+    }
+
+    .philosophy-card-featured {
+        padding: 1.75rem;
+    }
 }
 
 .section-title {
