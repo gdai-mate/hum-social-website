@@ -96,7 +96,25 @@
         }
     </style>
 </head>
-<body>
+<body class="fonts-loading">
+    <!-- Font Loading Screen -->
+    <div id="loader" class="page-loader">
+        <div class="loader-logo">hüm</div>
+    </div>
+
+    <script>
+        // Hide loader when fonts are ready
+        document.fonts.ready.then(() => {
+            document.body.classList.remove('fonts-loading');
+            document.getElementById('loader').classList.add('loaded');
+        });
+        // Fallback timeout
+        setTimeout(() => {
+            document.body.classList.remove('fonts-loading');
+            document.getElementById('loader').classList.add('loaded');
+        }, 2000);
+    </script>
+
     <!-- Navigation -->
     <nav class="nav">
         <div class="container">
