@@ -2092,6 +2092,15 @@ button, a, input, textarea, select {
     min-height: 320px;
     position: relative;
     z-index: 10;
+    pointer-events: auto;
+}
+
+.diff-card * {
+    pointer-events: none;
+}
+
+.diff-card {
+    -webkit-tap-highlight-color: transparent;
 }
 
 .card-inner {
@@ -2238,7 +2247,151 @@ button, a, input, textarea, select {
     line-height: 1.7;
 }
 
-/* How It Works - Philosophy Section */
+/* How It Works - Scroll-driven Journey */
+.how-it-works-journey {
+    background: var(--surface);
+}
+
+.principle-panel {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+}
+
+.principle-visual {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--surface);
+}
+
+.principle-screenshot {
+    max-width: 320px;
+    width: 100%;
+    height: auto;
+    border-radius: 2rem;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.15);
+}
+
+.principle-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 3rem;
+    min-height: 100vh;
+}
+
+.principle-number {
+    font-family: var(--font-numbers);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.principle-title {
+    font-family: var(--font-titles);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 2rem;
+    color: var(--text);
+}
+
+.principle-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.principle-line {
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    opacity: 0.3;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.principle-line.current,
+.principle-line.seen {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.principle-line.seen {
+    opacity: 0.6;
+}
+
+.line-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+}
+
+.principle-line[data-line="1"] .line-label {
+    color: var(--text-secondary);
+}
+
+.principle-line[data-line="2"] .line-label {
+    color: var(--accent);
+}
+
+.principle-line[data-line="3"] .line-label {
+    color: var(--accent-coral);
+}
+
+/* Alternate panel layout (visual on right) */
+.principle-panel:nth-child(even) {
+    grid-template-columns: 1fr 1fr;
+}
+
+.principle-panel:nth-child(even) .principle-visual {
+    order: 2;
+}
+
+.principle-panel:nth-child(even) .principle-content {
+    order: 1;
+}
+
+@media (max-width: 900px) {
+    .principle-panel {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .principle-visual {
+        position: relative;
+        height: auto;
+        min-height: 50vh;
+        padding: 3rem 1.5rem;
+    }
+
+    .principle-screenshot {
+        max-width: 240px;
+    }
+
+    .principle-content {
+        min-height: auto;
+        padding: 3rem 1.5rem;
+    }
+
+    .principle-panel:nth-child(even) .principle-visual,
+    .principle-panel:nth-child(even) .principle-content {
+        order: unset;
+    }
+}
+
+/* Legacy section styles */
 .how-it-works {
     padding: 6rem 0;
     background: var(--surface);
