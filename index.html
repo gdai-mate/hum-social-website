@@ -1398,43 +1398,53 @@
         // ============================================
         // WAITLIST & LEADERBOARD (SUPABASE)
         // ============================================
+        (function initWaitlist() {
+            try {
+                const SUPABASE_URL = 'https://mclksiyohsfwhquhhxcb.supabase.co';
+                const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jbGtzaXlvaHNmd2hxdWhoeGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5OTk0NzAsImV4cCI6MjA4MTU3NTQ3MH0.tsMWJGUJUO1hwxMo3eBrletfFuHOGCNybTtHVG5wsVw';
 
-        const SUPABASE_URL = 'https://mclksiyohsfwhquhhxcb.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jbGtzaXlvaHNmd2hxdWhoeGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5OTk0NzAsImV4cCI6MjA4MTU3NTQ3MH0.tsMWJGUJUO1hwxMo3eBrletfFuHOGCNybTtHVG5wsVw';
+                const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                // Get referral code from URL if present
+                const urlParams = new URLSearchParams(window.location.search);
+                const referredBy = urlParams.get('ref');
 
-        // Get referral code from URL if present
-        const urlParams = new URLSearchParams(window.location.search);
-        const referredBy = urlParams.get('ref');
+                // DOM Elements
+                const waitlistForm = document.getElementById('waitlist-form');
+                const formContainer = document.getElementById('waitlist-form-container');
+                const successContainer = document.getElementById('waitlist-success');
+                const leaderboardEl = document.getElementById('leaderboard');
+                const charCountEl = document.getElementById('char-count');
+                const whyTextarea = document.getElementById('waitlist-why');
+                const formError = document.getElementById('form-error');
+                const submitText = document.getElementById('submit-text');
 
-        // DOM Elements
-        const waitlistForm = document.getElementById('waitlist-form');
-        const formContainer = document.getElementById('waitlist-form-container');
-        const successContainer = document.getElementById('waitlist-success');
-        const leaderboardEl = document.getElementById('leaderboard');
-        const charCountEl = document.getElementById('char-count');
-        const whyTextarea = document.getElementById('waitlist-why');
-        const formError = document.getElementById('form-error');
-        const submitText = document.getElementById('submit-text');
+                if (!waitlistForm || !whyTextarea) {
+                    console.warn('Waitlist elements not found');
+                    return;
+                }
 
-        // Character counter
-        whyTextarea.addEventListener('input', () => {
-            charCountEl.textContent = whyTextarea.value.length;
-        });
+                // Character counter
+                whyTextarea.addEventListener('input', () => {
+                    charCountEl.textContent = whyTextarea.value.length;
+                });
 
-        // Load leaderboard on page load
-        loadLeaderboard();
+                // Load leaderboard on page load
+                loadLeaderboard();
 
-        // Check if user already signed up (via localStorage)
-        const savedUser = localStorage.getItem('hum_waitlist_user');
-        if (savedUser) {
-            const user = JSON.parse(savedUser);
-            showSuccessState(user);
-        }
+                // Check if user already signed up (via localStorage)
+                const savedUser = localStorage.getItem('hum_waitlist_user');
+                if (savedUser) {
+                    try {
+                        const user = JSON.parse(savedUser);
+                        showSuccessState(user);
+                    } catch (e) {
+                        localStorage.removeItem('hum_waitlist_user');
+                    }
+                }
 
-        // Form submission
-        waitlistForm.addEventListener('submit', async (e) => {
+                // Form submission
+                waitlistForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             formError.textContent = '';
 
@@ -1454,7 +1464,7 @@
 
             try {
                 // Check if email already exists
-                const { data: existing } = await supabase
+                const { data: existing } = await supabaseClient
                     .from('waitlist')
                     .select('referral_code')
                     .eq('email', email)
@@ -1470,7 +1480,7 @@
                 }
 
                 // Insert new waitlist entry
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('waitlist')
                     .insert([{
                         name,
@@ -1528,7 +1538,7 @@
 
         async function calculateUserRank(email) {
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('waitlist')
                     .select('email, referral_count')
                     .order('referral_count', { ascending: false });
@@ -1544,7 +1554,7 @@
 
         async function loadLeaderboard() {
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('waitlist')
                     .select('name, why, referral_count')
                     .order('referral_count', { ascending: false })
@@ -1582,6 +1592,11 @@
 
         // Auto-refresh leaderboard every 30 seconds
         setInterval(loadLeaderboard, 30000);
+
+            } catch (err) {
+                console.error('Waitlist initialization error:', err);
+            }
+        })();
     </script>
 </body>
 </html>
