@@ -2278,6 +2278,21 @@ button, a, input, textarea, select {
     border: 2px solid var(--accent);
 }
 
+.philosophy-card-with-visual {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 2.5rem;
+    align-items: center;
+}
+
+.philosophy-card-with-visual.reverse {
+    grid-template-columns: 240px 1fr;
+}
+
+.philosophy-card-with-visual.reverse .philosophy-visual {
+    order: -1;
+}
+
 .philosophy-content {
     flex: 1;
 }
