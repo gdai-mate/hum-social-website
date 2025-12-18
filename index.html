@@ -527,6 +527,12 @@
                             <textarea id="waitlist-why" placeholder="I want to join because..." maxlength="140" required></textarea>
                             <span class="char-count"><span id="char-count">0</span>/140</span>
                         </div>
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="waitlist-notifications">
+                                <span class="checkbox-text">Notify me if my rank changes</span>
+                            </label>
+                        </div>
                         <button type="submit" class="btn-cta waitlist-submit">
                             <span id="submit-text">Join the Waitlist</span>
                         </button>
@@ -1597,6 +1603,7 @@
             const name = document.getElementById('waitlist-name').value.trim();
             const email = document.getElementById('waitlist-email').value.trim().toLowerCase();
             const why = whyTextarea.value.trim();
+            const rankNotifications = document.getElementById('waitlist-notifications').checked;
 
             if (!name || !email || !why) {
                 formError.textContent = 'Please fill in all fields';
@@ -1632,7 +1639,8 @@
                         name,
                         email,
                         why,
-                        referred_by: referredBy || null
+                        referred_by: referredBy || null,
+                        rank_notifications: rankNotifications
                     }])
                     .select('referral_code')
                     .single();

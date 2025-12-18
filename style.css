@@ -3251,6 +3251,31 @@ button, a, input, textarea, select {
     color: white;
 }
 
+/* Checkbox styling */
+.checkbox-group {
+    text-align: left;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.checkbox-text {
+    user-select: none;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     .waitlist-section {

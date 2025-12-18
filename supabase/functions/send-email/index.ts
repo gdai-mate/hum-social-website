@@ -18,10 +18,11 @@ interface WaitlistEntry {
   referral_code: string
   referral_count: number
   previous_rank?: number
+  rank_notifications?: boolean
+  last_rank_email_at?: string
 }
 
 serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -31,11 +32,12 @@ serve(async (req) => {
 
     switch (action) {
       case 'welcome':
-        // Send welcome email to new waitlist signup
         return await sendWelcomeEmail(data)
 
+      case 'first-referral':
+        return await sendFirstReferralEmail(data)
+
       case 'daily-rank-check':
-        // Run daily rank check and notify dropped users
         return await dailyRankCheck()
 
       default:
@@ -53,9 +55,14 @@ serve(async (req) => {
   }
 })
 
+// ============================================
+// WELCOME EMAIL
+// ============================================
 async function sendWelcomeEmail(data: { email: string, name: string, referral_code: string }) {
   const { email, name, referral_code } = data
   const referralLink = `https://hum-social.com?ref=${referral_code}`
+
+  const subject = "You're on the list."
 
   const htmlContent = `
 <!DOCTYPE html>
@@ -67,13 +74,14 @@ async function sendWelcomeEmail(data: { email: string, name: string, referral_co
     .header { padding: 48px 40px 32px; text-align: center; border-bottom: 1px solid #F0F0F0; }
     .logo { font-size: 48px; font-weight: 300; color: #2C2418; margin: 0; letter-spacing: 2px; }
     .content { padding: 40px; }
-    .greeting { font-size: 24px; color: #2C2418; margin: 0 0 24px 0; font-weight: 400; }
+    .greeting { font-size: 20px; color: #2C2418; margin: 0 0 20px 0; }
     p { margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #4A4A4A; }
-    .highlight { background: #FFFBF7; border-left: 3px solid #D2916F; padding: 20px 24px; margin: 24px 0; }
-    .cta { display: inline-block; padding: 14px 32px; background: #2C2418; color: #FFFFFF !important; text-decoration: none; border-radius: 6px; font-weight: 500; margin: 16px 0; }
-    .referral-box { background: #F5F5F5; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center; }
-    .referral-link { font-family: monospace; font-size: 14px; background: #FFFFFF; padding: 12px; border-radius: 4px; word-break: break-all; display: block; margin-top: 8px; }
-    .footer { background: #FAFAFA; text-align: center; padding: 32px 40px; font-size: 13px; color: #999999; border-top: 1px solid #F0F0F0; }
+    .highlight { background: #FFFBF7; border-left: 3px solid #D2916F; padding: 16px 20px; margin: 24px 0; }
+    .highlight p { margin: 0; color: #2C2418; }
+    .referral-box { background: #F5F5F5; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center; }
+    .referral-link { font-family: monospace; font-size: 14px; background: #FFFFFF; padding: 12px; border-radius: 4px; word-break: break-all; display: block; margin-top: 8px; color: #2C2418; }
+    .footer { background: #FAFAFA; text-align: center; padding: 24px 40px; font-size: 13px; color: #999999; border-top: 1px solid #F0F0F0; }
+    .signature { margin-top: 32px; color: #2C2418; }
   </style>
 </head>
 <body>
@@ -82,56 +90,52 @@ async function sendWelcomeEmail(data: { email: string, name: string, referral_co
       <h1 class="logo">hüm</h1>
     </div>
     <div class="content">
-      <p class="greeting">Hey ${name}!</p>
-      <p>You're on the waitlist. Welcome to the movement.</p>
+      <p class="greeting">Hey ${name},</p>
+      <p>You're in. Welcome to the movement.</p>
 
       <div class="highlight">
-        <p style="margin: 0; color: #2C2418;"><strong>Top 100 referrers get first access when we launch.</strong></p>
+        <p><strong>Top 100 referrers get first access when we launch.</strong> Everyone else waits.</p>
       </div>
 
-      <p>Share your unique link with friends who are tired of doomscrolling and ready to build something real:</p>
-
+      <p>Your link:</p>
       <div class="referral-box">
-        <p style="margin: 0 0 8px 0; font-weight: 600; color: #2C2418;">Your referral link:</p>
         <span class="referral-link">${referralLink}</span>
       </div>
 
-      <p>Every friend who joins using your link moves you up the leaderboard.</p>
+      <p>Every friend who joins using your link moves you up the leaderboard. Simple.</p>
+      <p>No algorithms. No doomscrolling. No bullshit. Just real people building real habits together.</p>
+      <p>Share your link. Climb the board. See you on the other side.</p>
 
-      <div style="text-align: center;">
-        <a href="${referralLink}" class="cta">Share Your Link</a>
-      </div>
-
-      <p style="margin-top: 32px;">See you on the other side.</p>
-      <p style="color: #2C2418;"><strong>${SENDGRID_FROM_NAME}</strong></p>
+      <p class="signature">– ${SENDGRID_FROM_NAME}</p>
     </div>
     <div class="footer">
-      <p style="font-weight: 500; color: #2C2418; margin-bottom: 4px;">hüm</p>
-      <p>Social media that makes you better, not bitter</p>
+      <p>hüm – social media that makes you better, not bitter</p>
     </div>
   </div>
 </body>
 </html>`
 
-  const plainTextContent = `Hey ${name}!
+  const plainTextContent = `Hey ${name},
 
-You're on the waitlist. Welcome to the movement.
+You're in. Welcome to the movement.
 
-TOP 100 REFERRERS GET FIRST ACCESS WHEN WE LAUNCH.
+TOP 100 REFERRERS GET FIRST ACCESS WHEN WE LAUNCH. Everyone else waits.
 
-Share your unique link with friends who are tired of doomscrolling and ready to build something real:
+Your link:
+${referralLink}
 
-Your referral link: ${referralLink}
+Every friend who joins using your link moves you up the leaderboard. Simple.
 
-Every friend who joins using your link moves you up the leaderboard.
+No algorithms. No doomscrolling. No bullshit. Just real people building real habits together.
 
-See you on the other side.
-${SENDGRID_FROM_NAME}
+Share your link. Climb the board. See you on the other side.
+
+– ${SENDGRID_FROM_NAME}
 
 ---
-hüm - Social media that makes you better, not bitter`
+hüm – social media that makes you better, not bitter`
 
-  await sendEmail(email, "You're on the hüm waitlist!", htmlContent, plainTextContent)
+  await sendEmail(email, subject, htmlContent, plainTextContent)
 
   return new Response(
     JSON.stringify({ success: true }),
@@ -139,38 +143,162 @@ hüm - Social media that makes you better, not bitter`
   )
 }
 
+// ============================================
+// FIRST REFERRAL EMAIL
+// ============================================
+async function sendFirstReferralEmail(data: { email: string, name: string, referral_code: string, referrer_name: string, rank: number }) {
+  const { email, name, referral_code, referrer_name, rank } = data
+  const referralLink = `https://hum-social.com?ref=${referral_code}`
+
+  const subject = "Someone joined because of you."
+
+  const inTop100 = rank <= 100
+  const spotsAway = rank - 100
+
+  const rankMessage = inTop100
+    ? `<p>You're in the top 100. Keep your spot.</p>`
+    : `<p>Keep going. Top 100 get early access – you're <strong>${spotsAway} spots</strong> away.</p>`
+
+  const rankMessagePlain = inTop100
+    ? `You're in the top 100. Keep your spot.`
+    : `Keep going. Top 100 get early access – you're ${spotsAway} spots away.`
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #2C2418; background: #F8F8F8; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; background: #FFFFFF; }
+    .header { padding: 48px 40px 32px; text-align: center; border-bottom: 1px solid #F0F0F0; }
+    .logo { font-size: 48px; font-weight: 300; color: #2C2418; margin: 0; letter-spacing: 2px; }
+    .content { padding: 40px; }
+    .greeting { font-size: 20px; color: #2C2418; margin: 0 0 20px 0; }
+    p { margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #4A4A4A; }
+    .rank-box { background: #F5F5F5; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center; }
+    .rank-number { font-size: 32px; font-weight: 700; color: #2C2418; }
+    .referral-box { background: #FFFBF7; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center; }
+    .referral-link { font-family: monospace; font-size: 14px; word-break: break-all; color: #2C2418; }
+    .footer { background: #FAFAFA; text-align: center; padding: 24px 40px; font-size: 13px; color: #999999; border-top: 1px solid #F0F0F0; }
+    .signature { margin-top: 32px; color: #2C2418; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="logo">hüm</h1>
+    </div>
+    <div class="content">
+      <p class="greeting">Hey ${name},</p>
+      <p>Your first referral just landed. <strong>${referrer_name}</strong> is now on the waitlist because of you.</p>
+
+      <div class="rank-box">
+        <p style="margin: 0; color: #666;">You're</p>
+        <p class="rank-number">#${rank}</p>
+        <p style="margin: 0; color: #666;">on the leaderboard</p>
+      </div>
+
+      ${rankMessage}
+
+      <p>Your link (keep sharing):</p>
+      <div class="referral-box">
+        <span class="referral-link">${referralLink}</span>
+      </div>
+
+      <p class="signature">– ${SENDGRID_FROM_NAME}</p>
+    </div>
+    <div class="footer">
+      <p>hüm – social media that makes you better, not bitter</p>
+    </div>
+  </div>
+</body>
+</html>`
+
+  const plainTextContent = `Hey ${name},
+
+Your first referral just landed. ${referrer_name} is now on the waitlist because of you.
+
+You're #${rank} on the leaderboard.
+
+${rankMessagePlain}
+
+Your link (keep sharing):
+${referralLink}
+
+– ${SENDGRID_FROM_NAME}
+
+---
+hüm – social media that makes you better, not bitter`
+
+  await sendEmail(email, subject, htmlContent, plainTextContent)
+
+  return new Response(
+    JSON.stringify({ success: true }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  )
+}
+
+// ============================================
+// DAILY RANK CHECK (Dropped Out & Back In)
+// ============================================
 async function dailyRankCheck() {
-  // First, get current rankings
-  const response = await fetch(`${SUPABASE_URL}/rest/v1/waitlist?select=id,email,name,referral_count,previous_rank&order=referral_count.desc`, {
-    headers: {
-      'apikey': SUPABASE_SERVICE_ROLE_KEY,
-      'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+  // Get all users with rank notifications enabled
+  const response = await fetch(
+    `${SUPABASE_URL}/rest/v1/waitlist?select=id,email,name,referral_code,referral_count,previous_rank,rank_notifications,last_rank_email_at&order=referral_count.desc`,
+    {
+      headers: {
+        'apikey': SUPABASE_SERVICE_ROLE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+      }
     }
-  })
+  )
 
   const entries: WaitlistEntry[] = await response.json()
 
   const emailsSent: string[] = []
   const errors: string[] = []
 
-  // Check each entry for rank changes
+  const now = new Date()
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i]
     const currentRank = i + 1
     const previousRank = entry.previous_rank
 
-    // If they were in top 100 and now they're not, send email
+    // Skip if notifications not enabled
+    if (!entry.rank_notifications) continue
+
+    // Check cooldown (7 days since last rank email)
+    if (entry.last_rank_email_at) {
+      const lastEmailDate = new Date(entry.last_rank_email_at)
+      if (lastEmailDate > sevenDaysAgo) continue
+    }
+
+    // DROPPED OUT: Was in top 100, now isn't
     if (previousRank && previousRank <= 100 && currentRank > 100) {
       try {
-        await sendDroppedOutEmail(entry, previousRank, currentRank)
-        emailsSent.push(entry.email)
+        await sendDroppedOutEmail(entry, currentRank)
+        await updateLastRankEmail(entry.id)
+        emailsSent.push(`${entry.email} (dropped)`)
+      } catch (err) {
+        errors.push(`${entry.email}: ${err.message}`)
+      }
+    }
+
+    // BACK IN: Was outside top 100, now is in
+    if (previousRank && previousRank > 100 && currentRank <= 100) {
+      try {
+        await sendBackInEmail(entry, currentRank)
+        await updateLastRankEmail(entry.id)
+        emailsSent.push(`${entry.email} (back in)`)
       } catch (err) {
         errors.push(`${entry.email}: ${err.message}`)
       }
     }
   }
 
-  // Update all previous_rank values
+  // Update all previous_rank values for tomorrow
   await fetch(`${SUPABASE_URL}/rest/v1/rpc/snapshot_waitlist_ranks`, {
     method: 'POST',
     headers: {
@@ -191,8 +319,30 @@ async function dailyRankCheck() {
   )
 }
 
-async function sendDroppedOutEmail(entry: WaitlistEntry, previousRank: number, currentRank: number) {
+// Update last_rank_email_at timestamp
+async function updateLastRankEmail(userId: string) {
+  await fetch(`${SUPABASE_URL}/rest/v1/waitlist?id=eq.${userId}`, {
+    method: 'PATCH',
+    headers: {
+      'apikey': SUPABASE_SERVICE_ROLE_KEY,
+      'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal',
+    },
+    body: JSON.stringify({ last_rank_email_at: new Date().toISOString() })
+  })
+}
+
+// ============================================
+// DROPPED OUT EMAIL
+// ============================================
+async function sendDroppedOutEmail(entry: WaitlistEntry, currentRank: number) {
   const referralLink = `https://hum-social.com?ref=${entry.referral_code}`
+
+  // Calculate referrals needed to get back to #100
+  const referralsNeeded = Math.ceil((currentRank - 100) / 10) || 1
+
+  const subject = `Rank update: You're now #${currentRank}`
 
   const htmlContent = `
 <!DOCTYPE html>
@@ -204,11 +354,14 @@ async function sendDroppedOutEmail(entry: WaitlistEntry, previousRank: number, c
     .header { padding: 48px 40px 32px; text-align: center; border-bottom: 1px solid #F0F0F0; }
     .logo { font-size: 48px; font-weight: 300; color: #2C2418; margin: 0; letter-spacing: 2px; }
     .content { padding: 40px; }
-    .greeting { font-size: 24px; color: #2C2418; margin: 0 0 24px 0; font-weight: 400; }
+    .greeting { font-size: 20px; color: #2C2418; margin: 0 0 20px 0; }
     p { margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #4A4A4A; }
-    .alert-box { background: #FFF5F5; border-left: 3px solid #E74C3C; padding: 20px 24px; margin: 24px 0; }
-    .cta { display: inline-block; padding: 14px 32px; background: #2C2418; color: #FFFFFF !important; text-decoration: none; border-radius: 6px; font-weight: 500; margin: 16px 0; }
-    .footer { background: #FAFAFA; text-align: center; padding: 32px 40px; font-size: 13px; color: #999999; border-top: 1px solid #F0F0F0; }
+    .rank-box { background: #F5F5F5; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center; }
+    .rank-number { font-size: 32px; font-weight: 700; color: #2C2418; }
+    .referral-box { background: #FFFBF7; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center; }
+    .referral-link { font-family: monospace; font-size: 14px; word-break: break-all; color: #2C2418; }
+    .footer { background: #FAFAFA; text-align: center; padding: 24px 40px; font-size: 13px; color: #999999; border-top: 1px solid #F0F0F0; }
+    .signature { margin-top: 32px; color: #2C2418; }
   </style>
 </head>
 <body>
@@ -219,27 +372,23 @@ async function sendDroppedOutEmail(entry: WaitlistEntry, previousRank: number, c
     <div class="content">
       <p class="greeting">Hey ${entry.name},</p>
 
-      <div class="alert-box">
-        <p style="margin: 0; color: #2C2418;"><strong>You've dropped out of the top 100.</strong></p>
-        <p style="margin: 8px 0 0 0; color: #4A4A4A;">You were #${previousRank}, now you're #${currentRank}.</p>
+      <div class="rank-box">
+        <p style="margin: 0; color: #666;">You're currently</p>
+        <p class="rank-number">#${currentRank}</p>
+        <p style="margin: 0; color: #666;">on the waitlist</p>
       </div>
 
-      <p>The leaderboard is heating up! Other people are sharing their links and climbing past you.</p>
+      <p>To get back into the top 100, you need <strong>${referralsNeeded} more referral${referralsNeeded > 1 ? 's' : ''}</strong>.</p>
 
-      <p>Want back in the top 100? Share your link with one more friend:</p>
-
-      <div style="text-align: center; margin: 24px 0;">
-        <a href="${referralLink}" class="cta">Share & Climb Back Up</a>
+      <p>Your link:</p>
+      <div class="referral-box">
+        <span class="referral-link">${referralLink}</span>
       </div>
 
-      <p>Remember: <strong>Top 100 get first access when we launch.</strong></p>
-
-      <p style="margin-top: 32px;">Let's go,</p>
-      <p style="color: #2C2418;"><strong>${SENDGRID_FROM_NAME}</strong></p>
+      <p class="signature">– ${SENDGRID_FROM_NAME}</p>
     </div>
     <div class="footer">
-      <p style="font-weight: 500; color: #2C2418; margin-bottom: 4px;">hüm</p>
-      <p>Social media that makes you better, not bitter</p>
+      <p>hüm – social media that makes you better, not bitter</p>
     </div>
   </div>
 </body>
@@ -247,25 +396,94 @@ async function sendDroppedOutEmail(entry: WaitlistEntry, previousRank: number, c
 
   const plainTextContent = `Hey ${entry.name},
 
-You've dropped out of the top 100.
-You were #${previousRank}, now you're #${currentRank}.
+You're currently #${currentRank} on the waitlist.
 
-The leaderboard is heating up! Other people are sharing their links and climbing past you.
+To get back into the top 100, you need ${referralsNeeded} more referral${referralsNeeded > 1 ? 's' : ''}.
 
-Want back in the top 100? Share your link with one more friend:
+Your link:
 ${referralLink}
 
-Remember: Top 100 get first access when we launch.
-
-Let's go,
-${SENDGRID_FROM_NAME}
+– ${SENDGRID_FROM_NAME}
 
 ---
-hüm - Social media that makes you better, not bitter`
+hüm – social media that makes you better, not bitter`
 
-  await sendEmail(entry.email, "You've dropped out of the top 100", htmlContent, plainTextContent)
+  await sendEmail(entry.email, subject, htmlContent, plainTextContent)
 }
 
+// ============================================
+// BACK IN TOP 100 EMAIL
+// ============================================
+async function sendBackInEmail(entry: WaitlistEntry, currentRank: number) {
+  const referralLink = `https://hum-social.com?ref=${entry.referral_code}`
+
+  const subject = `Rank update: You're back in the top 100`
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #2C2418; background: #F8F8F8; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; background: #FFFFFF; }
+    .header { padding: 48px 40px 32px; text-align: center; border-bottom: 1px solid #F0F0F0; }
+    .logo { font-size: 48px; font-weight: 300; color: #2C2418; margin: 0; letter-spacing: 2px; }
+    .content { padding: 40px; }
+    .greeting { font-size: 20px; color: #2C2418; margin: 0 0 20px 0; }
+    p { margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #4A4A4A; }
+    .rank-box { background: #E8F5E9; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center; }
+    .rank-number { font-size: 32px; font-weight: 700; color: #2C2418; }
+    .referral-box { background: #FFFBF7; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center; }
+    .referral-link { font-family: monospace; font-size: 14px; word-break: break-all; color: #2C2418; }
+    .footer { background: #FAFAFA; text-align: center; padding: 24px 40px; font-size: 13px; color: #999999; border-top: 1px solid #F0F0F0; }
+    .signature { margin-top: 32px; color: #2C2418; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="logo">hüm</h1>
+    </div>
+    <div class="content">
+      <p class="greeting">Hey ${entry.name},</p>
+
+      <div class="rank-box">
+        <p style="margin: 0; color: #666;">You're back in the top 100</p>
+        <p class="rank-number">#${currentRank}</p>
+      </div>
+
+      <p>Your link:</p>
+      <div class="referral-box">
+        <span class="referral-link">${referralLink}</span>
+      </div>
+
+      <p class="signature">– ${SENDGRID_FROM_NAME}</p>
+    </div>
+    <div class="footer">
+      <p>hüm – social media that makes you better, not bitter</p>
+    </div>
+  </div>
+</body>
+</html>`
+
+  const plainTextContent = `Hey ${entry.name},
+
+You're back in the top 100 – #${currentRank} on the waitlist.
+
+Your link:
+${referralLink}
+
+– ${SENDGRID_FROM_NAME}
+
+---
+hüm – social media that makes you better, not bitter`
+
+  await sendEmail(entry.email, subject, htmlContent, plainTextContent)
+}
+
+// ============================================
+// SEND EMAIL VIA SENDGRID
+// ============================================
 async function sendEmail(to: string, subject: string, htmlContent: string, plainTextContent: string) {
   const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
     method: 'POST',
