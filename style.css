@@ -3027,12 +3027,52 @@ button, a, input, textarea, select {
 
 .leaderboard-entry {
     display: grid;
-    grid-template-columns: 50px 1fr auto;
+    grid-template-columns: 70px 1fr auto;
     align-items: center;
     padding: 1rem 1.25rem;
     border-bottom: 1px solid var(--border);
     text-align: left;
     transition: background 0.2s;
+}
+
+.leaderboard-rank-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
+.movement-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.movement-new {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.movement-up {
+    background: rgba(39, 174, 96, 0.15);
+    color: #27ae60;
+}
+
+.movement-up svg {
+    fill: #27ae60;
+}
+
+.movement-down {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+}
+
+.movement-down svg {
+    fill: #e74c3c;
 }
 
 .leaderboard-entry:last-child {

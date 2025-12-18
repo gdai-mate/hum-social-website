@@ -1635,7 +1635,7 @@
             try {
                 const { data, error } = await supabaseClient
                     .from('waitlist')
-                    .select('name, why, referral_count')
+                    .select('name, why, referral_count, previous_rank, created_at')
                     .order('referral_count', { ascending: false })
                     .limit(100);
 
@@ -1646,21 +1646,57 @@
                     return;
                 }
 
-                leaderboardEl.innerHTML = data.map((entry, index) => `
+                leaderboardEl.innerHTML = data.map((entry, index) => {
+                    const currentRank = index + 1;
+                    const movement = getMovementIndicator(currentRank, entry.previous_rank, entry.created_at);
+
+                    return `
                     <div class="leaderboard-entry ${index < 3 ? 'top-3' : ''}">
-                        <div class="leaderboard-rank">#${index + 1}</div>
+                        <div class="leaderboard-rank-container">
+                            <div class="leaderboard-rank">#${currentRank}</div>
+                            ${movement}
+                        </div>
                         <div class="leaderboard-info">
                             <div class="leaderboard-name">${escapeHtml(entry.name)}</div>
                             <div class="leaderboard-why">"${escapeHtml(entry.why)}"</div>
                         </div>
                         <div class="leaderboard-referrals">${entry.referral_count} referral${entry.referral_count !== 1 ? 's' : ''}</div>
                     </div>
-                `).join('');
+                `}).join('');
 
             } catch (error) {
                 console.error('Error loading leaderboard:', error);
                 leaderboardEl.innerHTML = '<div class="leaderboard-loading">Failed to load leaderboard</div>';
             }
+        }
+
+        function getMovementIndicator(currentRank, previousRank, createdAt) {
+            // Check if new (joined in last 24 hours)
+            const joinedAt = new Date(createdAt);
+            const now = new Date();
+            const hoursAgo = (now - joinedAt) / (1000 * 60 * 60);
+
+            if (hoursAgo < 24) {
+                return '<span class="movement-badge movement-new">NEW</span>';
+            }
+
+            if (!previousRank) return '';
+
+            const diff = previousRank - currentRank;
+
+            if (diff > 0) {
+                return `<span class="movement-badge movement-up" title="Up ${diff} spot${diff !== 1 ? 's' : ''}">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M7 14l5-5 5 5z"/></svg>
+                    ${diff}
+                </span>`;
+            } else if (diff < 0) {
+                return `<span class="movement-badge movement-down" title="Down ${Math.abs(diff)} spot${Math.abs(diff) !== 1 ? 's' : ''}">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M7 10l5 5 5-5z"/></svg>
+                    ${Math.abs(diff)}
+                </span>`;
+            }
+
+            return '';
         }
 
         function escapeHtml(text) {
