@@ -1474,6 +1474,25 @@
                     }
                 }
 
+                // Function to send welcome email via Edge Function
+                async function sendWelcomeEmail(name, email, referral_code) {
+                    try {
+                        await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            },
+                            body: JSON.stringify({
+                                action: 'welcome',
+                                data: { name, email, referral_code }
+                            }),
+                        });
+                    } catch (err) {
+                        console.log('Could not send welcome email:', err);
+                    }
+                }
+
                 // Check if user already signed up (via localStorage)
                 const savedUser = localStorage.getItem('hum_waitlist_user');
                 if (savedUser) {
@@ -1538,6 +1557,9 @@
                 // Save to localStorage
                 const user = { email, referral_code: data.referral_code };
                 localStorage.setItem('hum_waitlist_user', JSON.stringify(user));
+
+                // Send welcome email (fire and forget)
+                sendWelcomeEmail(name, email, data.referral_code);
 
                 // Show success state
                 showSuccessState(user);
