@@ -503,8 +503,8 @@
                 <h2>Join the Movement</h2>
                 <p class="waitlist-intro">Top 100 referrers get first access when we launch. Share your link, climb the leaderboard.</p>
 
-                <!-- Live Signup Counter -->
-                <div class="signup-counter">
+                <!-- Live Signup Counter (hidden until after signup) -->
+                <div class="signup-counter" id="signup-counter" style="display: none;">
                     <span class="counter-number" id="total-signups">--</span>
                     <span class="counter-label">people waiting for launch</span>
                 </div>
@@ -1507,10 +1507,7 @@
                 // Load leaderboard on page load
                 loadLeaderboard();
 
-                // Load total signup count
-                loadTotalSignups();
-
-                // Function to load total signups
+                // Function to load total signups (called after user signs up)
                 async function loadTotalSignups() {
                     try {
                         const { count, error } = await supabaseClient
@@ -1518,6 +1515,8 @@
                             .select('*', { count: 'exact', head: true });
 
                         if (!error && count !== null) {
+                            // Show the counter
+                            document.getElementById('signup-counter').style.display = 'flex';
                             const counterEl = document.getElementById('total-signups');
                             // Animate the counter
                             animateCounter(counterEl, 0, count, 1000);
@@ -1695,6 +1694,9 @@
 
             // Calculate and show rank
             calculateUserRank(user.email);
+
+            // Show total signup count (reveal after registration)
+            loadTotalSignups();
         }
 
         // Generate QR code for referral link
