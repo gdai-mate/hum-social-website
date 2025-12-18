@@ -92,6 +92,77 @@ body.fonts-loading > *:not(.page-loader) {
     font-display: swap;
 }
 
+/* Paper Grain Texture */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99998;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+[data-theme="dark"] body::after {
+    opacity: 0.04;
+}
+
+/* Organic/Human Feel - Tilted Elements */
+.diff-card:nth-child(1) { transform: rotate(-1.5deg); }
+.diff-card:nth-child(2) { transform: rotate(1deg); }
+.diff-card:nth-child(3) { transform: rotate(-0.5deg); }
+.diff-card:nth-child(4) { transform: rotate(1.5deg); }
+
+.diff-card:hover {
+    transform: rotate(0deg) scale(1.02) !important;
+}
+
+.stat-card:nth-child(1) { transform: rotate(0.8deg); }
+.stat-card:nth-child(2) { transform: rotate(-1deg); }
+.stat-card:nth-child(3) { transform: rotate(0.5deg); }
+
+.stat-card:hover {
+    transform: rotate(0deg) translateY(-4px) !important;
+}
+
+/* Organic border radius - less perfect */
+.diff-card .card-front,
+.diff-card .card-back {
+    border-radius: 20px 24px 22px 26px;
+}
+
+.stat-card {
+    border-radius: 18px 22px 20px 24px;
+}
+
+/* Hand Cursor */
+a, button, .diff-card, .clickable, [onclick] {
+    cursor: url('assets/hands/hand-cursor.png') 12 0, pointer;
+}
+
+/* Subtle wobble animation on idle */
+@keyframes gentleFloat {
+    0%, 100% { transform: translateY(0) rotate(var(--base-rotate, 0deg)); }
+    50% { transform: translateY(-4px) rotate(calc(var(--base-rotate, 0deg) + 0.5deg)); }
+}
+
+.diff-card {
+    --base-rotate: 0deg;
+    animation: gentleFloat 6s ease-in-out infinite;
+}
+
+.diff-card:nth-child(1) { --base-rotate: -1.5deg; animation-delay: 0s; }
+.diff-card:nth-child(2) { --base-rotate: 1deg; animation-delay: 1.5s; }
+.diff-card:nth-child(3) { --base-rotate: -0.5deg; animation-delay: 3s; }
+.diff-card:nth-child(4) { --base-rotate: 1.5deg; animation-delay: 4.5s; }
+
+.diff-card:hover {
+    animation-play-state: paused;
+}
+
 /* Reset & Base */
 * {
     margin: 0;
