@@ -35,15 +35,24 @@
 
     <link rel="stylesheet" href="style.css?v=20251116o">
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
     <style>
-        /* Global text unselectable */
-        * {
+        /* Global text unselectable (except form inputs) */
+        *:not(input):not(textarea) {
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
             -ms-user-select: none !important;
             user-select: none !important;
             -webkit-touch-callout: none !important;
+        }
+
+        /* Allow selection in form inputs */
+        input, textarea {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
         }
 
         /* Prevent text dragging */
@@ -117,7 +126,7 @@
                     Build habits. Share progress. Find your people. <span class="nowrap">Zero bullshit.</span>
                 </p>
                 <div class="hero-cta">
-                    <a href="https://app.hum-social.com" class="btn-cta">Join the Movement</a>
+                    <a href="#waitlist" class="btn-cta">Join the Waitlist</a>
                     <p class="cta-note">Free • Invite-only • Real Humans Only</p>
                 </div>
             </div>
@@ -457,7 +466,7 @@
                     <p class="invite-detail">
                         Get your unique referral code and QR. Share with people who get it. Build a community of real humans doing real work.
                     </p>
-                    <a href="https://app.hum-social.com" class="btn-cta">Get Your Invite Code</a>
+                    <a href="#waitlist" class="btn-cta">Join the Waitlist</a>
                 </div>
                 <div class="screenshot-container">
                     <img src="assets/screenshots/invite-qr.png" alt="Referral QR code to share hüm with friends" class="app-screenshot">
@@ -466,14 +475,86 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
+    <!-- Waitlist Section -->
+    <section class="waitlist-section" id="waitlist">
         <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Build Something Real?</h2>
-                <p>For the doers, not the viewers.</p>
-                <a href="https://app.hum-social.com" class="btn-cta">Get Your Invite</a>
-                <p class="cta-note">Free to join • Ask a friend for their referral code</p>
+            <div class="waitlist-content">
+                <h2>Join the Movement</h2>
+                <p class="waitlist-intro">Top 100 referrers get first access when we launch. Share your link, climb the leaderboard.</p>
+
+                <!-- Waitlist Form -->
+                <div id="waitlist-form-container" class="waitlist-form-container">
+                    <form id="waitlist-form" class="waitlist-form">
+                        <div class="form-group">
+                            <input type="text" id="waitlist-name" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="waitlist-email" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="waitlist-why" placeholder="Why do you want to join hüm? (280 chars max)" maxlength="280" required></textarea>
+                            <span class="char-count"><span id="char-count">0</span>/280</span>
+                        </div>
+                        <button type="submit" class="btn-cta waitlist-submit">
+                            <span id="submit-text">Join the Waitlist</span>
+                        </button>
+                        <p id="form-error" class="form-error"></p>
+                    </form>
+                </div>
+
+                <!-- Success State (hidden by default) -->
+                <div id="waitlist-success" class="waitlist-success" style="display: none;">
+                    <div class="success-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <h3>You're on the list!</h3>
+                    <p>Your current rank: <strong id="user-rank">#--</strong></p>
+                    <div class="referral-box">
+                        <p class="referral-label">Share your unique link to climb the leaderboard:</p>
+                        <div class="referral-link-container">
+                            <input type="text" id="referral-link" readonly>
+                            <button id="copy-link" class="copy-btn" title="Copy link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <p id="copy-feedback" class="copy-feedback"></p>
+                    </div>
+                    <div class="share-buttons">
+                        <a id="share-twitter" href="#" target="_blank" class="share-btn share-twitter">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            Share on X
+                        </a>
+                        <a id="share-linkedin" href="#" target="_blank" class="share-btn share-linkedin">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Leaderboard -->
+                <div class="leaderboard-container">
+                    <h3 class="leaderboard-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="trophy-icon">
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+                            <path d="M4 22h16"/>
+                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                        </svg>
+                        Leaderboard
+                    </h3>
+                    <p class="leaderboard-subtitle">Top 100 get first access</p>
+                    <div id="leaderboard" class="leaderboard">
+                        <div class="leaderboard-loading">Loading leaderboard...</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1313,6 +1394,194 @@
 
             document.body.appendChild(honeypot);
         })();
+
+        // ============================================
+        // WAITLIST & LEADERBOARD (SUPABASE)
+        // ============================================
+
+        const SUPABASE_URL = 'https://mclksiyohsfwhquhhxcb.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jbGtzaXlvaHNmd2hxdWhoeGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5OTk0NzAsImV4cCI6MjA4MTU3NTQ3MH0.tsMWJGUJUO1hwxMo3eBrletfFuHOGCNybTtHVG5wsVw';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Get referral code from URL if present
+        const urlParams = new URLSearchParams(window.location.search);
+        const referredBy = urlParams.get('ref');
+
+        // DOM Elements
+        const waitlistForm = document.getElementById('waitlist-form');
+        const formContainer = document.getElementById('waitlist-form-container');
+        const successContainer = document.getElementById('waitlist-success');
+        const leaderboardEl = document.getElementById('leaderboard');
+        const charCountEl = document.getElementById('char-count');
+        const whyTextarea = document.getElementById('waitlist-why');
+        const formError = document.getElementById('form-error');
+        const submitText = document.getElementById('submit-text');
+
+        // Character counter
+        whyTextarea.addEventListener('input', () => {
+            charCountEl.textContent = whyTextarea.value.length;
+        });
+
+        // Load leaderboard on page load
+        loadLeaderboard();
+
+        // Check if user already signed up (via localStorage)
+        const savedUser = localStorage.getItem('hum_waitlist_user');
+        if (savedUser) {
+            const user = JSON.parse(savedUser);
+            showSuccessState(user);
+        }
+
+        // Form submission
+        waitlistForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            formError.textContent = '';
+
+            const name = document.getElementById('waitlist-name').value.trim();
+            const email = document.getElementById('waitlist-email').value.trim().toLowerCase();
+            const why = whyTextarea.value.trim();
+
+            if (!name || !email || !why) {
+                formError.textContent = 'Please fill in all fields';
+                return;
+            }
+
+            // Disable submit button
+            const submitBtn = waitlistForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitText.textContent = 'Joining...';
+
+            try {
+                // Check if email already exists
+                const { data: existing } = await supabase
+                    .from('waitlist')
+                    .select('referral_code')
+                    .eq('email', email)
+                    .single();
+
+                if (existing) {
+                    // User already signed up, show their info
+                    const user = { email, referral_code: existing.referral_code };
+                    localStorage.setItem('hum_waitlist_user', JSON.stringify(user));
+                    showSuccessState(user);
+                    loadLeaderboard();
+                    return;
+                }
+
+                // Insert new waitlist entry
+                const { data, error } = await supabase
+                    .from('waitlist')
+                    .insert([{
+                        name,
+                        email,
+                        why,
+                        referred_by: referredBy || null
+                    }])
+                    .select('referral_code')
+                    .single();
+
+                if (error) throw error;
+
+                // Save to localStorage
+                const user = { email, referral_code: data.referral_code };
+                localStorage.setItem('hum_waitlist_user', JSON.stringify(user));
+
+                // Show success state
+                showSuccessState(user);
+                loadLeaderboard();
+
+            } catch (error) {
+                console.error('Error:', error);
+                formError.textContent = error.message || 'Something went wrong. Please try again.';
+                submitBtn.disabled = false;
+                submitText.textContent = 'Join the Waitlist';
+            }
+        });
+
+        function showSuccessState(user) {
+            formContainer.style.display = 'none';
+            successContainer.style.display = 'block';
+
+            const baseUrl = window.location.origin + window.location.pathname;
+            const referralLink = `${baseUrl}?ref=${user.referral_code}`;
+
+            document.getElementById('referral-link').value = referralLink;
+
+            // Update share links
+            const shareText = encodeURIComponent("I just joined the hüm waitlist - social media for doers, not viewers. Join me and let's build something real together!");
+            document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(referralLink)}`;
+            document.getElementById('share-linkedin').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`;
+
+            // Copy button
+            document.getElementById('copy-link').addEventListener('click', () => {
+                navigator.clipboard.writeText(referralLink);
+                document.getElementById('copy-feedback').textContent = 'Copied!';
+                setTimeout(() => {
+                    document.getElementById('copy-feedback').textContent = '';
+                }, 2000);
+            });
+
+            // Calculate and show rank
+            calculateUserRank(user.email);
+        }
+
+        async function calculateUserRank(email) {
+            try {
+                const { data, error } = await supabase
+                    .from('waitlist')
+                    .select('email, referral_count')
+                    .order('referral_count', { ascending: false });
+
+                if (error) throw error;
+
+                const rank = data.findIndex(entry => entry.email === email) + 1;
+                document.getElementById('user-rank').textContent = `#${rank}`;
+            } catch (error) {
+                console.error('Error calculating rank:', error);
+            }
+        }
+
+        async function loadLeaderboard() {
+            try {
+                const { data, error } = await supabase
+                    .from('waitlist')
+                    .select('name, why, referral_count')
+                    .order('referral_count', { ascending: false })
+                    .limit(100);
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    leaderboardEl.innerHTML = '<div class="leaderboard-empty">Be the first to join the movement!</div>';
+                    return;
+                }
+
+                leaderboardEl.innerHTML = data.map((entry, index) => `
+                    <div class="leaderboard-entry ${index < 3 ? 'top-3' : ''}">
+                        <div class="leaderboard-rank">#${index + 1}</div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${escapeHtml(entry.name)}</div>
+                            <div class="leaderboard-why">"${escapeHtml(entry.why)}"</div>
+                        </div>
+                        <div class="leaderboard-referrals">${entry.referral_count} referral${entry.referral_count !== 1 ? 's' : ''}</div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+                leaderboardEl.innerHTML = '<div class="leaderboard-loading">Failed to load leaderboard</div>';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Auto-refresh leaderboard every 30 seconds
+        setInterval(loadLeaderboard, 30000);
     </script>
 </body>
 </html>

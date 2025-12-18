@@ -1201,9 +1201,9 @@ button, a, input, textarea, select {
 
 .template-tag:hover {
     background: var(--gradient-card-hover);
-    border-color: rgba(124, 156, 191, 0.3);
+    border-color: rgba(210, 145, 111, 0.2);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(124, 156, 191, 0.15);
+    box-shadow: 0 4px 12px rgba(210, 145, 111, 0.1);
 }
 
 .templates-note {
@@ -2673,5 +2673,376 @@ button, a, input, textarea, select {
         left: 32%;
         width: 68px;
         height: 68px;
+    }
+}
+
+/* =====================================================
+   WAITLIST SECTION
+   ===================================================== */
+
+.waitlist-section {
+    padding: 6rem 0;
+    background: var(--gradient-card);
+}
+
+.waitlist-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.waitlist-content h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.waitlist-intro {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Form Styles */
+.waitlist-form-container {
+    max-width: 500px;
+    margin: 0 auto 3rem;
+}
+
+.waitlist-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    position: relative;
+    text-align: left;
+}
+
+.waitlist-form input,
+.waitlist-form textarea {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--background);
+    color: var(--text);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.waitlist-form input:focus,
+.waitlist-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(210, 145, 111, 0.2);
+}
+
+.waitlist-form input::placeholder,
+.waitlist-form textarea::placeholder {
+    color: var(--text-muted);
+}
+
+.waitlist-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.char-count {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.waitlist-submit {
+    margin-top: 0.5rem;
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+.waitlist-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.form-error {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    min-height: 1.5rem;
+}
+
+/* Success State */
+.waitlist-success {
+    max-width: 500px;
+    margin: 0 auto 3rem;
+    padding: 2rem;
+    background: var(--background);
+    border-radius: 16px;
+    border: 2px solid var(--border);
+}
+
+.success-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    color: #27ae60;
+}
+
+.success-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.waitlist-success h3 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.waitlist-success p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.waitlist-success strong {
+    color: var(--accent);
+    font-size: 1.5rem;
+}
+
+.referral-box {
+    background: var(--gradient-card);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.referral-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem !important;
+}
+
+.referral-link-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.referral-link-container input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--background);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-family: monospace;
+}
+
+.copy-btn {
+    padding: 0.75rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--background);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+.copy-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.copy-feedback {
+    font-size: 0.85rem;
+    color: #27ae60;
+    margin-top: 0.5rem;
+    min-height: 1.25rem;
+}
+
+.share-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.share-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.share-twitter {
+    background: #000;
+    color: #fff;
+}
+
+.share-twitter:hover {
+    background: #333;
+}
+
+.share-linkedin {
+    background: #0077b5;
+    color: #fff;
+}
+
+.share-linkedin:hover {
+    background: #006299;
+}
+
+/* Leaderboard */
+.leaderboard-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.leaderboard-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.trophy-icon {
+    width: 28px;
+    height: 28px;
+    color: #f1c40f;
+}
+
+.leaderboard-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.leaderboard {
+    background: var(--background);
+    border-radius: 16px;
+    border: 2px solid var(--border);
+    overflow: hidden;
+}
+
+.leaderboard-loading {
+    padding: 2rem;
+    color: var(--text-muted);
+}
+
+.leaderboard-entry {
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    transition: background 0.2s;
+}
+
+.leaderboard-entry:last-child {
+    border-bottom: none;
+}
+
+.leaderboard-entry:hover {
+    background: var(--gradient-card);
+}
+
+.leaderboard-entry.top-3 {
+    background: linear-gradient(135deg, rgba(241, 196, 15, 0.1), rgba(241, 196, 15, 0.05));
+}
+
+.leaderboard-rank {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+.leaderboard-entry.top-3 .leaderboard-rank {
+    color: #f1c40f;
+}
+
+.leaderboard-info {
+    min-width: 0;
+}
+
+.leaderboard-name {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+}
+
+.leaderboard-why {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.leaderboard-referrals {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 1rem;
+    white-space: nowrap;
+    padding-left: 1rem;
+}
+
+.leaderboard-empty {
+    padding: 3rem 2rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .waitlist-section {
+        padding: 4rem 0;
+    }
+
+    .share-buttons {
+        flex-direction: column;
+    }
+
+    .share-btn {
+        justify-content: center;
+    }
+
+    .leaderboard-entry {
+        grid-template-columns: 40px 1fr auto;
+        padding: 0.875rem 1rem;
+    }
+
+    .leaderboard-why {
+        max-width: 150px;
     }
 }
