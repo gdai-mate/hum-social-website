@@ -2879,7 +2879,8 @@ button, a, input, textarea, select {
 
 .share-buttons {
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     justify-content: center;
 }
 
@@ -2900,6 +2901,33 @@ button, a, input, textarea, select {
     height: 18px;
 }
 
+.share-whatsapp {
+    background: #25D366;
+    color: #fff;
+}
+
+.share-whatsapp:hover {
+    background: #1da851;
+}
+
+.share-sms {
+    background: #5856D6;
+    color: #fff;
+}
+
+.share-sms:hover {
+    background: #4745b5;
+}
+
+.share-instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: #fff;
+}
+
+.share-instagram:hover {
+    opacity: 0.9;
+}
+
 .share-twitter {
     background: #000;
     color: #fff;
@@ -2909,13 +2937,52 @@ button, a, input, textarea, select {
     background: #333;
 }
 
-.share-linkedin {
-    background: #0077b5;
-    color: #fff;
+/* Progress Bar */
+.progress-container {
+    margin: 1.5rem 0;
 }
 
-.share-linkedin:hover {
-    background: #006299;
+.progress-bar {
+    height: 12px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #27ae60);
+    border-radius: 6px;
+    transition: width 0.5s ease-out;
+    width: 0%;
+}
+
+.progress-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    margin-bottom: 0 !important;
+}
+
+.progress-text strong {
+    color: var(--accent);
+    font-size: 1rem;
+}
+
+/* Referrer Banner */
+.referrer-banner {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(39, 174, 96, 0.05));
+    border: 2px solid rgba(39, 174, 96, 0.3);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: var(--text);
+}
+
+.referrer-banner #referrer-name {
+    font-weight: 700;
+    color: #27ae60;
 }
 
 /* Leaderboard */

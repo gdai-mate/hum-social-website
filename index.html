@@ -482,6 +482,11 @@
                 <h2>Join the Movement</h2>
                 <p class="waitlist-intro">Top 100 referrers get first access when we launch. Share your link, climb the leaderboard.</p>
 
+                <!-- Referrer Banner (shown when arriving via referral link) -->
+                <div id="referrer-banner" class="referrer-banner" style="display: none;">
+                    <span id="referrer-name"></span> invited you to join the movement
+                </div>
+
                 <!-- Waitlist Form -->
                 <div id="waitlist-form-container" class="waitlist-form-container">
                     <form id="waitlist-form" class="waitlist-form">
@@ -492,7 +497,7 @@
                             <input type="email" id="waitlist-email" placeholder="your@email.com" required>
                         </div>
                         <div class="form-group">
-                            <textarea id="waitlist-why" placeholder="Why do you want to join hüm? (280 chars max)" maxlength="280" required></textarea>
+                            <textarea id="waitlist-why" placeholder="I want to join because..." maxlength="280" required></textarea>
                             <span class="char-count"><span id="char-count">0</span>/280</span>
                         </div>
                         <button type="submit" class="btn-cta waitlist-submit">
@@ -512,6 +517,12 @@
                     </div>
                     <h3>You're on the list!</h3>
                     <p>Your current rank: <strong id="user-rank">#--</strong></p>
+                    <div id="progress-container" class="progress-container">
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <p id="progress-text" class="progress-text"></p>
+                    </div>
                     <div class="referral-box">
                         <p class="referral-label">Share your unique link to climb the leaderboard:</p>
                         <div class="referral-link-container">
@@ -526,13 +537,21 @@
                         <p id="copy-feedback" class="copy-feedback"></p>
                     </div>
                     <div class="share-buttons">
+                        <a id="share-whatsapp" href="#" target="_blank" class="share-btn share-whatsapp">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            WhatsApp
+                        </a>
+                        <a id="share-sms" href="#" class="share-btn share-sms">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            SMS
+                        </a>
+                        <a id="share-instagram" href="#" class="share-btn share-instagram" onclick="copyForInstagram(event)">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            Copy for IG
+                        </a>
                         <a id="share-twitter" href="#" target="_blank" class="share-btn share-twitter">
                             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                            Share on X
-                        </a>
-                        <a id="share-linkedin" href="#" target="_blank" class="share-btn share-linkedin">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                            LinkedIn
+                            X
                         </a>
                     </div>
                 </div>
@@ -1424,6 +1443,11 @@
                     return;
                 }
 
+                // Show referrer banner if arriving via referral link
+                if (referredBy) {
+                    showReferrerBanner(referredBy);
+                }
+
                 // Character counter
                 whyTextarea.addEventListener('input', () => {
                     charCountEl.textContent = whyTextarea.value.length;
@@ -1431,6 +1455,24 @@
 
                 // Load leaderboard on page load
                 loadLeaderboard();
+
+                // Function to show referrer banner
+                async function showReferrerBanner(refCode) {
+                    try {
+                        const { data, error } = await supabaseClient
+                            .from('waitlist')
+                            .select('name')
+                            .eq('referral_code', refCode)
+                            .single();
+
+                        if (data && data.name) {
+                            document.getElementById('referrer-name').textContent = data.name;
+                            document.getElementById('referrer-banner').style.display = 'block';
+                        }
+                    } catch (err) {
+                        console.log('Could not fetch referrer info');
+                    }
+                }
 
                 // Check if user already signed up (via localStorage)
                 const savedUser = localStorage.getItem('hum_waitlist_user');
@@ -1518,10 +1560,18 @@
 
             document.getElementById('referral-link').value = referralLink;
 
+            // Share copy - more compelling
+            const shareTextShort = "Social media broke my brain. This might fix it.";
+            const shareTextFull = `${shareTextShort} No camera roll. No typing. Just real moments. Join me on hüm:`;
+
             // Update share links
-            const shareText = encodeURIComponent("I just joined the hüm waitlist - social media for doers, not viewers. Join me and let's build something real together!");
-            document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(referralLink)}`;
-            document.getElementById('share-linkedin').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`;
+            document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTextShort)}&url=${encodeURIComponent(referralLink)}`;
+            document.getElementById('share-whatsapp').href = `https://wa.me/?text=${encodeURIComponent(shareTextFull + ' ' + referralLink)}`;
+            document.getElementById('share-sms').href = `sms:?body=${encodeURIComponent(shareTextFull + ' ' + referralLink)}`;
+
+            // Store referral link globally for Instagram copy
+            window.humReferralLink = referralLink;
+            window.humShareText = shareTextFull;
 
             // Copy button
             document.getElementById('copy-link').addEventListener('click', () => {
@@ -1536,6 +1586,17 @@
             calculateUserRank(user.email);
         }
 
+        // Instagram copy function (can't deep link, so copy to clipboard)
+        window.copyForInstagram = function(e) {
+            e.preventDefault();
+            const textToCopy = window.humShareText + '\n\n' + window.humReferralLink;
+            navigator.clipboard.writeText(textToCopy);
+            document.getElementById('copy-feedback').textContent = 'Copied! Paste in your Instagram bio or story';
+            setTimeout(() => {
+                document.getElementById('copy-feedback').textContent = '';
+            }, 3000);
+        }
+
         async function calculateUserRank(email) {
             try {
                 const { data, error } = await supabaseClient
@@ -1546,7 +1607,25 @@
                 if (error) throw error;
 
                 const rank = data.findIndex(entry => entry.email === email) + 1;
+                const totalUsers = data.length;
                 document.getElementById('user-rank').textContent = `#${rank}`;
+
+                // Update progress bar
+                const progressFill = document.getElementById('progress-fill');
+                const progressText = document.getElementById('progress-text');
+
+                if (rank <= 100) {
+                    // Already in top 100!
+                    progressFill.style.width = '100%';
+                    progressFill.style.background = 'linear-gradient(90deg, #27ae60, #2ecc71)';
+                    progressText.innerHTML = `<strong>You're in the top 100!</strong> Keep sharing to secure your spot.`;
+                } else {
+                    // Calculate progress toward top 100
+                    const spotsAway = rank - 100;
+                    const progressPercent = Math.max(0, Math.min(100, ((totalUsers - rank) / (totalUsers - 100)) * 100));
+                    progressFill.style.width = `${progressPercent}%`;
+                    progressText.innerHTML = `<strong>${spotsAway} spots</strong> away from early access. Share to climb!`;
+                }
             } catch (error) {
                 console.error('Error calculating rank:', error);
             }
