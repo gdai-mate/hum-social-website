@@ -33,14 +33,30 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <meta name="theme-color" content="#2C2418">
 
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hum-social.com/">
+    <meta property="og:title" content="hum - Join the Movement">
+    <meta property="og:description" content="Tired of doomscrolling? Join the waitlist for hum - social media that makes you better, not bitter. Top 100 referrers get first access.">
+    <meta property="og:image" content="https://hum-social.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="hum - Join the Movement">
+    <meta name="twitter:description" content="Tired of doomscrolling? Join the waitlist for hum - social media that makes you better, not bitter.">
+    <meta name="twitter:image" content="https://hum-social.com/og-image.png">
+
     <!-- Preload critical fonts for faster loading -->
     <link rel="preload" href="assets/fonts/BigScratchBrush.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="assets/fonts/Ecoplanet.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="assets/fonts/Coconutz.ttf" as="font" type="font/ttf" crossorigin>
 
-    <link rel="stylesheet" href="style.css?v=20251116o">
+    <link rel="stylesheet" href="style.css?v=20251218a">
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
 
     <style>
         /* Global text unselectable (except form inputs) */
@@ -487,6 +503,12 @@
                 <h2>Join the Movement</h2>
                 <p class="waitlist-intro">Top 100 referrers get first access when we launch. Share your link, climb the leaderboard.</p>
 
+                <!-- Live Signup Counter -->
+                <div class="signup-counter">
+                    <span class="counter-number" id="total-signups">--</span>
+                    <span class="counter-label">people waiting for launch</span>
+                </div>
+
                 <!-- Referrer Banner (shown when arriving via referral link) -->
                 <div id="referrer-banner" class="referrer-banner" style="display: none;">
                     <span id="referrer-name"></span> invited you to join the movement
@@ -558,6 +580,30 @@
                             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                             X
                         </a>
+                    </div>
+
+                    <!-- QR Code Share Card -->
+                    <div class="qr-share-card">
+                        <p class="qr-label">Your personal invite card (screenshot & share)</p>
+                        <div class="qr-card" id="qr-card">
+                            <div class="qr-card-header">
+                                <span class="qr-card-logo">hum</span>
+                                <span class="qr-card-tagline">join the movement</span>
+                            </div>
+                            <div class="qr-code-container">
+                                <canvas id="qr-code"></canvas>
+                            </div>
+                            <p class="qr-card-name" id="qr-card-name"></p>
+                            <p class="qr-card-invite">invited you</p>
+                        </div>
+                        <button id="download-card" class="btn-secondary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download Card
+                        </button>
                     </div>
                 </div>
 
@@ -1461,6 +1507,41 @@
                 // Load leaderboard on page load
                 loadLeaderboard();
 
+                // Load total signup count
+                loadTotalSignups();
+
+                // Function to load total signups
+                async function loadTotalSignups() {
+                    try {
+                        const { count, error } = await supabaseClient
+                            .from('waitlist')
+                            .select('*', { count: 'exact', head: true });
+
+                        if (!error && count !== null) {
+                            const counterEl = document.getElementById('total-signups');
+                            // Animate the counter
+                            animateCounter(counterEl, 0, count, 1000);
+                        }
+                    } catch (err) {
+                        console.log('Could not load signup count');
+                    }
+                }
+
+                // Animate counter from start to end
+                function animateCounter(element, start, end, duration) {
+                    const startTime = performance.now();
+                    const update = (currentTime) => {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const current = Math.floor(start + (end - start) * progress);
+                        element.textContent = current.toLocaleString();
+                        if (progress < 1) {
+                            requestAnimationFrame(update);
+                        }
+                    };
+                    requestAnimationFrame(update);
+                }
+
                 // Function to show referrer banner
                 async function showReferrerBanner(refCode) {
                     try {
@@ -1609,8 +1690,56 @@
                 }, 2000);
             });
 
+            // Generate QR code
+            generateQRCode(referralLink, user.email);
+
             // Calculate and show rank
             calculateUserRank(user.email);
+        }
+
+        // Generate QR code for referral link
+        async function generateQRCode(referralLink, email) {
+            try {
+                // Get user's name from database
+                const { data } = await supabaseClient
+                    .from('waitlist')
+                    .select('name')
+                    .eq('email', email)
+                    .single();
+
+                const userName = data?.name || 'Someone';
+                document.getElementById('qr-card-name').textContent = userName;
+
+                // Generate QR code on canvas
+                const canvas = document.getElementById('qr-code');
+                await QRCode.toCanvas(canvas, referralLink, {
+                    width: 160,
+                    margin: 0,
+                    color: {
+                        dark: '#2C2418',
+                        light: '#FFFFFF'
+                    }
+                });
+
+                // Set up download button
+                document.getElementById('download-card').addEventListener('click', () => {
+                    downloadQRCard(userName);
+                });
+            } catch (err) {
+                console.log('Could not generate QR code:', err);
+            }
+        }
+
+        // Download QR card as image
+        function downloadQRCard(userName) {
+            const qrCard = document.getElementById('qr-card');
+
+            // Use html2canvas if available, otherwise just download QR
+            const canvas = document.getElementById('qr-code');
+            const link = document.createElement('a');
+            link.download = `hum-invite-${userName.toLowerCase().replace(/\s+/g, '-')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
         }
 
         // Instagram copy function (can't deep link, so copy to clipboard)
