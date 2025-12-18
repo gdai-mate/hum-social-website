@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,10 +53,13 @@
     <link rel="preload" href="assets/fonts/Ecoplanet.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="assets/fonts/Coconutz.ttf" as="font" type="font/ttf" crossorigin>
 
-    <link rel="stylesheet" href="style.css?v=20251218b">
+    <link rel="stylesheet" href="style.css?v=20251218z1">
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- GSAP for scroll animations -->
+    <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
     <style>
         /* Global text unselectable (except form inputs) */
@@ -103,6 +106,12 @@
     </div>
 
     <script>
+        // Force scroll to top on page load/refresh
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+
         // Hide loader when fonts are ready
         document.fonts.ready.then(() => {
             document.body.classList.remove('fonts-loading');
@@ -145,50 +154,107 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="hero">
-        <!-- Hand Pattern Background -->
-        <div class="hands-pattern"></div>
+    <!-- HERO: Sticky Parallax Scroll Experience -->
+    <div class="hero-journey" id="hero-journey">
 
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">New School Social Media</div>
-                <h1 class="hero-tagline">
-                    Social media for doers,<br class="desktop-break"> not viewers.
-                </h1>
-                <!-- Desktop subtitle (verbose) -->
-                <p class="hero-subtitle hero-subtitle-desktop">
-                    Post photos and videos—but only in the moment. No camera roll uploads. No curated aesthetics. Voice captions, voice comments, voice DMs. Join quests that help you show up for what matters. Build a community that actually gives a hüm about your progress. No ads. No bots. No performing.
-                </p>
-                <!-- Mobile subtitle (punchy) -->
-                <p class="hero-subtitle hero-subtitle-mobile">
-                    Build habits. Share progress. Find your people. <span class="nowrap">Zero bullshit.</span>
-                </p>
-                <div class="hero-cta">
-                    <a href="#waitlist" class="btn-cta">Join the Waitlist</a>
-                    <p class="cta-note">Free • Invite-only • Real Humans Only</p>
+        <!-- Section 1: The Opening - Word by word reveal -->
+        <section class="hero-panel panel-opening" data-panel="1" data-lines="5">
+            <div class="panel-content">
+                <div class="word-reveal">
+                    <span class="reveal-word" data-line="1">Social</span>
+                    <span class="reveal-word" data-line="2">media</span>
+                    <span class="reveal-word" data-line="3">is</span>
+                    <span class="reveal-word" data-line="4">broken.</span>
+                </div>
+                <p class="hero-subtext" data-line="5">You already know this.</p>
+            </div>
+            <div class="scroll-prompt">
+                <span>Scroll</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Section 2: The Feelings -->
+        <section class="hero-panel panel-feelings" data-panel="2" data-lines="5">
+            <div class="panel-content">
+                <div class="feeling-lines">
+                    <p class="feeling-line" data-line="1">It's 2am. Your thumb is sore. Your brain feels fried.</p>
+                    <p class="feeling-line" data-line="2">1,000 followers. Nobody to call when you need help.</p>
+                    <p class="feeling-line" data-line="3">Together with friends, but everyone's half-looking at their phone.</p>
+                    <p class="feeling-line" data-line="4">Watching everyone else's life. While yours passes by.</p>
+                    <p class="feeling-line" data-line="5">It sneaks in quietly. Masquerading as connection.</p>
                 </div>
             </div>
-        </div>
-    </header>
+        </section>
 
-    <!-- The Problem -->
-    <section class="problem">
-        <div class="container">
-            <div class="problem-content">
-                <h2>Remember When Social Media Was Actually <span class="nowrap">Social?</span></h2>
-                <p class="problem-statement">
-                    Before the algorithms. Before the ads. Before everyone was performing for likes. Social media used to be about sharing what you were up to with people who actually cared.
-                    <br><br>
-                    Then it became a highlight reel. A place to consume, not create. A dopamine slot machine designed to keep you scrolling, not doing.
-                    <br><br>
-                    <strong>hüm brings back what made social media good—and leaves out everything that broke it.</strong>
-                </p>
+        <!-- Section 3: The System -->
+        <section class="hero-panel panel-system" data-panel="3" data-lines="4">
+            <div class="panel-content">
+                <p class="system-line" data-line="1">They built it this way.</p>
+                <p class="system-line" data-line="2">Infinite scroll. No stopping cues.</p>
+                <p class="system-line" data-line="3">Advertisers are the customer.</p>
+                <p class="system-line has-underline" data-line="4">Your attention is the product.<svg class="hand-underline" viewBox="0 0 300 12" preserveAspectRatio="none"><path d="M0 8 Q50 4 100 8 Q150 12 200 6 Q250 10 300 7" class="underline-path"/></svg></p>
+            </div>
+        </section>
+
+        <!-- Section 4: The Shift -->
+        <section class="hero-panel panel-shift" data-panel="4" data-lines="4">
+            <div class="panel-content">
+                <p class="shift-line" data-line="1">The change must come.</p>
+                <p class="shift-line" data-line="2">We are entering a new era of the internet.</p>
+                <p class="shift-line" data-line="3">Where it becomes more</p>
+                <div class="human-to-hum" data-line="4">
+                    <span class="hum-letter">h</span><span class="hum-letter hum-u">u<span class="umlaut-dots">¨</span></span><span class="hum-letter">m</span><span class="hum-letter hum-an">a</span><span class="hum-letter hum-an">n</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cloud transition - theater curtains that part in the middle -->
+        <div class="cloud-transition" id="cloud-transition">
+            <!-- LEFT CURTAIN - entire group slides left -->
+            <div class="curtain curtain-left">
+                <img class="cloud cl-1" src="assets/clouds/cloud1.png" alt="">
+                <img class="cloud cl-2" src="assets/clouds/cloud2.png" alt="">
+                <img class="cloud cl-3" src="assets/clouds/cloud1.png" alt="">
+                <img class="cloud cl-4" src="assets/clouds/cloud2.png" alt="">
+                <img class="cloud cl-5" src="assets/clouds/cloud1.png" alt="">
+                <img class="cloud cl-6" src="assets/clouds/cloud2.png" alt="">
+                <img class="cloud cl-7" src="assets/clouds/cloud1.png" alt="">
+                <img class="cloud cl-8" src="assets/clouds/cloud2.png" alt="">
+                <img class="cloud cl-9" src="assets/clouds/cloud1.png" alt="">
+            </div>
+
+            <!-- RIGHT CURTAIN - entire group slides right -->
+            <div class="curtain curtain-right">
+                <img class="cloud cr-1" src="assets/clouds/cloud2.png" alt="">
+                <img class="cloud cr-2" src="assets/clouds/cloud1.png" alt="">
+                <img class="cloud cr-3" src="assets/clouds/cloud2.png" alt="">
+                <img class="cloud cr-4" src="assets/clouds/cloud1.png" alt="">
+                <img class="cloud cr-5" src="assets/clouds/cloud2.png" alt="">
+                <img class="cloud cr-6" src="assets/clouds/cloud1.png" alt="">
+                <img class="cloud cr-7" src="assets/clouds/cloud2.png" alt="">
+                <img class="cloud cr-8" src="assets/clouds/cloud1.png" alt="">
+                <img class="cloud cr-9" src="assets/clouds/cloud2.png" alt="">
             </div>
         </div>
-    </section>
 
-    <!-- The Solution -->
+        <!-- Section 5: The Reveal (light, with hands) -->
+        <section class="hero-panel panel-reveal" data-panel="5">
+            <div class="panel-content">
+                <h1 class="reveal-logo">hüm</h1>
+                <p class="reveal-tagline">A campfire, not a stage.</p>
+                <p class="reveal-tagline-sub">Creation, not consumption.</p>
+                <a href="#waitlist" class="btn-cta-hero">Join the Waitlist</a>
+            </div>
+            <!-- Sea of hands -->
+            <div class="hands-sea" id="hands-sea"></div>
+        </section>
+
+    </div>
+
+    <!-- The Difference (existing cards) -->
     <section class="solution">
         <div class="container">
             <div class="solution-content">
@@ -653,45 +719,28 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <img src="assets/icons/hum-icon-light.svg" alt="hüm" class="logo-footer logo-light">
-                    <img src="assets/icons/hum-icon-dark.svg" alt="hüm" class="logo-footer logo-dark">
-                    <p class="footer-tagline">Social media that makes you better, not bitter</p>
-                    <p class="footer-team">
-                        Built with love in Brisbane, Australia
-                    </p>
-                </div>
-                <div class="footer-links">
-                    <a href="https://app.hum-social.com">Launch App</a>
-                    <a href="mailto:hello@hum-social.com">Contact</a>
-                    <a href="https://app.hum-social.com/settings/privacy">Privacy</a>
-                    <a href="https://app.hum-social.com/settings/terms">Terms</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 hüm. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
     <script>
         // Theme toggle
         const themeToggle = document.getElementById('theme-toggle');
         const html = document.documentElement;
 
-        // Check for saved theme preference or default to 'light'
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        html.setAttribute('data-theme', currentTheme);
+        // Page ALWAYS starts with dark theme for the journey experience
+        // Theme toggle only works after the cloud transition completes
+        let journeyComplete = false;
 
         themeToggle.addEventListener('click', () => {
+            // Only allow toggle after journey is complete
+            if (!journeyComplete) return;
+
             const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
         });
+
+        // Function to mark journey as complete (called after cloud transition)
+        window.markJourneyComplete = function() {
+            journeyComplete = true;
+        };
 
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1895,6 +1944,451 @@
             } catch (err) {
                 console.error('Waitlist initialization error:', err);
             }
+        })();
+    </script>
+
+    <!-- Hero Journey Animations -->
+    <script>
+        (function initHeroJourney() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Track animation state
+            window.shiftPanelActive = false;
+            window.cloudTransitionTriggered = false;
+
+            const scrollPrompt = document.querySelector('.scroll-prompt');
+            const openingPanel = document.querySelector('.panel-opening');
+            const feelingsPanel = document.querySelector('.panel-feelings');
+            const systemPanel = document.querySelector('.panel-system');
+            const shiftPanel = document.querySelector('.panel-shift');
+            const revealPanel = document.querySelector('.panel-reveal');
+            const cloudTransition = document.querySelector('.cloud-transition');
+
+            // ========================================
+            // Opening Panel - Auto-animate words on load
+            // ========================================
+            function animateOpeningPanel() {
+                if (!openingPanel) return;
+                const lines = openingPanel.querySelectorAll('[data-line]');
+
+                // Fade in words one by one (0.2s = 200ms apart, subtext 0.8s after last word)
+                lines.forEach((line, i) => {
+                    const delay = i < 4 ? i * 200 : (4 * 200) + 800;
+                    setTimeout(() => {
+                        line.classList.add('visible');
+                    }, delay);
+                });
+            }
+
+            setTimeout(animateOpeningPanel, 300);
+
+            // ========================================
+            // Helper: Trigger illustration drawing
+            // ========================================
+            function drawIllustration(panel) {
+                const illustration = panel.querySelector('.panel-illustration');
+                if (!illustration) return;
+
+                const groups = illustration.querySelectorAll('g[data-draw]');
+                groups.forEach((group, i) => {
+                    // Stagger group animations - slower for more intentional feel
+                    setTimeout(() => {
+                        group.classList.add('drawing');
+                    }, i * 700);
+                });
+            }
+
+            function resetIllustration(panel) {
+                const illustration = panel.querySelector('.panel-illustration');
+                if (!illustration) return;
+
+                const groups = illustration.querySelectorAll('g[data-draw]');
+                groups.forEach(group => {
+                    group.classList.remove('drawing');
+                });
+            }
+
+            // ========================================
+            // Shift Panel Animation - Reusable trigger function
+            // ========================================
+            function triggerShiftPanelAnimation(panel) {
+                if (window.cloudTransitionTriggered) return; // Already triggered
+                window.cloudTransitionTriggered = true;
+
+                // LOCK SCROLLING immediately
+                document.body.style.overflow = 'hidden';
+                document.documentElement.style.overflow = 'hidden';
+
+                const humAn = panel.querySelectorAll('.hum-an');
+                const umlautDots = panel.querySelector('.umlaut-dots');
+                const humanToHum = panel.querySelector('.human-to-hum');
+
+                // Auto-trigger transformation after a brief moment
+                setTimeout(() => {
+                    humAn.forEach(el => el.classList.add('fade-out'));
+                    if (umlautDots) umlautDots.classList.add('visible');
+                    // Slide hüm to center
+                    if (humanToHum) humanToHum.classList.add('centered');
+                }, 400);
+
+                // Then auto-trigger clouds after transformation settles
+                setTimeout(() => {
+                    if (cloudTransition) {
+                        cloudTransition.classList.add('active');
+
+                        // Wait for clouds to fully fade in (~1.4s staggered fade)
+                        setTimeout(() => {
+                            // Kill ALL ScrollTrigger instances FIRST
+                            if (typeof ScrollTrigger !== 'undefined') {
+                                ScrollTrigger.getAll().forEach(st => st.kill());
+                            }
+
+                            // WHILE CLOUDS COVER EVERYTHING:
+                            // 1. Hide dark sections FIRST
+                            document.documentElement.classList.add('journey-complete');
+                            document.body.classList.add('journey-complete');
+
+                            // 2. Switch theme to light
+                            document.documentElement.setAttribute('data-theme', 'light');
+
+                            // 3. Scroll to top (now showing reveal section)
+                            window.scrollTo(0, 0);
+
+                            // 4. Start clouds parting (theater curtain style)
+                            setTimeout(() => {
+                                cloudTransition.classList.add('parting');
+
+                                // 5. UNLOCK SCROLLING after clouds start parting
+                                document.body.style.overflow = '';
+                                document.documentElement.style.overflow = '';
+
+                                // Hide clouds after parting animation finishes
+                                setTimeout(() => {
+                                    cloudTransition.classList.add('clouds-hidden');
+                                }, 3500);
+
+                                // Mark journey as complete after parting finishes (~2.4s)
+                                setTimeout(() => {
+                                    if (typeof window.markJourneyComplete === 'function') {
+                                        window.markJourneyComplete();
+                                    }
+                                }, 3000);
+                            }, 100);
+                        }, 1500);
+                    }
+                }, 1800);
+            }
+
+            // ========================================
+            // Helper: Create pinned section with line progression
+            // ========================================
+            function createPinnedSection(panel, options = {}) {
+                if (!panel) return;
+
+                const lines = panel.querySelectorAll('[data-line]');
+                const lineCount = lines.length;
+                if (lineCount === 0) return;
+
+                // Pin duration: 100vh scroll per line - slower, easier to read each line
+                const pinDuration = lineCount * 100;
+
+                let illustrationDrawn = false;
+                let currentLineIndex = -1; // Track to avoid unnecessary updates
+
+                ScrollTrigger.create({
+                    trigger: panel,
+                    start: 'top top',
+                    end: `+=${pinDuration}%`,
+                    pin: true,
+                    pinSpacing: true,
+                    anticipatePin: 1,
+                    onEnter: () => {
+                        // Set first line as current immediately
+                        currentLineIndex = 0;
+                        lines[0].classList.add('current');
+                        // Draw illustration
+                        if (!illustrationDrawn) {
+                            drawIllustration(panel);
+                            illustrationDrawn = true;
+                        }
+                        // SHIFT PANEL: Lock scrolling on enter until animation completes
+                        if (options.isShiftPanel && !window.cloudTransitionTriggered) {
+                            window.shiftPanelActive = true;
+                        }
+                    },
+                    onLeave: () => {
+                        // Mark all lines as seen when leaving
+                        lines.forEach((line, i) => {
+                            line.classList.remove('current');
+                            line.classList.add('seen');
+                        });
+                        // SHIFT PANEL: Trigger animation if leaving (even if fast scrolling)
+                        if (options.isShiftPanel) {
+                            triggerShiftPanelAnimation(panel);
+                        }
+                    },
+                    onUpdate: (self) => {
+                        const progress = self.progress;
+                        // Calculate line index - evenly distributed across progress
+                        const newLineIndex = Math.min(
+                            Math.floor(progress * lineCount),
+                            lineCount - 1
+                        );
+
+                        // Only update if line actually changed
+                        if (newLineIndex !== currentLineIndex) {
+                            // Update previous line to 'seen'
+                            if (currentLineIndex >= 0 && currentLineIndex < lineCount) {
+                                lines[currentLineIndex].classList.remove('current');
+                                lines[currentLineIndex].classList.add('seen');
+                            }
+                            // Mark all lines before new index as seen
+                            for (let i = 0; i < newLineIndex; i++) {
+                                lines[i].classList.remove('current');
+                                lines[i].classList.add('seen');
+                            }
+                            // Set new current line
+                            lines[newLineIndex].classList.remove('seen');
+                            lines[newLineIndex].classList.add('current');
+                            currentLineIndex = newLineIndex;
+
+                            // Shift panel: auto-animate when last line is reached
+                            if (options.isShiftPanel && newLineIndex === lineCount - 1) {
+                                triggerShiftPanelAnimation(panel);
+                            }
+                        }
+                    },
+                    onEnterBack: () => {
+                        // Entering from bottom - last line should be current
+                        currentLineIndex = lineCount - 1;
+                        lines.forEach((line, i) => {
+                            line.classList.remove('current', 'seen');
+                            if (i < currentLineIndex) {
+                                line.classList.add('seen');
+                            } else if (i === currentLineIndex) {
+                                line.classList.add('current');
+                            }
+                        });
+
+                        if (options.isShiftPanel) {
+                            const humAn = panel.querySelectorAll('.hum-an');
+                            const umlautDots = panel.querySelector('.umlaut-dots');
+                            const humanToHum = panel.querySelector('.human-to-hum');
+                            humAn.forEach(el => el.classList.remove('fade-out'));
+                            if (umlautDots) umlautDots.classList.remove('visible');
+                            if (humanToHum) humanToHum.classList.remove('centered');
+                        }
+                    },
+                    onLeaveBack: () => {
+                        // Leaving upward - reset everything
+                        currentLineIndex = -1;
+                        lines.forEach(line => {
+                            line.classList.remove('current', 'seen');
+                        });
+                        resetIllustration(panel);
+                        illustrationDrawn = false;
+                    }
+                });
+            }
+
+            // ========================================
+            // Create pinned sections for each panel
+            // ========================================
+
+            // Opening panel - just pin briefly, auto-animation already handled
+            if (openingPanel) {
+                ScrollTrigger.create({
+                    trigger: openingPanel,
+                    start: 'top top',
+                    end: '+=25%',
+                    pin: true,
+                    pinSpacing: true,
+                    anticipatePin: 1,
+                    onUpdate: (self) => {
+                        if (scrollPrompt && self.progress > 0.1) {
+                            scrollPrompt.style.opacity = '0';
+                        }
+                    }
+                });
+            }
+
+            // Feelings panel - 5 lines
+            createPinnedSection(feelingsPanel);
+
+            // System panel - 4 lines
+            createPinnedSection(systemPanel);
+
+            // Shift panel - 4 lines + human to hum transformation
+            createPinnedSection(shiftPanel, { isShiftPanel: true });
+
+            // ========================================
+            // Hands - spread across bottom half
+            // ========================================
+            const handsSea = document.getElementById('hands-sea');
+            if (handsSea) {
+                const handCount = 300;
+                const handPaths = [
+                    'M25 48 Q20 48 17 45 Q14 42 14 38 L14 28 Q14 24 16 20 Q17 18 18 16 Q19 14 20 13 Q21 12 22 12 Q23 12 23 14 L23 26 L24 14 Q24 10 26 8 Q27 7 28 7 Q29 7 30 9 Q31 11 31 14 L30 26 L32 14 Q32 10 34 8 Q35 7 36 7 Q37 7 38 9 Q39 11 39 14 L38 26 L40 18 Q41 15 42 14 Q43 13 44 14 Q45 15 45 18 L43 30 Q42 36 40 40 Q37 45 32 47 Q28 48 25 48 Z',
+                    'M24 48 Q19 47 16 44 Q14 41 14 36 L15 26 Q15 22 17 18 Q18 15 20 13 Q22 12 23 13 L23 25 L25 12 Q26 9 28 8 Q30 8 31 10 L30 25 L33 12 Q34 9 36 8 Q38 8 39 10 L37 25 L40 16 Q41 13 43 13 Q45 14 44 18 L42 32 Q40 40 36 44 Q31 48 24 48 Z',
+                    'M26 48 Q21 48 18 45 Q15 42 15 37 L16 27 Q16 22 18 18 Q20 14 22 13 Q24 13 24 16 L24 26 L26 14 Q27 10 29 9 Q31 9 32 12 L31 26 L34 14 Q35 10 37 9 Q39 9 40 12 L38 26 L41 18 Q42 15 44 15 Q46 16 45 20 L42 34 Q40 42 35 46 Q30 48 26 48 Z'
+                ];
+
+                const handData = [];
+
+                for (let i = 0; i < handCount; i++) {
+                    const hand = document.createElement('div');
+                    hand.className = 'sea-hand';
+
+                    const pathIndex = i % handPaths.length;
+
+                    // Fill oval pattern evenly from center to edge
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = Math.sqrt(Math.random()); // sqrt for even area distribution
+                    const radiusX = 0.38; // Oval width
+                    const radiusY = 0.44; // Oval height
+
+                    const xPercent = 50 + Math.cos(angle) * radius * radiusX * 100;
+                    const yPercent = 50 + Math.sin(angle) * radius * radiusY * 100;
+
+                    // Depth based on y position (lower = closer/bigger)
+                    const normalizedY = yPercent / 100;
+                    const scale = 0.5 + normalizedY * 0.8;
+                    const depth = 0.3 + normalizedY * 0.7;
+                    const zIndex = Math.floor(normalizedY * 20);
+
+                    const baseRotation = (Math.random() - 0.5) * 40;
+
+                    hand.style.left = `${xPercent}%`;
+                    hand.style.top = `${yPercent}%`;
+                    hand.style.setProperty('--x', '0px');
+                    hand.style.setProperty('--y', '0px');
+                    hand.style.setProperty('--rotation', `${baseRotation}deg`);
+                    hand.style.setProperty('--scale', scale);
+                    hand.style.setProperty('--depth', depth);
+                    hand.style.zIndex = zIndex;
+
+                    hand.innerHTML = `
+                        <svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="${handPaths[pathIndex]}"/>
+                        </svg>
+                    `;
+
+                    hand.addEventListener('click', () => {
+                        hand.classList.add('celebrating');
+                        setTimeout(() => hand.classList.remove('celebrating'), 500);
+                    });
+
+                    handsSea.appendChild(hand);
+                    handData.push({ el: hand, baseRotation });
+
+                    // Fade in with stagger
+                    setTimeout(() => hand.classList.add('visible'), i * 5);
+                }
+
+                // Add straggler hands around the edges - late to the party
+                const stragglerCount = 45;
+                const stragglerDelay = handCount * 5 + 500; // Start after main hands finish
+
+                for (let i = 0; i < stragglerCount; i++) {
+                    const hand = document.createElement('div');
+                    hand.className = 'sea-hand straggler';
+
+                    const pathIndex = i % handPaths.length;
+
+                    // Position stragglers outside the main oval - around edges
+                    const angle = Math.random() * Math.PI * 2;
+                    // Radius between 1.1 and 1.4 (outside the main oval)
+                    const radius = 1.1 + Math.random() * 0.3;
+                    const radiusX = 0.35; // Wider spread for edges
+                    const radiusY = 0.45;
+
+                    let xPercent = 50 + Math.cos(angle) * radius * radiusX * 100;
+                    let yPercent = 50 + Math.sin(angle) * radius * radiusY * 100;
+
+                    // Keep within bounds but at edges
+                    xPercent = Math.max(3, Math.min(97, xPercent));
+                    yPercent = Math.max(5, Math.min(95, yPercent));
+
+                    // Same size/opacity rules as main hands - based on vertical position
+                    const normalizedY = yPercent / 100;
+                    const scale = 0.5 + normalizedY * 0.8;
+                    const depth = 0.3 + normalizedY * 0.7;
+                    const zIndex = Math.floor(normalizedY * 20);
+
+                    const baseRotation = (Math.random() - 0.5) * 60; // More varied rotation
+
+                    hand.style.left = `${xPercent}%`;
+                    hand.style.top = `${yPercent}%`;
+                    hand.style.setProperty('--x', '0px');
+                    hand.style.setProperty('--y', '0px');
+                    hand.style.setProperty('--rotation', `${baseRotation}deg`);
+                    hand.style.setProperty('--scale', scale);
+                    hand.style.setProperty('--depth', depth);
+                    hand.style.zIndex = zIndex;
+
+                    hand.innerHTML = `
+                        <svg viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="${handPaths[pathIndex]}"/>
+                        </svg>
+                    `;
+
+                    hand.addEventListener('click', () => {
+                        hand.classList.add('celebrating');
+                        setTimeout(() => hand.classList.remove('celebrating'), 500);
+                    });
+
+                    handsSea.appendChild(hand);
+                    handData.push({ el: hand, baseRotation });
+
+                    // Fade in later with stagger - arriving late!
+                    setTimeout(() => hand.classList.add('visible'), stragglerDelay + i * 80);
+                }
+
+                // Cursor tracking - hands reach toward cursor
+                let mouseX = window.innerWidth / 2;
+                let mouseY = window.innerHeight / 2;
+
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                });
+
+                function updateHands() {
+                    const seaRect = handsSea.getBoundingClientRect();
+                    if (seaRect.top > window.innerHeight || seaRect.bottom < 0) {
+                        requestAnimationFrame(updateHands);
+                        return;
+                    }
+
+                    handData.forEach(({ el, baseRotation }) => {
+                        const rect = el.getBoundingClientRect();
+                        const handX = rect.left + rect.width / 2;
+                        const handY = rect.top + rect.height / 2;
+
+                        const dx = mouseX - handX;
+                        const dy = mouseY - handY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        const maxDist = 200;
+                        const influence = Math.max(0, 1 - distance / maxDist);
+                        const angleToMouse = Math.atan2(dy, dx) * (180 / Math.PI);
+                        const rotation = baseRotation + (angleToMouse - 90) * influence * 0.4;
+
+                        el.style.setProperty('--rotation', `${rotation}deg`);
+
+                        if (influence > 0.5) {
+                            el.classList.add('waving');
+                        } else {
+                            el.classList.remove('waving');
+                        }
+                    });
+
+                    requestAnimationFrame(updateHands);
+                }
+
+                updateHands();
+            }
+
         })();
     </script>
 </body>
