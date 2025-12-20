@@ -2931,29 +2931,24 @@ button, a, input, textarea, select {
 
 /* Light side hover - text and button stay centered as side expands */
 .social-comparison.in-view .light-side:hover .side-content {
-    transform: scale(1.03) translateX(-2.5vw);
+    transform: scale(1.03) translateX(-30px);
 }
 
 .social-comparison.in-view .light-side:hover .comparison-cta {
-    transform: scale(1.05) translateX(-2.5vw);
+    transform: scale(1.05) translateX(-30px);
 }
 
 /* When dark side hovers (light side shrinks) - content shifts right to stay centered */
 .social-comparison.in-view:has(.dark-side:hover) .light-side .side-content {
-    transform: translateX(2.5vw);
+    transform: translateX(30px);
 }
 
 .social-comparison.in-view:has(.dark-side:hover) .light-side .comparison-cta {
-    transform: translateX(2.5vw);
+    transform: translateX(30px);
 }
 
 .comparison-cta {
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
-}
-
-/* Smooth transitions for content */
-.side-content {
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* New way wins - takeover animation */
@@ -3038,6 +3033,7 @@ button, a, input, textarea, select {
     position: relative;
     z-index: 1;
     max-width: 400px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .side-label {
