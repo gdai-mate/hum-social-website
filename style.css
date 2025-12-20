@@ -2916,9 +2916,27 @@ button, a, input, textarea, select {
     width: 55%;
 }
 
+.social-comparison.in-view .dark-side:hover .side-content {
+    transform: scale(1.03);
+}
+
 .social-comparison.in-view .light-side:hover ~ .dark-side,
 .social-comparison.in-view:has(.light-side:hover) .dark-side {
     width: 45%;
+}
+
+.social-comparison.in-view:has(.light-side:hover) .dark-side .side-content {
+    transform: scale(0.97);
+}
+
+/* Light side hover - text grows and moves */
+.social-comparison.in-view .light-side:hover .side-content {
+    transform: scale(1.05) translateX(-10px);
+}
+
+/* Smooth transitions for content */
+.side-content {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* New way wins - takeover animation */
