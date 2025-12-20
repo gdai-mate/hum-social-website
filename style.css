@@ -2998,20 +2998,28 @@ button, a, input, textarea, select {
     direction: ltr;
 }
 
-/* Mobile */
+/* Mobile - How It Works */
 @media (max-width: 900px) {
     .how-it-works-journey {
-        height: 900vh; /* Proportionally less on mobile but still enough for 20 steps */
+        height: 900vh;
     }
 
     .principle-panel {
         grid-template-columns: 1fr;
-        padding: 3rem 1.5rem;
+        padding: 2rem 1.5rem;
+        padding-right: 3.5rem; /* Space for dots */
         gap: 2rem;
+        text-align: center;
+        justify-items: center;
     }
 
     .principle-panel:nth-child(even) {
         direction: ltr;
+    }
+
+    /* Hide the big number on mobile, use dots instead */
+    .principle-number {
+        display: none;
     }
 
     .principle-progress {
@@ -3019,21 +3027,27 @@ button, a, input, textarea, select {
     }
 
     .progress-dot {
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
     }
 
+    /* Image centered above, larger */
     .principle-visual {
         order: -1;
         padding: 0;
+        display: flex;
+        justify-content: center;
     }
 
     .principle-screenshot {
-        max-width: 220px;
+        max-width: 260px; /* Larger on tablet */
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
     }
 
     .principle-content {
         padding: 0;
+        text-align: center;
     }
 
     .principle-title {
@@ -3043,7 +3057,8 @@ button, a, input, textarea, select {
 
     .principle-line {
         font-size: 1rem;
-        padding: 1rem 0 1rem 1rem;
+        padding: 1rem;
+        text-align: left;
     }
 }
 
@@ -6538,74 +6553,80 @@ button, a, input, textarea, select {
     }
 }
 
-/* === 3. HOW IT WORKS - Mobile layout (keeps scroll mechanism) === */
+/* === 3. HOW IT WORKS - Mobile layout (centered image above, text below) === */
 @media (max-width: 768px) {
-    /* Keep scroll height but reduce it for mobile */
+    /* Keep scroll height for scroll-pinned animation */
     .how-it-works-journey {
         height: 800vh;
     }
 
-    /* Panel stays absolute but with mobile-friendly layout */
+    /* Panel layout: single column, centered content */
     .principle-panel {
         grid-template-columns: 1fr;
         padding: 1.5rem;
+        padding-right: 3rem; /* Space for progress dots */
         gap: 1.5rem;
-        padding-top: 4rem;
+        text-align: center;
+        justify-items: center;
     }
 
-    /* Number as subtle background element */
+    /* Number hidden on mobile - dots serve as indicator */
     .principle-number {
-        position: absolute;
-        right: 1rem;
-        top: 1rem;
-        font-size: clamp(3rem, 15vw, 5rem);
-        opacity: 0.1;
+        display: none;
     }
 
-    /* Screenshot smaller, top right area */
+    /* Image centered above text, larger */
     .principle-visual {
-        position: absolute;
-        right: 1rem;
-        top: 4.5rem;
+        position: static;
+        order: -1; /* Image first */
+        display: flex;
+        justify-content: center;
+        padding: 0;
     }
 
     .principle-screenshot {
-        max-width: 80px;
-        border-radius: 10px;
+        max-width: 200px; /* 2x larger than before */
+        width: 100%;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     }
 
-    /* Content takes full width */
+    /* Content below image, full width */
     .principle-content {
-        padding-right: 100px; /* Make room for screenshot */
+        padding: 0;
+        padding-right: 0;
+        text-align: center;
     }
 
     .principle-title {
-        font-size: clamp(1.25rem, 5vw, 1.5rem);
-        margin-bottom: 1rem;
-        white-space: normal !important;
-        padding-right: 0;
+        font-size: clamp(1.35rem, 5vw, 1.75rem);
+        margin-bottom: 1.25rem;
+        white-space: normal;
     }
 
+    /* Text lines - centered */
     .principle-line {
-        font-size: 0.875rem;
-        padding: 0.625rem 0 0.625rem 0.75rem;
-        line-height: 1.55;
+        font-size: 0.9rem;
+        padding: 0.875rem 1rem;
+        line-height: 1.6;
+        text-align: left;
+        border-left-width: 3px;
     }
 
     .line-label {
-        font-size: 0.6rem;
+        font-size: 0.65rem;
         margin-bottom: 0.25rem;
     }
 
-    /* Progress dots */
+    /* Progress dots - right side, same style as desktop */
     .principle-progress {
-        right: 0.5rem;
-        gap: 0.4rem;
+        right: 0.75rem;
+        gap: 0.5rem;
     }
 
     .progress-dot {
-        width: 6px;
-        height: 6px;
+        width: 8px;
+        height: 8px;
     }
 }
 
@@ -6615,28 +6636,21 @@ button, a, input, textarea, select {
     }
 
     .principle-panel {
-        padding: 1.25rem;
-        padding-top: 3.5rem;
-    }
-
-    .principle-number {
-        font-size: clamp(2.5rem, 12vw, 4rem);
+        padding: 1rem;
+        padding-right: 2.5rem;
+        gap: 1.25rem;
     }
 
     .principle-screenshot {
-        max-width: 65px;
-    }
-
-    .principle-content {
-        padding-right: 80px;
+        max-width: 180px;
     }
 
     .principle-title {
-        font-size: clamp(1.1rem, 4.5vw, 1.35rem);
+        font-size: clamp(1.2rem, 5vw, 1.5rem);
     }
 
     .principle-line {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         padding: 0.5rem 0 0.5rem 0.625rem;
     }
 }
