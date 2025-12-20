@@ -242,6 +242,9 @@ serve(async (req) => {
       case 'daily-rank-check':
         return await dailyRankCheck()
 
+      case 'forgot-pin':
+        return await sendForgotPinEmail(data)
+
       default:
         return new Response(
           JSON.stringify({ error: 'Unknown action' }),
@@ -260,11 +263,26 @@ serve(async (req) => {
 // ============================================
 // WELCOME EMAIL
 // ============================================
-async function sendWelcomeEmail(data: { email: string, name: string, referral_code: string }) {
-  const { email, name, referral_code } = data
+async function sendWelcomeEmail(data: { email: string, name: string, referral_code: string, pin?: string }) {
+  const { email, name, referral_code, pin } = data
   const referralLink = `${SITE_URL}?ref=${referral_code}`
 
   const subject = "You're in. Welcome to the movement."
+
+  // PIN section only shown if PIN is provided
+  const pinSection = pin ? `
+      <div class="highlight-box" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%); border-color: rgba(255, 255, 255, 0.15);">
+        <p style="margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255, 255, 255, 0.5);">Your login PIN</p>
+        <p style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 0.3em; color: #fff; font-family: 'SF Mono', Monaco, monospace;">${pin}</p>
+        <p style="margin: 8px 0 0 0; font-size: 13px; color: rgba(255, 255, 255, 0.5);">Save this — you'll need it to check your stats</p>
+      </div>
+  ` : ''
+
+  const pinPlainText = pin ? `
+YOUR LOGIN PIN: ${pin}
+(Save this — you'll need it to check your stats)
+
+` : ''
 
   const htmlContent = `
 <!DOCTYPE html>
@@ -280,6 +298,8 @@ async function sendWelcomeEmail(data: { email: string, name: string, referral_co
     <div class="content">
       <p class="greeting">Hey ${name},</p>
       <p>You're on the list. Welcome to the movement.</p>
+
+      ${pinSection}
 
       <div class="highlight-box">
         <p><strong>Top 100 referrers get Day 1 access.</strong><br>Everyone else waits in line.</p>
@@ -310,7 +330,7 @@ async function sendWelcomeEmail(data: { email: string, name: string, referral_co
   const plainTextContent = `Hey ${name},
 
 You're on the list. Welcome to the movement.
-
+${pinPlainText}
 TOP 100 REFERRERS GET DAY 1 ACCESS. Everyone else waits in line.
 
 Every friend who joins using your link moves you up the leaderboard. The more you share, the earlier you're in.
@@ -653,6 +673,95 @@ the hüm team
 hüm — social media that makes you better, not bitter`
 
   await sendEmail(entry.email, subject, htmlContent, plainTextContent)
+}
+
+// ============================================
+// FORGOT PIN EMAIL
+// ============================================
+async function sendForgotPinEmail(data: { email: string }) {
+  const { email } = data
+
+  // Look up user's PIN from database
+  const response = await fetch(
+    `${SUPABASE_URL}/rest/v1/waitlist?email=eq.${encodeURIComponent(email)}&select=name,pin`,
+    {
+      headers: {
+        'apikey': SUPABASE_SERVICE_ROLE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+      }
+    }
+  )
+
+  const users = await response.json()
+
+  if (!users || users.length === 0) {
+    return new Response(
+      JSON.stringify({ error: 'Email not found on waitlist' }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
+  }
+
+  const user = users[0]
+
+  if (!user.pin) {
+    return new Response(
+      JSON.stringify({ error: 'No PIN set for this account. Please contact support.' }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
+  }
+
+  const subject = "Your hüm PIN"
+
+  const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>${emailStyles}</style>
+</head>
+<body>
+  <div class="container">
+    ${emailHeader}
+    <div class="content">
+      <p class="greeting">Hey ${user.name},</p>
+      <p>You requested your PIN. Here it is:</p>
+
+      <div class="highlight-box" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%); border-color: rgba(255, 255, 255, 0.15); text-align: center;">
+        <p style="margin: 0; font-size: 48px; font-weight: 700; letter-spacing: 0.3em; color: #fff; font-family: 'SF Mono', Monaco, monospace;">${user.pin}</p>
+      </div>
+
+      <p style="font-size: 14px; color: rgba(255, 255, 255, 0.5);">Use this to log in and check your referral stats.</p>
+
+      <a href="${SITE_URL}" class="cta-button" style="display: block; text-align: center;">Go to hüm</a>
+
+      <p class="signature">See you soon,<br><strong style="color: #d2916f;">the hüm team</strong></p>
+    </div>
+    ${emailFooter}
+  </div>
+</body>
+</html>`
+
+  const plainTextContent = `Hey ${user.name},
+
+You requested your PIN. Here it is:
+
+${user.pin}
+
+Use this to log in and check your referral stats.
+
+See you soon,
+the hüm team
+
+---
+hüm — social media that makes you better, not bitter`
+
+  await sendEmail(email, subject, htmlContent, plainTextContent)
+
+  return new Response(
+    JSON.stringify({ success: true }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  )
 }
 
 // ============================================

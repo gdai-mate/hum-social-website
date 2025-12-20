@@ -197,6 +197,7 @@
                 <img src="assets/logos/hum-logo-dark.svg" alt="hüm" class="logo-img logo-light">
                 <img src="assets/logos/hum-logo-light.svg" alt="hüm" class="logo-img logo-dark">
 
+                <button id="login-btn" class="btn-secondary">Login</button>
                 <a href="https://app.hum-social.com" class="btn-primary">Launch App</a>
 
                 <!-- Theme Toggle -->
@@ -219,6 +220,39 @@
             </div>
         </div>
     </nav>
+
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="login-overlay" style="display: none;">
+        <div class="login-modal">
+            <button class="login-close" id="login-close" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <h2>Welcome back</h2>
+            <p class="login-subtitle">Enter your email and PIN to access your referral dashboard</p>
+            <form id="login-form" class="login-form">
+                <div class="login-field">
+                    <input type="email" id="login-email" placeholder="your@email.com" required>
+                </div>
+                <div class="login-field">
+                    <input type="text" id="login-pin" placeholder="4-digit PIN" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" required>
+                </div>
+                <button type="submit" class="login-submit">
+                    <span class="login-submit-text">Login</span>
+                    <span class="login-submit-loading" style="display: none;">
+                        <svg class="spinner" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="32" stroke-linecap="round"/></svg>
+                    </span>
+                </button>
+                <p class="login-error" id="login-error"></p>
+            </form>
+            <div class="login-footer">
+                <button type="button" class="login-forgot" id="login-forgot">Forgot PIN? Resend it</button>
+                <p class="login-alt">Not on the list? <a href="#waitlist">Join the waitlist</a></p>
+            </div>
+        </div>
+    </div>
 
     <!-- REFERRAL HERO: Shown when arriving via referral link -->
     <section class="referral-hero" id="referral-hero" style="display: none;">
@@ -248,6 +282,9 @@
                     </div>
                     <div class="referral-form-row">
                         <input type="email" name="email" placeholder="Your email" required>
+                    </div>
+                    <div class="referral-form-row pin-row">
+                        <input type="text" name="pin" placeholder="Create 4-digit PIN" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" required>
                     </div>
                     <button type="submit" class="referral-submit-btn">
                         <span class="referral-submit-text">Join the Waitlist</span>
@@ -643,6 +680,10 @@
                         <div class="form-group">
                             <input type="email" id="waitlist-email" placeholder="your@email.com" required>
                         </div>
+                        <div class="form-group pin-group">
+                            <input type="text" id="waitlist-pin" placeholder="Create a 4-digit PIN" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" required>
+                            <span class="pin-hint">You'll use this to log in later</span>
+                        </div>
                         <div class="form-group">
                             <textarea id="waitlist-why" placeholder="Why I want to join..." maxlength="80" required></textarea>
                             <span class="char-count"><span id="char-count">0</span>/80</span>
@@ -779,6 +820,27 @@
                         </div>
                         <p id="progress-text" class="progress-text">Share to climb the leaderboard</p>
                     </div>
+
+                    <!-- Skip waitlist CTA -->
+                    <div class="skip-waitlist-cta">
+                        <p>Don't want to wait? <a href="#support">Become a supporter</a> for guaranteed Day 1 access.</p>
+                    </div>
+
+                    <!-- People you referred -->
+                    <div id="referred-section" class="referred-section" style="display: none;">
+                        <h3 class="referred-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            People you referred
+                        </h3>
+                        <div id="referred-list" class="referred-list">
+                            <p class="referred-empty">Share your link to see your referrals here</p>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Leaderboard -->
@@ -804,7 +866,7 @@
     </section>
 
     <!-- Support Section -->
-    <section class="support">
+    <section id="support" class="support">
         <div class="container">
             <div class="support-content">
                 <h2>A Terrible Business Model<br><span class="support-subtitle">(And Why That's the Point)</span></h2>
@@ -1003,10 +1065,17 @@
                 const formData = new FormData(form);
                 const name = formData.get('name').trim();
                 const email = formData.get('email').trim().toLowerCase();
+                const pin = formData.get('pin').trim();
 
                 // Validate
-                if (!name || !email) {
+                if (!name || !email || !pin) {
                     errorEl.textContent = 'Please fill in all fields';
+                    return;
+                }
+
+                // Validate PIN is exactly 4 digits
+                if (!/^\d{4}$/.test(pin)) {
+                    errorEl.textContent = 'PIN must be exactly 4 digits';
                     return;
                 }
 
@@ -1038,6 +1107,7 @@
                         .insert([{
                             name,
                             email,
+                            pin,
                             referral_code: newReferralCode,
                             referred_by: validReferredBy,
                             source: 'referral'
@@ -1074,7 +1144,7 @@
                     }
 
                     // Send welcome email
-                    sendWelcomeEmail(name, email, newReferralCode);
+                    sendWelcomeEmail(name, email, newReferralCode, pin);
 
                     // Notify referrer (first referral only)
                     if (validReferredBy) {
@@ -1116,6 +1186,167 @@
             const theme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
+        });
+
+        // =====================================================
+        // LOGIN OVERLAY FUNCTIONALITY
+        // =====================================================
+        const loginBtn = document.getElementById('login-btn');
+        const loginOverlay = document.getElementById('login-overlay');
+        const loginClose = document.getElementById('login-close');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const loginForgot = document.getElementById('login-forgot');
+
+        // Open login overlay
+        loginBtn.addEventListener('click', () => {
+            loginOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            document.getElementById('login-email').focus();
+        });
+
+        // Close login overlay
+        function closeLogin() {
+            loginOverlay.style.display = 'none';
+            document.body.style.overflow = '';
+            loginError.textContent = '';
+            loginForm.reset();
+        }
+
+        loginClose.addEventListener('click', closeLogin);
+        loginOverlay.addEventListener('click', (e) => {
+            if (e.target === loginOverlay) closeLogin();
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && loginOverlay.style.display === 'flex') {
+                closeLogin();
+            }
+        });
+
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginError.textContent = '';
+
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const pin = document.getElementById('login-pin').value.trim();
+
+            if (!email || !pin) {
+                loginError.textContent = 'Please fill in all fields';
+                return;
+            }
+
+            if (!/^\d{4}$/.test(pin)) {
+                loginError.textContent = 'PIN must be 4 digits';
+                return;
+            }
+
+            const submitBtn = loginForm.querySelector('.login-submit');
+            const submitText = loginForm.querySelector('.login-submit-text');
+            const submitLoading = loginForm.querySelector('.login-submit-loading');
+
+            submitBtn.disabled = true;
+            submitText.style.display = 'none';
+            submitLoading.style.display = 'inline-flex';
+
+            try {
+                // Check email + PIN match
+                const { data, error } = await supabaseClient
+                    .from('waitlist')
+                    .select('email, referral_code, pin')
+                    .eq('email', email)
+                    .single();
+
+                if (error || !data) {
+                    loginError.textContent = 'Email not found on waitlist';
+                    submitBtn.disabled = false;
+                    submitText.style.display = 'inline';
+                    submitLoading.style.display = 'none';
+                    return;
+                }
+
+                if (data.pin !== pin) {
+                    loginError.textContent = 'Incorrect PIN';
+                    submitBtn.disabled = false;
+                    submitText.style.display = 'inline';
+                    submitLoading.style.display = 'none';
+                    return;
+                }
+
+                // Success! Save to localStorage and show success state
+                const user = { email, referral_code: data.referral_code };
+                localStorage.setItem('hum_waitlist_user', JSON.stringify(user));
+
+                closeLogin();
+
+                // Scroll to waitlist section and show success state
+                const waitlistSection = document.getElementById('waitlist');
+                if (waitlistSection) {
+                    waitlistSection.scrollIntoView({ behavior: 'smooth' });
+                }
+
+                // Trigger success state display
+                if (typeof showSuccessState === 'function') {
+                    showSuccessState(user);
+                    if (typeof loadLeaderboard === 'function') {
+                        loadLeaderboard();
+                    }
+                }
+
+            } catch (err) {
+                console.error('Login error:', err);
+                loginError.textContent = 'Something went wrong. Please try again.';
+                submitBtn.disabled = false;
+                submitText.style.display = 'inline';
+                submitLoading.style.display = 'none';
+            }
+        });
+
+        // Handle forgot PIN
+        loginForgot.addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+
+            if (!email) {
+                loginError.textContent = 'Enter your email first';
+                return;
+            }
+
+            loginForgot.disabled = true;
+            loginForgot.textContent = 'Sending...';
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                    },
+                    body: JSON.stringify({
+                        action: 'forgot-pin',
+                        data: { email }
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    loginError.textContent = result.error;
+                } else {
+                    loginError.style.color = '#4CAF50';
+                    loginError.textContent = 'PIN sent! Check your email.';
+                    setTimeout(() => {
+                        loginError.style.color = '';
+                        loginError.textContent = '';
+                    }, 5000);
+                }
+            } catch (err) {
+                loginError.textContent = 'Could not send PIN. Try again.';
+            }
+
+            loginForgot.disabled = false;
+            loginForgot.textContent = 'Forgot PIN? Resend it';
         });
 
         // Function to mark journey as complete (called after cloud transition)
@@ -2096,7 +2327,7 @@
                 }
 
                 // Function to send welcome email via Edge Function
-                async function sendWelcomeEmail(name, email, referral_code) {
+                async function sendWelcomeEmail(name, email, referral_code, pin) {
                     try {
                         await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
                             method: 'POST',
@@ -2106,7 +2337,7 @@
                             },
                             body: JSON.stringify({
                                 action: 'welcome',
-                                data: { name, email, referral_code }
+                                data: { name, email, referral_code, pin }
                             }),
                         });
                     } catch (err) {
@@ -2199,11 +2430,18 @@
 
             const name = document.getElementById('waitlist-name').value.trim();
             const email = document.getElementById('waitlist-email').value.trim().toLowerCase();
+            const pin = document.getElementById('waitlist-pin').value.trim();
             const why = whyTextarea.value.trim();
             const rankNotifications = document.getElementById('waitlist-notifications').checked;
 
-            if (!name || !email || !why) {
+            if (!name || !email || !pin || !why) {
                 formError.textContent = 'Please fill in all fields';
+                return;
+            }
+
+            // Validate PIN is exactly 4 digits
+            if (!/^\d{4}$/.test(pin)) {
+                formError.textContent = 'PIN must be exactly 4 digits';
                 return;
             }
 
@@ -2250,6 +2488,7 @@
                     .insert([{
                         name,
                         email,
+                        pin,
                         why,
                         referred_by: validReferredBy,
                         rank_notifications: rankNotifications
@@ -2264,7 +2503,7 @@
                 localStorage.setItem('hum_waitlist_user', JSON.stringify(user));
 
                 // Send welcome email (fire and forget)
-                sendWelcomeEmail(name, email, data.referral_code);
+                sendWelcomeEmail(name, email, data.referral_code, pin);
 
                 // Notify referrer if this signup came from a valid referral link
                 if (validReferredBy) {
@@ -2322,6 +2561,9 @@
 
             // Show total signup count (reveal after registration)
             loadTotalSignups();
+
+            // Load people this user has referred
+            loadReferredPeople(user.referral_code);
 
             // Only trigger celebration for NEW signups, not returning users
             if (isNewSignup) {
@@ -2586,6 +2828,61 @@
                 }
             } catch (error) {
                 console.error('Error calculating rank:', error);
+            }
+        }
+
+        // Load people referred by this user
+        async function loadReferredPeople(referralCode) {
+            const referredSection = document.getElementById('referred-section');
+            const referredList = document.getElementById('referred-list');
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('waitlist')
+                    .select('name, why, created_at')
+                    .eq('referred_by', referralCode)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    referredSection.style.display = 'none';
+                    return;
+                }
+
+                referredSection.style.display = 'block';
+
+                // Format date helper
+                const formatDate = (dateStr) => {
+                    const date = new Date(dateStr);
+                    const now = new Date();
+                    const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+
+                    if (diffDays === 0) return 'Today';
+                    if (diffDays === 1) return 'Yesterday';
+                    if (diffDays < 7) return `${diffDays} days ago`;
+                    return date.toLocaleDateString('en-AU', { month: 'short', day: 'numeric' });
+                };
+
+                referredList.innerHTML = data.map(person => `
+                    <div class="referred-entry">
+                        <div class="referred-avatar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="8" r="4"/>
+                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                            </svg>
+                        </div>
+                        <div class="referred-info">
+                            <p class="referred-name">${person.name}</p>
+                            ${person.why ? `<p class="referred-why">"${person.why}"</p>` : ''}
+                        </div>
+                        <div class="referred-date">${formatDate(person.created_at)}</div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error('Error loading referred people:', err);
+                referredSection.style.display = 'none';
             }
         }
 
