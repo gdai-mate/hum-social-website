@@ -332,7 +332,7 @@
             <div class="panel-content">
                 <p class="shift-line" data-line="1">But something's shifting.</p>
                 <p class="shift-line" data-line="2">People are waking up.</p>
-                <p class="shift-line" data-line="3">And building something more</p>
+                <p class="shift-line" data-line="3">And building something more...</p>
                 <div class="human-to-hum" data-line="4">
                     <span class="hum-letter">h</span><span class="hum-letter hum-u">u<span class="umlaut-dots">¨</span></span><span class="hum-letter">m</span><span class="hum-letter hum-an">a</span><span class="hum-letter hum-an">n</span>
                 </div>
@@ -2862,16 +2862,18 @@
                             setTimeout(() => {
                                 cloudTransition.classList.add('parting');
 
-                                // 5. UNLOCK SCROLLING after clouds start parting
-                                document.body.style.overflow = '';
-                                document.documentElement.style.overflow = '';
-
                                 // Start hands popping up as clouds part - reveals with the opening
                                 if (typeof window.showHandsAfterJourney === 'function') {
                                     setTimeout(() => {
                                         window.showHandsAfterJourney();
                                     }, 400);
                                 }
+
+                                // 5. UNLOCK SCROLLING after clouds have opened (not when they start)
+                                setTimeout(() => {
+                                    document.body.style.overflow = '';
+                                    document.documentElement.style.overflow = '';
+                                }, 1200);
 
                                 // Hide clouds after parting animation finishes
                                 setTimeout(() => {
