@@ -2929,9 +2929,17 @@ button, a, input, textarea, select {
     transform: scale(0.97);
 }
 
-/* Light side hover - text grows and moves */
+/* Light side hover - text and button grow and move */
 .social-comparison.in-view .light-side:hover .side-content {
     transform: scale(1.05) translateX(-10px);
+}
+
+.social-comparison.in-view .light-side:hover .comparison-cta {
+    transform: scale(1.08) translateX(-5px);
+}
+
+.comparison-cta {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
 /* Smooth transitions for content */
