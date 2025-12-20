@@ -53,7 +53,7 @@
     <link rel="preload" href="assets/fonts/Ecoplanet.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="assets/fonts/Coconutz.ttf" as="font" type="font/ttf" crossorigin>
 
-    <link rel="stylesheet" href="style.css?v=20251220ae">
+    <link rel="stylesheet" href="style.css?v=20251220ag">
 
     <!-- FLIP CARD - 3D Rotation Animation -->
     <style>
@@ -471,9 +471,9 @@
                 <span class="principle-number">02</span>
                 <h3 class="principle-title">In-the-Moment Only</h3>
                 <div class="principle-lines">
-                    <p class="principle-line" data-line="1"><span class="line-label">The Problem</span>We get it. You've spent 45 minutes choosing the right photo from 73 nearly-identical shots. Edited it. Re-edited it. That's not sharing your life. That's performing it.</p>
-                    <p class="principle-line" data-line="2"><span class="line-label">Our Choice</span>No camera roll access. You can only post what's happening right now, through the in-app camera. What you see is what's actually happening in someone's life.</p>
-                    <p class="principle-line" data-line="3"><span class="line-label">Why It Works</span>You can't perform if you can't prepare. The pressure disappears. Your messy kitchen, your actual face, your real progress. That's the content. And it's enough.</p>
+                    <p class="principle-line" data-line="1"><span class="line-label">The Problem</span>Somewhere along the way, sharing became performing. 45 minutes choosing from 73 nearly-identical shots. The anxiety of not being aesthetic enough. You shouldn't need a content strategy to show your friends what you're passionate about.</p>
+                    <p class="principle-line" data-line="2"><span class="line-label">Our Choice</span>No gallery access. No curated archives. Just an in-app camera capturing what's actually happening, right now. A purely and simply chronological feed. The moment you're in is the only moment that exists.</p>
+                    <p class="principle-line" data-line="3"><span class="line-label">Why It Works</span>Constraints breed creativity. When you can't obsess over the perfect shot, you start seeing the beauty in the imperfect one. Your messy kitchen. Your actual face. Your real Tuesday. That's the content. And it's more than enough.</p>
                 </div>
             </div>
         </div>
@@ -489,7 +489,7 @@
                 <div class="principle-lines">
                     <p class="principle-line" data-line="1"><span class="line-label">The Problem</span>Text is broken. Easy to misread, easy to fake, easy to copy-paste. Comment sections became toxic. DMs became exhausting. A thumbs up emoji isn't connection.</p>
                     <p class="principle-line" data-line="2"><span class="line-label">Our Choice</span>Voice notes for everything. Captions, comments, DMs. Your actual voice, with all its texture and imperfection. You can hear when someone means it.</p>
-                    <p class="principle-line" data-line="3"><span class="line-label">Why It Works</span>You can't fake sincerity in your voice. A 10-second voice note takes more intention than typing "nice!" Comments become real. Connection becomes real.</p>
+                    <p class="principle-line" data-line="3"><span class="line-label">Why It Works</span>A 5-second voice note takes about the same time as typing "nice!" but carries infinitely more weight. Warmth, sarcasm, excitement, sincerity—it all comes through. The vibes don't get lost in translation.</p>
                 </div>
             </div>
         </div>
@@ -503,9 +503,9 @@
                 <span class="principle-number">04</span>
                 <h3 class="principle-title">Quest System</h3>
                 <div class="principle-lines">
-                    <p class="principle-line" data-line="1"><span class="line-label">The Problem</span>Social media rewards passive scrolling. You consume other people's highlight reels while your own goals collect dust. Following someone isn't the same as being on a journey with them.</p>
-                    <p class="principle-line" data-line="2"><span class="line-label">Our Choice</span>Structured journeys. Learn a language. Build a morning routine. Start a book club. Go solo or invite friends. 30+ days. Your progress becomes your content.</p>
-                    <p class="principle-line" data-line="3"><span class="line-label">Why It Works</span>Shared goals create real bonds. You're not watching someone's life from the outside. You're in the arena with them. Struggling together. Celebrating together.</p>
+                    <p class="principle-line" data-line="1"><span class="line-label">The Problem</span>Social media rewards passive scrolling. You watch someone else's wins and your brain registers it as your own achievement. Your goals collect dust. You consume instead of create. Following someone isn't the same as being on a journey with them.</p>
+                    <p class="principle-line" data-line="2"><span class="line-label">Our Choice</span>Every post ties into something you're working on. Reading a book. Learning to cook. Training for a marathon. Climbing Everest. Your progress becomes your content—a personal, public, shareable journal. Go solo, invite friends, or join a public quest.</p>
+                    <p class="principle-line" data-line="3"><span class="line-label">Why It Works</span>Shared goals create real bonds. You're not watching someone's life from the outside—you're in the arena with them. You're not a follower. You're a viber.</p>
                 </div>
             </div>
         </div>
@@ -519,8 +519,8 @@
                 <span class="principle-number">05</span>
                 <h3 class="principle-title">No Ads. Ever.</h3>
                 <div class="principle-lines">
-                    <p class="principle-line"><span class="line-label">The Problem</span>When the product is free, you are the product. Platforms are designed to keep you scrolling, outraged, envious, addicted. They're optimizing for advertisers, not for you.</p>
-                    <p class="principle-line"><span class="line-label">Our Choice</span>No advertising. No sponsored content. No algorithm designed to hijack your attention. You support us directly, so we work for you. Not brands. Not shareholders. You.</p>
+                    <p class="principle-line"><span class="line-label">The Problem</span>Typically, when the product is free, you are the product. Platforms are designed to keep you scrolling, outraged, envious, addicted. They're optimizing for advertisers, not for you.</p>
+                    <p class="principle-line"><span class="line-label">Our Choice</span>Kick the profiteers out of our town hall. No algorithm. No sponsored content. No advertising. You support us directly, so we work for you. Not brands. Not shareholders. You.</p>
                     <p class="principle-line"><span class="line-label">Why It Works</span>When we don't sell your attention, we have zero incentive to manipulate you. The experience is designed for your wellbeing, not engagement metrics. Novel concept, we know.</p>
                 </div>
             </div>
@@ -1167,6 +1167,23 @@
             });
 
             comparisonObserver.observe(comparisonSection);
+
+            // Comparison CTA click - new way takes over, then scroll to waitlist
+            const comparisonCta = document.querySelector('.comparison-cta');
+            if (comparisonCta) {
+                comparisonCta.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Trigger new way takeover animation
+                    comparisonSection.classList.add('new-way-wins');
+                    // After animation, scroll to waitlist
+                    setTimeout(() => {
+                        const waitlist = document.getElementById('waitlist');
+                        if (waitlist) {
+                            waitlist.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, 600);
+                });
+            }
         }
 
         // Interactive hands that reach towards cursor (LEGACY - only runs if .hands-pattern exists)
@@ -1741,22 +1758,27 @@
         }
         } // End of handsPattern null check
 
-        // Flip cards on click - only one at a time
+        // Flip cards on click - up to 3 at a time
+        const flippedCards = []; // Track order of flipped cards
         document.querySelectorAll('.diff-card').forEach((card, index) => {
             card.addEventListener('click', (e) => {
                 e.stopPropagation();
-                console.log('Card clicked:', index);
 
-                // Unflip all other cards
-                document.querySelectorAll('.diff-card').forEach(c => {
-                    if (c !== card) {
-                        c.classList.remove('flipped');
+                if (card.classList.contains('flipped')) {
+                    // Unflip this card
+                    card.classList.remove('flipped');
+                    const idx = flippedCards.indexOf(card);
+                    if (idx > -1) flippedCards.splice(idx, 1);
+                } else {
+                    // If 3 cards already flipped, unflip the oldest
+                    if (flippedCards.length >= 3) {
+                        const oldest = flippedCards.shift();
+                        oldest.classList.remove('flipped');
                     }
-                });
-
-                // Toggle the clicked card
-                card.classList.toggle('flipped');
-                console.log('Card flipped state:', card.classList.contains('flipped'));
+                    // Flip this card
+                    card.classList.add('flipped');
+                    flippedCards.push(card);
+                }
             });
         });
 
@@ -2801,7 +2823,7 @@
                     if (humanToHum) humanToHum.classList.add('centered');
                 }, 900);
 
-                // Then auto-trigger clouds after transformation settles
+                // Then auto-trigger clouds after transformation settles (longer pause to appreciate hüm)
                 setTimeout(() => {
                     if (cloudTransition) {
                         cloudTransition.classList.add('active');
@@ -2853,7 +2875,7 @@
                             }, 100);
                         }, 1500);
                     }
-                }, 1800);
+                }, 2800);
             }
 
             // ========================================

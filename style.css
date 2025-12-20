@@ -834,6 +834,8 @@ a, button, .diff-card, .clickable, [onclick] {
     position: absolute;
     opacity: 0;
     height: auto;
+    /* Off-white/cream tint */
+    filter: sepia(15%) brightness(1.02) saturate(0.9);
 }
 
 /* ============================================
@@ -2900,13 +2902,29 @@ button, a, input, textarea, select {
     width: 100%;
     justify-content: center;
     background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0d0d0d 100%);
-    color: #999;
-    transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #ccc;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* When section is in view, shrink dark side to reveal light side */
 .social-comparison.in-view .dark-side {
     width: 50%;
+}
+
+/* Tug-of-war hover effects */
+.social-comparison.in-view .dark-side:hover {
+    width: 55%;
+}
+
+.social-comparison.in-view .light-side:hover ~ .dark-side,
+.social-comparison.in-view:has(.light-side:hover) .dark-side {
+    width: 45%;
+}
+
+/* New way wins - takeover animation */
+.social-comparison.new-way-wins .dark-side {
+    width: 0% !important;
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark-side::before {
@@ -2920,21 +2938,21 @@ button, a, input, textarea, select {
 }
 
 .dark-side .side-label {
-    color: #666;
+    color: #999;
 }
 
 .dark-side .side-title {
-    color: #888;
+    color: #bbb;
     text-shadow: 0 2px 20px rgba(0,0,0,0.5);
 }
 
 .dark-side .list-icon {
     stroke: #dc3545;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 .dark-side li span {
-    color: #777;
+    color: #aaa;
 }
 
 /* Light Side */
@@ -2944,6 +2962,7 @@ button, a, input, textarea, select {
     padding-right: 10%;
     background: linear-gradient(135deg, #fffef8 0%, #fff9e6 50%, #fffef8 100%);
     color: var(--text);
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .light-side::before {
