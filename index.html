@@ -53,7 +53,7 @@
     <link rel="preload" href="assets/fonts/Ecoplanet.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="assets/fonts/Coconutz.ttf" as="font" type="font/ttf" crossorigin>
 
-    <link rel="stylesheet" href="style.css?v=20251220ag">
+    <link rel="stylesheet" href="style.css?v=20251220mobile">
 
     <!-- FLIP CARD - 3D Rotation Animation -->
     <style>
@@ -104,6 +104,18 @@
         }
         .diff-card:hover:not(.flipped) .card-inner {
             transform: rotateY(10deg);
+        }
+        /* Mobile responsive flip cards */
+        @media (max-width: 768px) {
+            .diff-card { min-height: 220px; }
+            .card-inner { min-height: 220px; }
+            .card-front, .card-back { padding: 1.25rem 1rem; }
+            .diff-card:hover:not(.flipped) .card-inner { transform: none; }
+        }
+        @media (max-width: 480px) {
+            .diff-card { min-height: 200px; }
+            .card-inner { min-height: 200px; }
+            .card-front, .card-back { padding: 1rem 0.75rem; }
         }
     </style>
 

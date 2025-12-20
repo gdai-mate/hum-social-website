@@ -5757,3 +5757,338 @@ button, a, input, textarea, select {
         max-width: 100%;
     }
 }
+
+/* ============================================
+   MOBILE OPTIMIZATIONS - Comprehensive Fix
+   ============================================ */
+
+/* === TABLET BREAKPOINT (768px - 1024px) === */
+@media (min-width: 768px) and (max-width: 1024px) {
+    /* Hero Journey - Tablet text sizing */
+    .feeling-line,
+    .system-line,
+    .shift-line {
+        font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+    }
+
+    /* Human to Hum - Smaller on tablet */
+    .human-to-hum {
+        font-size: clamp(4rem, 15vw, 8rem);
+    }
+
+    /* How It Works - Tablet layout */
+    .principle-panel {
+        grid-template-columns: 1fr;
+        padding: 3rem 2rem;
+    }
+
+    .principle-visual {
+        order: -1;
+    }
+
+    .principle-screenshot {
+        max-width: 280px;
+    }
+
+    /* Comparison section - Tablet */
+    .social-comparison.in-view .dark-side {
+        width: 50%;
+    }
+
+    .side-title {
+        font-size: 1.75rem;
+    }
+
+    /* Flip cards - 2x2 grid on tablet */
+    .differences {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+
+    .diff-card {
+        min-height: 260px;
+    }
+
+    .card-inner {
+        min-height: 260px;
+    }
+}
+
+/* === MOBILE BREAKPOINT (max-width: 768px) === */
+@media (max-width: 768px) {
+    /* Hero Journey - Mobile text sizing */
+    .feeling-line,
+    .system-line,
+    .shift-line {
+        font-size: clamp(1.1rem, 5vw, 1.5rem);
+        line-height: 1.5;
+    }
+
+    .feeling-lines {
+        gap: 1rem;
+    }
+
+    /* Panel content - Mobile padding */
+    .panel-content {
+        padding: 1.5rem;
+        max-width: 100%;
+    }
+
+    /* Human to Hum - Smaller on mobile */
+    .human-to-hum {
+        font-size: clamp(3rem, 18vw, 6rem);
+    }
+
+    /* Opening panel text */
+    .word-reveal .story-text-large {
+        font-size: clamp(1.5rem, 8vw, 2.5rem);
+    }
+
+    /* How It Works header - Mobile */
+    .how-it-works-header {
+        padding: 1.5rem;
+    }
+
+    .how-it-works-title {
+        font-size: clamp(2rem, 8vw, 3rem);
+    }
+
+    .how-it-works-subtext {
+        font-size: clamp(1rem, 4vw, 1.25rem);
+    }
+
+    /* How It Works Journey - Reduced scroll height on mobile */
+    .how-it-works-journey {
+        height: 700vh;
+    }
+
+    .principle-panel {
+        padding: 2rem 1.25rem;
+        gap: 1.5rem;
+    }
+
+    .principle-number {
+        font-size: clamp(4rem, 20vw, 6rem);
+    }
+
+    .principle-title {
+        font-size: clamp(1.5rem, 6vw, 2rem);
+        margin-bottom: 1.25rem;
+    }
+
+    .principle-line {
+        font-size: 0.95rem;
+        padding: 0.875rem 0 0.875rem 1rem;
+        line-height: 1.6;
+    }
+
+    .line-label {
+        font-size: 0.625rem;
+    }
+
+    .principle-screenshot {
+        max-width: 180px;
+    }
+
+    /* Comparison section - Mobile vertical reveal */
+    .comparison-side {
+        padding: 2.5rem 1.25rem;
+    }
+
+    .side-content {
+        max-width: 100%;
+    }
+
+    .side-title {
+        font-size: clamp(1.5rem, 6vw, 2rem);
+        white-space: normal;
+        line-height: 1.2;
+    }
+
+    .comparison-list {
+        gap: 1rem;
+    }
+
+    .comparison-list li {
+        font-size: 0.9rem;
+        gap: 0.75rem;
+    }
+
+    .list-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Disable tug-of-war on touch devices */
+    .social-comparison.in-view .dark-side:hover,
+    .social-comparison.in-view:has(.light-side:hover) .dark-side {
+        width: 50%;
+        height: 50%;
+    }
+
+    /* Flip cards - 2 column grid on mobile */
+    .differences {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.875rem;
+    }
+
+    .diff-card {
+        min-height: 220px;
+    }
+
+    .card-inner {
+        min-height: 220px;
+    }
+
+    .card-front,
+    .card-back {
+        padding: 1.25rem 1rem;
+    }
+
+    .card-icon {
+        width: 70px;
+        height: 70px;
+    }
+
+    .card-back h3 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-back p {
+        font-size: 0.85rem;
+        line-height: 1.45;
+    }
+
+    /* Cloud transition - Mobile */
+    .cloud-transition .cloud {
+        max-width: 150%;
+    }
+
+    /* Hands sea - Mobile */
+    .hands-sea {
+        height: 250px;
+    }
+
+    .sea-hand {
+        width: clamp(28px, 7vw, 38px);
+    }
+
+    /* Progress dots - Mobile */
+    .principle-progress {
+        right: 0.75rem;
+    }
+
+    .progress-dot {
+        width: 6px;
+        height: 6px;
+    }
+}
+
+/* === SMALL MOBILE (max-width: 480px) === */
+@media (max-width: 480px) {
+    /* Hero Journey - Small mobile text */
+    .feeling-line,
+    .system-line,
+    .shift-line {
+        font-size: clamp(1rem, 5.5vw, 1.25rem);
+        line-height: 1.6;
+    }
+
+    .feeling-lines {
+        gap: 0.75rem;
+    }
+
+    /* Human to Hum - Small mobile */
+    .human-to-hum {
+        font-size: clamp(2.5rem, 16vw, 4.5rem);
+    }
+
+    /* Opening panel */
+    .word-reveal .story-text-large {
+        font-size: clamp(1.25rem, 7vw, 2rem);
+    }
+
+    /* How It Works - Small mobile */
+    .how-it-works-journey {
+        height: 600vh;
+    }
+
+    .how-it-works-title {
+        font-size: clamp(1.75rem, 9vw, 2.5rem);
+    }
+
+    .how-it-works-subtext {
+        font-size: clamp(0.9rem, 4vw, 1.1rem);
+    }
+
+    .principle-number {
+        font-size: clamp(3rem, 18vw, 5rem);
+    }
+
+    .principle-title {
+        font-size: clamp(1.25rem, 5.5vw, 1.75rem);
+    }
+
+    .principle-line {
+        font-size: 0.875rem;
+        padding: 0.75rem 0 0.75rem 0.875rem;
+    }
+
+    .principle-screenshot {
+        max-width: 140px;
+    }
+
+    /* Comparison - Small mobile */
+    .side-title {
+        font-size: clamp(1.35rem, 5.5vw, 1.75rem);
+    }
+
+    .comparison-list li {
+        font-size: 0.85rem;
+    }
+
+    .comparison-cta {
+        font-size: 0.8rem;
+        padding: 0.75rem 1.25rem;
+    }
+
+    /* Flip cards - Keep 2x2 but smaller */
+    .diff-card {
+        min-height: 200px;
+    }
+
+    .card-inner {
+        min-height: 200px;
+    }
+
+    .card-front,
+    .card-back {
+        padding: 1rem 0.75rem;
+    }
+
+    .card-icon {
+        width: 55px;
+        height: 55px;
+    }
+
+    .card-back h3 {
+        font-size: 0.9rem;
+    }
+
+    .card-back p {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+
+    /* Scroll indicator - Small mobile */
+    .scroll-indicator {
+        bottom: 1.5rem;
+        font-size: 0.75rem;
+    }
+
+    .scroll-indicator svg {
+        width: 20px;
+        height: 20px;
+    }
+}
