@@ -6127,115 +6127,135 @@ button, a, input, textarea, select {
     .cloud-transition .cr-9 { width: 115vw; top: 82%; right: -15%; }
 }
 
-/* === 2. HANDS - Spread out on mobile === */
+/* === 2. HANDS - Much less dense on mobile === */
 @media (max-width: 768px) {
     .hands-pattern {
-        grid-template-columns: repeat(6, 1fr);
-        grid-template-rows: repeat(5, 1fr);
-        gap: 2rem;
-        opacity: 0.06;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 4rem;
+        opacity: 0.04;
     }
 
     .pattern-hand {
-        width: 100%;
-        height: 100%;
+        width: 70%;
+        height: 70%;
     }
 }
 
 @media (max-width: 480px) {
     .hands-pattern {
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: repeat(4, 1fr);
-        gap: 2.5rem;
-        opacity: 0.05;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 5rem;
+        opacity: 0.035;
+    }
+
+    .pattern-hand {
+        width: 60%;
+        height: 60%;
     }
 }
 
-/* === 3. HOW IT WORKS - Redesigned mobile layout === */
+/* === 3. HOW IT WORKS - Mobile layout (keeps scroll mechanism) === */
 @media (max-width: 768px) {
-    /* Reduced scroll height for snappier experience */
+    /* Keep scroll height but reduce it for mobile */
     .how-it-works-journey {
-        height: auto;
-        min-height: 100vh;
+        height: 800vh;
     }
 
-    /* Panel redesign - horizontal layout with image on right */
+    /* Panel stays absolute but with mobile-friendly layout */
     .principle-panel {
-        display: flex;
-        flex-direction: column;
+        grid-template-columns: 1fr;
         padding: 1.5rem;
-        gap: 1rem;
-        min-height: 100vh;
+        gap: 1.5rem;
+        padding-top: 4rem;
     }
 
-    /* Top row: Number + Image side by side */
-    .principle-panel .principle-visual {
-        order: 0;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        padding: 0;
-    }
-
-    .principle-panel .principle-number {
+    /* Number as subtle background element */
+    .principle-number {
         position: absolute;
-        left: 1.5rem;
-        top: 1.5rem;
-        font-size: clamp(2.5rem, 12vw, 4rem);
-        opacity: 0.15;
+        right: 1rem;
+        top: 1rem;
+        font-size: clamp(3rem, 15vw, 5rem);
+        opacity: 0.1;
+    }
+
+    /* Screenshot smaller, top right area */
+    .principle-visual {
+        position: absolute;
+        right: 1rem;
+        top: 4.5rem;
     }
 
     .principle-screenshot {
-        max-width: 100px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        max-width: 80px;
+        border-radius: 10px;
     }
 
-    /* Content below */
+    /* Content takes full width */
     .principle-content {
-        order: 1;
-        padding: 0;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
+        padding-right: 100px; /* Make room for screenshot */
     }
 
     .principle-title {
         font-size: clamp(1.25rem, 5vw, 1.5rem);
         margin-bottom: 1rem;
         white-space: normal !important;
-    }
-
-    /* Lines container - show one at a time via CSS */
-    .principle-lines {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        position: relative;
+        padding-right: 0;
     }
 
     .principle-line {
-        font-size: 0.9rem;
-        padding: 0.75rem 0;
-        line-height: 1.6;
-        border-left: none;
-        padding-left: 0;
+        font-size: 0.875rem;
+        padding: 0.625rem 0 0.625rem 0.75rem;
+        line-height: 1.55;
     }
 
     .line-label {
-        font-size: 0.65rem;
-        margin-bottom: 0.35rem;
+        font-size: 0.6rem;
+        margin-bottom: 0.25rem;
     }
 
-    /* Progress dots repositioned */
+    /* Progress dots */
     .principle-progress {
         right: 0.5rem;
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
 
     .progress-dot {
         width: 6px;
         height: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .how-it-works-journey {
+        height: 700vh;
+    }
+
+    .principle-panel {
+        padding: 1.25rem;
+        padding-top: 3.5rem;
+    }
+
+    .principle-number {
+        font-size: clamp(2.5rem, 12vw, 4rem);
+    }
+
+    .principle-screenshot {
+        max-width: 65px;
+    }
+
+    .principle-content {
+        padding-right: 80px;
+    }
+
+    .principle-title {
+        font-size: clamp(1.1rem, 4.5vw, 1.35rem);
+    }
+
+    .principle-line {
+        font-size: 0.8rem;
+        padding: 0.5rem 0 0.5rem 0.625rem;
     }
 }
 
