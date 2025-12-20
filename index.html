@@ -388,7 +388,7 @@
             <div class="solution-content">
                 <h2>Social Media for Your Journey,<br class="mobile-break"> <span class="nowrap">Not Your Performance</span></h2>
                 <p class="solution-intro">
-                    hüm is social media built around what you're working on—not what you look like. Document your progress. Connect with people on similar paths. Build a community that gives a hüm.
+                    hüm is social media built around what you're working on—not what you look&nbsp;like. Document your progress. Connect with people on similar paths. Build a community that gives a hüm.
                 </p>
                 <div class="differences">
                     <div class="diff-card">
@@ -809,13 +809,13 @@
             <div class="support-content">
                 <h2>A Terrible Business Model<br><span class="support-subtitle">(And Why That's the Point)</span></h2>
                 <p class="support-intro support-philosophy">
-                    Let's be honest: this is an awful way to make money. No ads. No data mining. No business accounts. No sponsored content. No algorithm optimizing for engagement. We've intentionally removed every profitable lever that makes social media "work."
+                    No ads. No sponsors. No data sales. No algorithm. We threw out every profitable part of social media. Yes, on purpose. Yes, our families have questions.
                 </p>
                 <p class="support-intro support-philosophy">
-                    <strong>That's the point.</strong> Too much business has ruined social spaces. The profiteering of our togetherness is exactly the problem we're trying to solve. So we built something that can't be corrupted by it.
+                    But those parts are what made it toxic. Selling your attention requires hijacking it first. We'd rather just... not.
                 </p>
                 <p class="support-intro">
-                    hüm is <strong class="completely-free">completely free</strong> with 3 concurrent quests and all core features. If you believe in what we're building and want to help keep it alive, independent, and permanently ad-free—here's how:
+                    hüm is <strong class="completely-free">free</strong>. Really. But some things cost real money to run—longer voice notes, video, transcription, storage. So supporters get those extras, and we get to stay independent. Everybody wins.
                 </p>
                 <p class="support-early-access">All supporters get <strong>guaranteed Day 1 access</strong>—skip the waitlist entirely.</p>
                 <div class="support-tiers">
@@ -3452,17 +3452,17 @@
                     const rect = randomData.el.getBoundingClientRect();
                     const message = seaBubbleMessages[Math.floor(Math.random() * seaBubbleMessages.length)];
 
-                    // Create bubble
+                    // Create bubble (using handsSea and seaRect already defined above)
                     const bubble = document.createElement('div');
                     bubble.className = 'high-five-bubble sea-bubble';
                     bubble.textContent = message;
-                    bubble.style.position = 'fixed';
-                    bubble.style.left = `${rect.left + rect.width / 2}px`;
-                    bubble.style.top = `${rect.top - 40}px`;
+                    bubble.style.position = 'absolute';
+                    bubble.style.left = `${rect.left - seaRect.left + rect.width / 2}px`;
+                    bubble.style.top = `${rect.top - seaRect.top - 40}px`;
                     bubble.style.transform = 'translateX(-50%)';
                     bubble.style.zIndex = '10001';
 
-                    document.body.appendChild(bubble);
+                    handsSea.appendChild(bubble);
                     seaBubble = bubble;
 
                     // Make hand wave
@@ -3489,7 +3489,7 @@
                     // Click bubble or waving hand to celebrate
                     bubble.addEventListener('click', handleWavingHandClick);
                     randomData.el.addEventListener('click', handleWavingHandClick);
-                    randomData.el.style.cursor = 'pointer';
+                    randomData.el.style.cursor = "url('assets/hands/hand-cursor.png') 12 12, pointer";
                     randomData.el.style.zIndex = '100'; // Bring waving hand to front
 
                     // Store handler for cleanup

@@ -1333,7 +1333,7 @@ body:not(.journey-complete) footer {
     height: auto;
     opacity: 0;
     transform-origin: bottom center;
-    cursor: pointer;
+    cursor: url('assets/hands/hand-cursor.png') 12 12, pointer;
     pointer-events: auto;
     transform: translate(var(--x, 0px), calc(var(--y, 0px) + 40px)) rotate(var(--rotation, 0deg)) scale(0);
     transition:
