@@ -3648,6 +3648,23 @@ button, a, input, textarea, select {
     white-space: nowrap;
 }
 
+.support-contact {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+.support-contact a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.support-contact a:hover {
+    opacity: 0.8;
+}
+
 /* CTA Section */
 .cta-section {
     padding: 6rem 0;
