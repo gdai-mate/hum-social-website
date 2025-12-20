@@ -2929,13 +2929,22 @@ button, a, input, textarea, select {
     transform: scale(0.97);
 }
 
-/* Light side hover - text and button grow and move */
+/* Light side hover - text and button stay centered as side expands */
 .social-comparison.in-view .light-side:hover .side-content {
-    transform: scale(1.05) translateX(-10px);
+    transform: scale(1.03) translateX(-2.5vw);
 }
 
 .social-comparison.in-view .light-side:hover .comparison-cta {
-    transform: scale(1.08) translateX(-5px);
+    transform: scale(1.05) translateX(-2.5vw);
+}
+
+/* When dark side hovers (light side shrinks) - content shifts right to stay centered */
+.social-comparison.in-view:has(.dark-side:hover) .light-side .side-content {
+    transform: translateX(2.5vw);
+}
+
+.social-comparison.in-view:has(.dark-side:hover) .light-side .comparison-cta {
+    transform: translateX(2.5vw);
 }
 
 .comparison-cta {
