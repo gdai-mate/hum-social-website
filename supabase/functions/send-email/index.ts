@@ -2,9 +2,13 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
 const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY')!
 const SENDGRID_FROM_EMAIL = Deno.env.get('SENDGRID_FROM_EMAIL') || 'hello@hum-social.com'
-const SENDGRID_FROM_NAME = Deno.env.get('SENDGRID_FROM_NAME') || 'the hüm team'
+const SENDGRID_FROM_NAME = Deno.env.get('SENDGRID_FROM_NAME') || 'hüm'
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+
+// Brand assets - hosted logo for email clients
+const LOGO_URL = 'https://hum-social.com/assets/logos/hum-logo-dark.svg'
+const SITE_URL = 'https://hum-social.com'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -21,6 +25,204 @@ interface WaitlistEntry {
   rank_notifications?: boolean
   last_rank_email_at?: string
 }
+
+// ============================================
+// SHARED EMAIL STYLES - Premium Brand Design
+// ============================================
+const emailStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+    margin: 0;
+    padding: 40px 20px;
+  }
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    background: linear-gradient(165deg, #1a1a1a 0%, #242424 50%, #1a1a1a 100%);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  .header {
+    padding: 48px 40px 32px;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(210, 145, 111, 0.08) 0%, transparent 100%);
+  }
+  .logo-img {
+    height: 48px;
+    width: auto;
+  }
+  .logo-text {
+    font-size: 42px;
+    font-weight: 300;
+    background: linear-gradient(135deg, #fff 0%, #f5f0e8 50%, #d2916f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 4px;
+    margin: 0;
+  }
+  .tagline {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(210, 145, 111, 0.7);
+    margin-top: 8px;
+  }
+  .content {
+    padding: 40px 40px 48px;
+  }
+  .greeting {
+    font-size: 18px;
+    color: #ffffff;
+    margin: 0 0 24px 0;
+    font-weight: 500;
+  }
+  p {
+    margin: 0 0 16px 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(210, 145, 111, 0.15) 0%, rgba(210, 145, 111, 0.05) 100%);
+    border: 1px solid rgba(210, 145, 111, 0.3);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 28px 0;
+  }
+  .highlight-box p {
+    margin: 0;
+    color: #fff;
+    font-size: 15px;
+  }
+  .highlight-box strong {
+    color: #d2916f;
+  }
+  .rank-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 28px 0;
+    text-align: center;
+  }
+  .rank-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 0 8px 0;
+  }
+  .rank-number {
+    font-size: 56px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff 0%, #d2916f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    line-height: 1;
+  }
+  .rank-sublabel {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 8px 0 0 0;
+  }
+  .rank-card.success {
+    background: linear-gradient(145deg, rgba(76, 175, 80, 0.15) 0%, rgba(76, 175, 80, 0.05) 100%);
+    border-color: rgba(76, 175, 80, 0.3);
+  }
+  .referral-section {
+    margin: 32px 0;
+  }
+  .referral-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 0 12px 0;
+  }
+  .referral-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .referral-link {
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+    font-size: 13px;
+    color: #d2916f;
+    word-break: break-all;
+    flex: 1;
+  }
+  .cta-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #d2916f 0%, #c17f5d 100%);
+    color: #fff !important;
+    text-decoration: none;
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin: 24px 0;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(210, 145, 111, 0.3);
+  }
+  .cta-button:hover {
+    background: linear-gradient(135deg, #c17f5d 0%, #b06e4c 100%);
+  }
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+    margin: 32px 0;
+  }
+  .signature {
+    margin-top: 32px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+  }
+  .footer {
+    background: rgba(0, 0, 0, 0.3);
+    text-align: center;
+    padding: 24px 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .footer p {
+    margin: 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.5px;
+  }
+  .footer a {
+    color: #d2916f;
+    text-decoration: none;
+  }
+`
+
+// Email header with logo
+const emailHeader = `
+  <div class="header">
+    <h1 class="logo-text">hüm</h1>
+    <p class="tagline">voice-first social</p>
+  </div>
+`
+
+// Email footer
+const emailFooter = `
+  <div class="footer">
+    <p>hüm — social media that makes you better, not bitter</p>
+  </div>
+`
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -60,80 +262,70 @@ serve(async (req) => {
 // ============================================
 async function sendWelcomeEmail(data: { email: string, name: string, referral_code: string }) {
   const { email, name, referral_code } = data
-  const referralLink = `https://hum-social.com?ref=${referral_code}`
+  const referralLink = `${SITE_URL}?ref=${referral_code}`
 
-  const subject = "You're on the list."
+  const subject = "You're in. Welcome to the movement."
 
   const htmlContent = `
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #2C2418; background: #F8F8F8; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 40px auto; background: #FFFFFF; }
-    .header { padding: 48px 40px 32px; text-align: center; border-bottom: 1px solid #F0F0F0; }
-    .logo { font-size: 48px; font-weight: 300; color: #2C2418; margin: 0; letter-spacing: 2px; }
-    .content { padding: 40px; }
-    .greeting { font-size: 20px; color: #2C2418; margin: 0 0 20px 0; }
-    p { margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #4A4A4A; }
-    .highlight { background: #FFFBF7; border-left: 3px solid #D2916F; padding: 16px 20px; margin: 24px 0; }
-    .highlight p { margin: 0; color: #2C2418; }
-    .referral-box { background: #F5F5F5; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center; }
-    .referral-link { font-family: monospace; font-size: 14px; background: #FFFFFF; padding: 12px; border-radius: 4px; word-break: break-all; display: block; margin-top: 8px; color: #2C2418; }
-    .footer { background: #FAFAFA; text-align: center; padding: 24px 40px; font-size: 13px; color: #999999; border-top: 1px solid #F0F0F0; }
-    .signature { margin-top: 32px; color: #2C2418; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>${emailStyles}</style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1 class="logo">hüm</h1>
-    </div>
+    ${emailHeader}
     <div class="content">
       <p class="greeting">Hey ${name},</p>
-      <p>You're in. Welcome to the movement.</p>
+      <p>You're on the list. Welcome to the movement.</p>
 
-      <div class="highlight">
-        <p><strong>Top 100 referrers get first access when we launch.</strong> Everyone else waits.</p>
+      <div class="highlight-box">
+        <p><strong>Top 100 referrers get Day 1 access.</strong><br>Everyone else waits in line.</p>
       </div>
 
-      <p>Your link:</p>
-      <div class="referral-box">
-        <span class="referral-link">${referralLink}</span>
+      <p>Every friend who joins using your link moves you up the leaderboard. The more you share, the earlier you're in.</p>
+
+      <div class="referral-section">
+        <p class="referral-label">Your unique referral link</p>
+        <div class="referral-box">
+          <span class="referral-link">${referralLink}</span>
+        </div>
       </div>
 
-      <p>Every friend who joins using your link moves you up the leaderboard. Simple.</p>
-      <p>No algorithms. No doomscrolling. No bullshit. Just real people building real habits together.</p>
-      <p>Share your link. Climb the board. See you on the other side.</p>
+      <a href="${referralLink}" class="cta-button" style="display: block; text-align: center;">Share & Climb the Leaderboard</a>
 
-      <p class="signature">– ${SENDGRID_FROM_NAME}</p>
+      <div class="divider"></div>
+
+      <p style="font-size: 14px; color: rgba(255, 255, 255, 0.5);">No algorithms. No doomscrolling. No bullshit.<br>Just real people building real habits together.</p>
+
+      <p class="signature">See you on the other side,<br><strong style="color: #d2916f;">the hüm team</strong></p>
     </div>
-    <div class="footer">
-      <p>hüm – social media that makes you better, not bitter</p>
-    </div>
+    ${emailFooter}
   </div>
 </body>
 </html>`
 
   const plainTextContent = `Hey ${name},
 
-You're in. Welcome to the movement.
+You're on the list. Welcome to the movement.
 
-TOP 100 REFERRERS GET FIRST ACCESS WHEN WE LAUNCH. Everyone else waits.
+TOP 100 REFERRERS GET DAY 1 ACCESS. Everyone else waits in line.
 
-Your link:
+Every friend who joins using your link moves you up the leaderboard. The more you share, the earlier you're in.
+
+Your unique referral link:
 ${referralLink}
 
-Every friend who joins using your link moves you up the leaderboard. Simple.
+No algorithms. No doomscrolling. No bullshit.
+Just real people building real habits together.
 
-No algorithms. No doomscrolling. No bullshit. Just real people building real habits together.
-
-Share your link. Climb the board. See you on the other side.
-
-– ${SENDGRID_FROM_NAME}
+See you on the other side,
+the hüm team
 
 ---
-hüm – social media that makes you better, not bitter`
+hüm — social media that makes you better, not bitter`
 
   await sendEmail(email, subject, htmlContent, plainTextContent)
 
@@ -148,75 +340,65 @@ hüm – social media that makes you better, not bitter`
 // ============================================
 async function sendFirstReferralEmail(data: { email: string, name: string, referral_code: string, referrer_name: string, rank: number }) {
   const { email, name, referral_code, referrer_name, rank } = data
-  const referralLink = `https://hum-social.com?ref=${referral_code}`
+  const referralLink = `${SITE_URL}?ref=${referral_code}`
 
-  const subject = "Someone joined because of you."
+  const subject = `${referrer_name} just joined because of you.`
 
   const inTop100 = rank <= 100
   const spotsAway = rank - 100
 
   const rankMessage = inTop100
-    ? `<p>You're in the top 100. Keep your spot.</p>`
-    : `<p>Keep going. Top 100 get early access – you're <strong>${spotsAway} spots</strong> away.</p>`
+    ? `<p style="color: #4CAF50; font-weight: 500;">You're in the top 100! Keep your spot by sharing more.</p>`
+    : `<p>You're <strong style="color: #d2916f;">${spotsAway} spots</strong> away from Day 1 access. Keep sharing!</p>`
 
   const rankMessagePlain = inTop100
-    ? `You're in the top 100. Keep your spot.`
-    : `Keep going. Top 100 get early access – you're ${spotsAway} spots away.`
+    ? `You're in the top 100! Keep your spot by sharing more.`
+    : `You're ${spotsAway} spots away from Day 1 access. Keep sharing!`
+
+  const rankCardClass = inTop100 ? 'rank-card success' : 'rank-card'
 
   const htmlContent = `
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #2C2418; background: #F8F8F8; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 40px auto; background: #FFFFFF; }
-    .header { padding: 48px 40px 32px; text-align: center; border-bottom: 1px solid #F0F0F0; }
-    .logo { font-size: 48px; font-weight: 300; color: #2C2418; margin: 0; letter-spacing: 2px; }
-    .content { padding: 40px; }
-    .greeting { font-size: 20px; color: #2C2418; margin: 0 0 20px 0; }
-    p { margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #4A4A4A; }
-    .rank-box { background: #F5F5F5; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center; }
-    .rank-number { font-size: 32px; font-weight: 700; color: #2C2418; }
-    .referral-box { background: #FFFBF7; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center; }
-    .referral-link { font-family: monospace; font-size: 14px; word-break: break-all; color: #2C2418; }
-    .footer { background: #FAFAFA; text-align: center; padding: 24px 40px; font-size: 13px; color: #999999; border-top: 1px solid #F0F0F0; }
-    .signature { margin-top: 32px; color: #2C2418; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>${emailStyles}</style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1 class="logo">hüm</h1>
-    </div>
+    ${emailHeader}
     <div class="content">
       <p class="greeting">Hey ${name},</p>
-      <p>Your first referral just landed. <strong>${referrer_name}</strong> is now on the waitlist because of you.</p>
+      <p>Your referral just landed! <strong style="color: #fff;">${referrer_name}</strong> is now on the waitlist because of you.</p>
 
-      <div class="rank-box">
-        <p style="margin: 0; color: #666;">You're</p>
+      <div class="${rankCardClass}">
+        <p class="rank-label">Your position</p>
         <p class="rank-number">#${rank}</p>
-        <p style="margin: 0; color: #666;">on the leaderboard</p>
+        <p class="rank-sublabel">on the leaderboard</p>
       </div>
 
       ${rankMessage}
 
-      <p>Your link (keep sharing):</p>
-      <div class="referral-box">
-        <span class="referral-link">${referralLink}</span>
+      <div class="referral-section">
+        <p class="referral-label">Keep sharing your link</p>
+        <div class="referral-box">
+          <span class="referral-link">${referralLink}</span>
+        </div>
       </div>
 
-      <p class="signature">– ${SENDGRID_FROM_NAME}</p>
+      <a href="${SITE_URL}#leaderboard" class="cta-button" style="display: block; text-align: center;">View Leaderboard</a>
+
+      <p class="signature">Keep climbing,<br><strong style="color: #d2916f;">the hüm team</strong></p>
     </div>
-    <div class="footer">
-      <p>hüm – social media that makes you better, not bitter</p>
-    </div>
+    ${emailFooter}
   </div>
 </body>
 </html>`
 
   const plainTextContent = `Hey ${name},
 
-Your first referral just landed. ${referrer_name} is now on the waitlist because of you.
+Your referral just landed! ${referrer_name} is now on the waitlist because of you.
 
 You're #${rank} on the leaderboard.
 
@@ -225,10 +407,11 @@ ${rankMessagePlain}
 Your link (keep sharing):
 ${referralLink}
 
-– ${SENDGRID_FROM_NAME}
+Keep climbing,
+the hüm team
 
 ---
-hüm – social media that makes you better, not bitter`
+hüm — social media that makes you better, not bitter`
 
   await sendEmail(email, subject, htmlContent, plainTextContent)
 
@@ -337,76 +520,70 @@ async function updateLastRankEmail(userId: string) {
 // DROPPED OUT EMAIL
 // ============================================
 async function sendDroppedOutEmail(entry: WaitlistEntry, currentRank: number) {
-  const referralLink = `https://hum-social.com?ref=${entry.referral_code}`
+  const referralLink = `${SITE_URL}?ref=${entry.referral_code}`
 
   // Calculate referrals needed to get back to #100
   const referralsNeeded = Math.ceil((currentRank - 100) / 10) || 1
 
-  const subject = `Rank update: You're now #${currentRank}`
+  const subject = `You slipped to #${currentRank} — here's how to get back in`
 
   const htmlContent = `
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #2C2418; background: #F8F8F8; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 40px auto; background: #FFFFFF; }
-    .header { padding: 48px 40px 32px; text-align: center; border-bottom: 1px solid #F0F0F0; }
-    .logo { font-size: 48px; font-weight: 300; color: #2C2418; margin: 0; letter-spacing: 2px; }
-    .content { padding: 40px; }
-    .greeting { font-size: 20px; color: #2C2418; margin: 0 0 20px 0; }
-    p { margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #4A4A4A; }
-    .rank-box { background: #F5F5F5; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center; }
-    .rank-number { font-size: 32px; font-weight: 700; color: #2C2418; }
-    .referral-box { background: #FFFBF7; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center; }
-    .referral-link { font-family: monospace; font-size: 14px; word-break: break-all; color: #2C2418; }
-    .footer { background: #FAFAFA; text-align: center; padding: 24px 40px; font-size: 13px; color: #999999; border-top: 1px solid #F0F0F0; }
-    .signature { margin-top: 32px; color: #2C2418; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>${emailStyles}</style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1 class="logo">hüm</h1>
-    </div>
+    ${emailHeader}
     <div class="content">
       <p class="greeting">Hey ${entry.name},</p>
+      <p>Others are climbing the leaderboard. Your position has changed.</p>
 
-      <div class="rank-box">
-        <p style="margin: 0; color: #666;">You're currently</p>
+      <div class="rank-card">
+        <p class="rank-label">Current position</p>
         <p class="rank-number">#${currentRank}</p>
-        <p style="margin: 0; color: #666;">on the waitlist</p>
+        <p class="rank-sublabel">outside the top 100</p>
       </div>
 
-      <p>To get back into the top 100, you need <strong>${referralsNeeded} more referral${referralsNeeded > 1 ? 's' : ''}</strong>.</p>
-
-      <p>Your link:</p>
-      <div class="referral-box">
-        <span class="referral-link">${referralLink}</span>
+      <div class="highlight-box">
+        <p>You need <strong>${referralsNeeded} more referral${referralsNeeded > 1 ? 's' : ''}</strong> to get back into the top 100 and secure Day 1 access.</p>
       </div>
 
-      <p class="signature">– ${SENDGRID_FROM_NAME}</p>
+      <div class="referral-section">
+        <p class="referral-label">Share your link</p>
+        <div class="referral-box">
+          <span class="referral-link">${referralLink}</span>
+        </div>
+      </div>
+
+      <a href="${referralLink}" class="cta-button" style="display: block; text-align: center;">Share & Get Back In</a>
+
+      <p class="signature">Don't give up,<br><strong style="color: #d2916f;">the hüm team</strong></p>
     </div>
-    <div class="footer">
-      <p>hüm – social media that makes you better, not bitter</p>
-    </div>
+    ${emailFooter}
   </div>
 </body>
 </html>`
 
   const plainTextContent = `Hey ${entry.name},
 
-You're currently #${currentRank} on the waitlist.
+Others are climbing the leaderboard. Your position has changed.
 
-To get back into the top 100, you need ${referralsNeeded} more referral${referralsNeeded > 1 ? 's' : ''}.
+You're currently #${currentRank} — outside the top 100.
+
+You need ${referralsNeeded} more referral${referralsNeeded > 1 ? 's' : ''} to get back into the top 100 and secure Day 1 access.
 
 Your link:
 ${referralLink}
 
-– ${SENDGRID_FROM_NAME}
+Don't give up,
+the hüm team
 
 ---
-hüm – social media that makes you better, not bitter`
+hüm — social media that makes you better, not bitter`
 
   await sendEmail(entry.email, subject, htmlContent, plainTextContent)
 }
@@ -415,68 +592,65 @@ hüm – social media that makes you better, not bitter`
 // BACK IN TOP 100 EMAIL
 // ============================================
 async function sendBackInEmail(entry: WaitlistEntry, currentRank: number) {
-  const referralLink = `https://hum-social.com?ref=${entry.referral_code}`
+  const referralLink = `${SITE_URL}?ref=${entry.referral_code}`
 
-  const subject = `Rank update: You're back in the top 100`
+  const subject = `You're back in the top 100!`
 
   const htmlContent = `
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #2C2418; background: #F8F8F8; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 40px auto; background: #FFFFFF; }
-    .header { padding: 48px 40px 32px; text-align: center; border-bottom: 1px solid #F0F0F0; }
-    .logo { font-size: 48px; font-weight: 300; color: #2C2418; margin: 0; letter-spacing: 2px; }
-    .content { padding: 40px; }
-    .greeting { font-size: 20px; color: #2C2418; margin: 0 0 20px 0; }
-    p { margin: 0 0 16px 0; font-size: 16px; line-height: 1.6; color: #4A4A4A; }
-    .rank-box { background: #E8F5E9; border-radius: 8px; padding: 20px; margin: 24px 0; text-align: center; }
-    .rank-number { font-size: 32px; font-weight: 700; color: #2C2418; }
-    .referral-box { background: #FFFBF7; border-radius: 8px; padding: 16px; margin: 24px 0; text-align: center; }
-    .referral-link { font-family: monospace; font-size: 14px; word-break: break-all; color: #2C2418; }
-    .footer { background: #FAFAFA; text-align: center; padding: 24px 40px; font-size: 13px; color: #999999; border-top: 1px solid #F0F0F0; }
-    .signature { margin-top: 32px; color: #2C2418; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>${emailStyles}</style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1 class="logo">hüm</h1>
-    </div>
+    ${emailHeader}
     <div class="content">
       <p class="greeting">Hey ${entry.name},</p>
+      <p>Great news — you've climbed back into the top 100!</p>
 
-      <div class="rank-box">
-        <p style="margin: 0; color: #666;">You're back in the top 100</p>
+      <div class="rank-card success">
+        <p class="rank-label">Your position</p>
         <p class="rank-number">#${currentRank}</p>
+        <p class="rank-sublabel">Day 1 access secured</p>
       </div>
 
-      <p>Your link:</p>
-      <div class="referral-box">
-        <span class="referral-link">${referralLink}</span>
+      <p>You're locked in for early access when we launch. Keep sharing to climb even higher and secure your spot.</p>
+
+      <div class="referral-section">
+        <p class="referral-label">Your link</p>
+        <div class="referral-box">
+          <span class="referral-link">${referralLink}</span>
+        </div>
       </div>
 
-      <p class="signature">– ${SENDGRID_FROM_NAME}</p>
+      <a href="${SITE_URL}#leaderboard" class="cta-button" style="display: block; text-align: center;">View Your Position</a>
+
+      <p class="signature">Keep climbing,<br><strong style="color: #d2916f;">the hüm team</strong></p>
     </div>
-    <div class="footer">
-      <p>hüm – social media that makes you better, not bitter</p>
-    </div>
+    ${emailFooter}
   </div>
 </body>
 </html>`
 
   const plainTextContent = `Hey ${entry.name},
 
-You're back in the top 100 – #${currentRank} on the waitlist.
+Great news — you've climbed back into the top 100!
+
+You're #${currentRank} on the waitlist — Day 1 access secured.
+
+Keep sharing to climb even higher and secure your spot.
 
 Your link:
 ${referralLink}
 
-– ${SENDGRID_FROM_NAME}
+Keep climbing,
+the hüm team
 
 ---
-hüm – social media that makes you better, not bitter`
+hüm — social media that makes you better, not bitter`
 
   await sendEmail(entry.email, subject, htmlContent, plainTextContent)
 }

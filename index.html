@@ -53,13 +53,67 @@
     <link rel="preload" href="assets/fonts/Ecoplanet.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="assets/fonts/Coconutz.ttf" as="font" type="font/ttf" crossorigin>
 
-    <link rel="stylesheet" href="style.css?v=20251218z1">
+    <link rel="stylesheet" href="style.css?v=20251220ae">
+
+    <!-- FLIP CARD - 3D Rotation Animation -->
+    <style>
+        .diff-card {
+            cursor: pointer;
+            position: relative;
+            min-height: 320px;
+            perspective: 1000px;
+            -webkit-perspective: 1000px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            min-height: 320px;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
+        }
+        .diff-card.flipped .card-inner {
+            transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            padding: 2.5rem 2rem;
+            border-radius: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        .card-front {
+            z-index: 2;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
+            text-align: left;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+        .diff-card:hover:not(.flipped) .card-inner {
+            transform: rotateY(10deg);
+        }
+    </style>
+
     <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- GSAP for scroll animations -->
     <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollToPlugin.min.js"></script>
 
     <style>
         /* Global text unselectable (except form inputs) */
@@ -154,6 +208,68 @@
         </div>
     </nav>
 
+    <!-- REFERRAL HERO: Shown when arriving via referral link -->
+    <section class="referral-hero" id="referral-hero" style="display: none;">
+        <div class="referral-hero-content">
+            <div class="referral-invite-card">
+                <!-- Referrer Avatar -->
+                <div class="referrer-avatar" id="referrer-avatar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                    </svg>
+                </div>
+
+                <h1 class="referral-headline">
+                    <span id="referrer-name-hero">Someone</span> invited you
+                </h1>
+                <p class="referral-subtext">to join the movement</p>
+
+                <div class="referral-community-count">
+                    <span id="referral-community-number">--</span> people waiting for launch
+                </div>
+
+                <!-- Inline Signup Form -->
+                <form id="referral-signup-form" class="referral-form">
+                    <div class="referral-form-row">
+                        <input type="text" name="name" placeholder="Your name" required>
+                    </div>
+                    <div class="referral-form-row">
+                        <input type="email" name="email" placeholder="Your email" required>
+                    </div>
+                    <button type="submit" class="referral-submit-btn">
+                        <span class="referral-submit-text">Join the Waitlist</span>
+                        <span class="referral-submit-loading" style="display: none;">
+                            <svg class="spinner" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="32" stroke-linecap="round"/></svg>
+                        </span>
+                    </button>
+                    <p class="referral-form-error" id="referral-form-error"></p>
+                </form>
+
+                <!-- Success State (hidden by default) -->
+                <div id="referral-success" class="referral-success" style="display: none;">
+                    <div class="referral-success-badge">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="24" height="24">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        You're in!
+                    </div>
+                    <p class="referral-success-rank">Rank <strong id="referral-user-rank">#--</strong></p>
+
+                    <div class="scroll-to-explore">
+                        <p>Scroll to learn what we're building</p>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                            <path d="M12 5v14M5 12l7 7 7-7"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative hands around the edges -->
+        <div class="referral-hands-decor"></div>
+    </section>
+
     <!-- HERO: Sticky Parallax Scroll Experience -->
     <div class="hero-journey" id="hero-journey">
 
@@ -245,7 +361,7 @@
             <div class="panel-content">
                 <h1 class="reveal-logo">hüm</h1>
                 <p class="reveal-tagline">A campfire, not a stage.</p>
-                <p class="reveal-tagline-sub">Creation, not consumption.</p>
+                <p class="reveal-tagline-sub">Social media for humans.</p>
                 <a href="#waitlist" class="btn-cta-hero">Join the Waitlist</a>
             </div>
             <!-- Sea of hands -->
@@ -269,8 +385,8 @@
                                 <img src="assets/hands/hand-1.svg" alt="Hand 1" class="card-icon">
                             </div>
                             <div class="card-back">
-                                <h3>In-the-Moment Only</h3>
-                                <p>Post photos and videos—but only as they happen. No camera roll uploads. No curating. No performing. Just real moments from your actual life.</p>
+                                <h3>Real Moments</h3>
+                                <p>No filters. No galleries. No 28 takes to get it right. Just life as it happens.</p>
                             </div>
                         </div>
                     </div>
@@ -280,8 +396,8 @@
                                 <img src="assets/hands/hand-2.svg" alt="Hand 2" class="card-icon">
                             </div>
                             <div class="card-back">
-                                <h3>Voice-Only Communication</h3>
-                                <p>Add voice captions to posts. Leave voice comments. Send voice DMs. You can't fake authenticity in your voice—and that's the point.</p>
+                                <h3>Real Voice</h3>
+                                <p>Your actual voice—not text you agonized over. Hear the laughter, the tiredness, the genuine excitement.</p>
                             </div>
                         </div>
                     </div>
@@ -291,8 +407,8 @@
                                 <img src="assets/hands/hand-3.svg" alt="Hand 3" class="card-icon">
                             </div>
                             <div class="card-back">
-                                <h3>Quest System</h3>
-                                <p>Join quests—learn a language, start a book club, build a morning routine. Or create shared quests with friends. Show up for what matters to you.</p>
+                                <h3>Real Purpose</h3>
+                                <p>You're not here to scroll. You're here to build something. Join a quest. Show up. Grow together.</p>
                             </div>
                         </div>
                     </div>
@@ -302,8 +418,8 @@
                                 <img src="assets/hands/hand-4.svg" alt="Hand 4" class="card-icon">
                             </div>
                             <div class="card-back">
-                                <h3>Real Community</h3>
-                                <p>Ad-free. Bot-free. Invite-only. Everyone here is a doer. No passive scrollers. Just people building the life they want.</p>
+                                <h3>Real Humans</h3>
+                                <p>No bots. No brands. No strangers. Everyone here was invited by someone who actually knows them.</p>
                             </div>
                         </div>
                     </div>
@@ -313,22 +429,38 @@
     </section>
 
     <!-- How It Works - Scroll-driven storytelling -->
-    <section class="how-it-works-journey">
-        <!-- Principle 1: Invite-Only -->
-        <div class="principle-panel" data-principle="1" data-lines="3">
-            <div class="principle-visual">
-                <img src="assets/screenshots/invite-qr.png" alt="Your personal invite QR code" class="principle-screenshot">
-            </div>
-            <div class="principle-content">
-                <span class="principle-number">01</span>
-                <h3 class="principle-title">Invite-Only</h3>
-                <div class="principle-lines">
-                    <p class="principle-line" data-line="1"><span class="line-label">The Problem</span>You can't trust what you see online anymore. AI-generated content, bots, trolls, businesses buying their way into your feed. Platforms flooded with people who aren't even real.</p>
-                    <p class="principle-line" data-line="2"><span class="line-label">Our Choice</span>Every person on hum has been vouched for by someone already inside. No buying your way in. No ads. No business accounts. If you're here, a real human brought you here.</p>
-                    <p class="principle-line" data-line="3"><span class="line-label">Why It Works</span>Accountability. Bad actors get traced back. The community polices itself. You're surrounded by people who actually want to be here.</p>
+    <section class="how-it-works-journey" id="how-it-works">
+        <!-- Section header -->
+        <div class="how-it-works-header">
+            <h2 class="how-it-works-title">How It Works</h2>
+            <p class="how-it-works-subtext">Imagine your favourite social media, except...</p>
+        </div>
+
+        <!-- Progress dots -->
+        <div class="principle-progress">
+            <div class="progress-dot active" data-panel="1"></div>
+            <div class="progress-dot" data-panel="2"></div>
+            <div class="progress-dot" data-panel="3"></div>
+            <div class="progress-dot" data-panel="4"></div>
+            <div class="progress-dot" data-panel="5"></div>
+        </div>
+
+        <div class="panels-container">
+            <!-- Principle 1: Invite-Only -->
+            <div class="principle-panel" data-principle="1">
+                <div class="principle-visual">
+                    <img src="assets/screenshots/invite-qr.png" alt="Your personal invite QR code" class="principle-screenshot">
+                </div>
+                <div class="principle-content">
+                    <span class="principle-number">01</span>
+                    <h3 class="principle-title">Invite-Only</h3>
+                    <div class="principle-lines">
+                        <p class="principle-line"><span class="line-label">The Problem</span>You can't trust what you see online anymore. AI-generated content, bots, trolls, businesses buying their way into your feed. Platforms flooded with people who aren't even real.</p>
+                        <p class="principle-line"><span class="line-label">Our Choice</span>Every person on hum has been vouched for by someone already inside. No buying your way in. No ads. No business accounts. If you're here, a real human brought you here.</p>
+                        <p class="principle-line"><span class="line-label">Why It Works</span>Accountability. Bad actors get traced back. The community polices itself. You're surrounded by people who actually want to be here.</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
         <!-- Principle 2: In-the-Moment -->
         <div class="principle-panel" data-principle="2" data-lines="3">
@@ -353,7 +485,7 @@
             </div>
             <div class="principle-content">
                 <span class="principle-number">03</span>
-                <h3 class="principle-title">Voice-First Communication</h3>
+                <h3 class="principle-title" style="white-space: nowrap;">Voice-First Communication</h3>
                 <div class="principle-lines">
                     <p class="principle-line" data-line="1"><span class="line-label">The Problem</span>Text is broken. Easy to misread, easy to fake, easy to copy-paste. Comment sections became toxic. DMs became exhausting. A thumbs up emoji isn't connection.</p>
                     <p class="principle-line" data-line="2"><span class="line-label">Our Choice</span>Voice notes for everything. Captions, comments, DMs. Your actual voice, with all its texture and imperfection. You can hear when someone means it.</p>
@@ -387,201 +519,86 @@
                 <span class="principle-number">05</span>
                 <h3 class="principle-title">No Ads. Ever.</h3>
                 <div class="principle-lines">
-                    <p class="principle-line" data-line="1"><span class="line-label">The Problem</span>When the product is free, you are the product. Platforms are designed to keep you scrolling, outraged, envious, addicted. They're optimizing for advertisers, not for you.</p>
-                    <p class="principle-line" data-line="2"><span class="line-label">Our Choice</span>No advertising. No sponsored content. No algorithm designed to hijack your attention. You support us directly, so we work for you. Not brands. Not shareholders. You.</p>
-                    <p class="principle-line" data-line="3"><span class="line-label">Why It Works</span>When we don't sell your attention, we have zero incentive to manipulate you. The experience is designed for your wellbeing, not engagement metrics. Novel concept, we know.</p>
+                    <p class="principle-line"><span class="line-label">The Problem</span>When the product is free, you are the product. Platforms are designed to keep you scrolling, outraged, envious, addicted. They're optimizing for advertisers, not for you.</p>
+                    <p class="principle-line"><span class="line-label">Our Choice</span>No advertising. No sponsored content. No algorithm designed to hijack your attention. You support us directly, so we work for you. Not brands. Not shareholders. You.</p>
+                    <p class="principle-line"><span class="line-label">Why It Works</span>When we don't sell your attention, we have zero incentive to manipulate you. The experience is designed for your wellbeing, not engagement metrics. Novel concept, we know.</p>
                 </div>
             </div>
         </div>
+        </div><!-- /.panels-container -->
     </section>
 
-    <!-- Quest Templates Preview -->
-    <section class="templates-preview">
-        <div class="container">
-            <h2 class="section-title"><span class="number-accent">15</span> Quest Templates</h2>
-            <p class="templates-intro">Body • Mind • Heart • Spirit • Knowledge</p>
-            <div class="template-row">
-                <span class="template-tag"><i class="ph-duotone ph-barbell"></i> Morning Movement</span>
-                <span class="template-tag"><i class="ph-duotone ph-hands-praying"></i> Daily Meditation</span>
-                <span class="template-tag"><i class="ph-duotone ph-heart"></i> Weekly Connection</span>
-                <span class="template-tag"><i class="ph-duotone ph-sparkle"></i> Morning Ritual</span>
-                <span class="template-tag"><i class="ph-duotone ph-book"></i> Daily Reading</span>
-                <span class="template-tag"><i class="ph-duotone ph-drop"></i> Hydration Hero</span>
-                <span class="template-tag"><i class="ph-duotone ph-hands-praying"></i> Gratitude Practice</span>
-                <span class="template-tag"><i class="ph-duotone ph-target"></i> Vision Alignment</span>
-                <span class="template-tag"><i class="ph-duotone ph-book-open"></i> Skill Building</span>
-                <span class="template-tag"><i class="ph-duotone ph-moon-stars"></i> Sleep Sovereignty</span>
-                <span class="template-tag"><i class="ph-duotone ph-phone-slash"></i> Digital Detox</span>
-                <span class="template-tag"><i class="ph-duotone ph-chat-circle"></i> Emotional Awareness</span>
-                <span class="template-tag"><i class="ph-duotone ph-star"></i> Service & Contribution</span>
-                <span class="template-tag"><i class="ph-duotone ph-headphones"></i> Podcast Learning</span>
-                <span class="template-tag"><i class="ph-duotone ph-heart"></i> Daily Appreciation</span>
-            </div>
-            <p class="templates-note">Or create your own custom quest. You decide what matters.</p>
-        </div>
-    </section>
-
-    <!-- Why Voice -->
-    <section class="why-voice">
-        <div class="container">
-            <div class="voice-showcase">
-                <div class="voice-content">
-                    <h2>Two Rules That Keep It Real</h2>
-
-                    <div class="voice-rule">
-                        <h3>1. Voice-Only Communication</h3>
-                        <p class="voice-detail">
-                            Every caption, comment, and DM is your actual voice. Bots can't fake it. You can't overthink it. Just press record and be real. You hear the exhaustion after a hard workout, the excitement of a breakthrough, the vulnerability of sharing something difficult.
-                        </p>
-                        <p class="voice-detail">
-                            Every "hum" (voice comment) is auto-transcribed for accessibility, but you hear the real person behind it. <span class="nowrap">Audio lasts</span> <span class="nowrap">24 hours,</span> transcript stays forever.
-                        </p>
-                    </div>
-
-                    <div class="voice-rule">
-                        <h3>2. In-the-Moment Content Only</h3>
-                        <p class="voice-detail">
-                            Photos and videos are captured in the app—no camera roll uploads. <span class="nowrap">No curating</span> last week's highlight reel. <span class="nowrap">No perfect</span> lighting. <span class="nowrap">No retakes</span> from your gallery. Post what's happening now, or don't post at all.
-                        </p>
-                        <p class="voice-detail">
-                            This is how we keep hüm authentic. You can't perform when you can't prepare.
-                        </p>
-                    </div>
-                </div>
-                <div class="rules-icons-container">
-                    <!-- Rule 1: Voice-Only Communication Icons -->
-                    <img src="assets/icons/rules-new/chat.png" alt="Voice communication" class="rule-icon rule-icon-1">
-                    <img src="assets/icons/rules-new/woman.png" alt="Real person" class="rule-icon rule-icon-2">
-                    <img src="assets/icons/rules-new/pirate.png" alt="Authentic voice" class="rule-icon rule-icon-3">
-                    <img src="assets/icons/rules-new/high-five.png" alt="High five connection" class="rule-icon rule-icon-4">
-
-                    <!-- Rule 2: In-the-Moment Content Only Icons -->
-                    <img src="assets/icons/rules-new/picture.png" alt="Picture frame" class="rule-icon rule-icon-5">
-                    <img src="assets/icons/rules-new/photo-camera.png" alt="In-app camera" class="rule-icon rule-icon-6">
-                    <img src="assets/icons/rules-new/sunbathing.png" alt="In the moment" class="rule-icon rule-icon-7">
-                    <img src="assets/icons/rules-new/sunglasses.png" alt="No curation" class="rule-icon rule-icon-8">
-                    <img src="assets/icons/rules-new/acoustic-guitar.png" alt="Authentic content" class="rule-icon rule-icon-9">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Profile & Tracking -->
-    <section class="profile-tracking">
-        <div class="container">
-            <h2 class="section-title">Your Life Journal, Not Your Highlight Reel</h2>
-            <div class="tracking-showcase">
-                <div class="screenshot-container">
-                    <img src="assets/screenshots/profile.png" alt="User profile showing posts, vibers, quests, and streak stats" class="app-screenshot">
-                </div>
-                <div class="tracking-content">
-                    <h3>Your Profile Shows What You Do, Not What You Look Like</h3>
-                    <p>No follower count. No likes. Your stats show the journey:</p>
-                    <ul class="feature-list">
-                        <li><strong>Posts:</strong> Real updates from your life</li>
-                        <li><strong>Vibers:</strong> People you're building with</li>
-                        <li><strong>Quests:</strong> What you're committed to right now</li>
-                        <li><strong>Streak:</strong> Days you've shown up</li>
+    <!-- Dark vs Light - Social Media Comparison (Scroll-Driven Reveal) -->
+    <section class="social-comparison" id="comparison-section">
+        <div class="comparison-container">
+            <!-- Light Side (Background - revealed as dark shrinks) -->
+            <div class="comparison-side light-side">
+                <div class="side-content">
+                    <span class="side-label">The New Way</span>
+                    <h3 class="side-title side-title-logo">
+                        <img src="assets/logos/hum-logo-dark.svg" alt="hüm" class="comparison-logo">
+                    </h3>
+                    <ul class="comparison-list">
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>No algorithm, just chronological</span>
+                        </li>
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>No ads, no data harvesting</span>
+                        </li>
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>Real moments, voice-first authenticity</span>
+                        </li>
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>Invite-only, verified humans</span>
+                        </li>
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>Intentional use, quest-based growth</span>
+                        </li>
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>You are the community</span>
+                        </li>
                     </ul>
-                    <p class="feature-note">Your profile tells the story of who you're becoming, not who you're pretending to be.</p>
+                    <a href="#waitlist" class="comparison-cta">Join the Waitlist</a>
                 </div>
             </div>
 
-            <div class="tracking-showcase reverse">
-                <div class="screenshot-container">
-                    <img src="assets/screenshots/quest-detail.png" alt="Quest detail page showing Daily Movement progress with streak and remaining days" class="app-screenshot">
-                </div>
-                <div class="tracking-content">
-                    <h3>Every Quest Tells a Story</h3>
-                    <p>See your progress unfold in real-time:</p>
-                    <ul class="feature-list">
-                        <li><strong>Current streak:</strong> Days in a row you've shown up</li>
-                        <li><strong>Best streak:</strong> Your personal record</li>
-                        <li><strong>Days remaining:</strong> Keep the momentum</li>
-                        <li><strong>Why it matters:</strong> Your personal philosophy</li>
+            <!-- Dark Side (Overlay - shrinks on scroll to reveal light side) -->
+            <div class="comparison-side dark-side" id="dark-overlay">
+                <div class="side-content">
+                    <span class="side-label">The Old Way</span>
+                    <h3 class="side-title">Social Media Today</h3>
+                    <ul class="comparison-list">
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            <span>Algorithms designed to addict you</span>
+                        </li>
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            <span>Your data sold to advertisers</span>
+                        </li>
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            <span>Curated perfection, constant comparison</span>
+                        </li>
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            <span>Bots, trolls, and fake engagement</span>
+                        </li>
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            <span>Infinite scroll dopamine loops</span>
+                        </li>
+                        <li>
+                            <svg class="list-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            <span>You are the product</span>
+                        </li>
                     </ul>
-                    <p class="feature-note">Build the habit. Track the journey. Prove it to yourself.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Support Section -->
-    <section class="support">
-        <div class="container">
-            <div class="support-content">
-                <h2>A Terrible Business Model<br><span class="support-subtitle">(And Why That's the Point)</span></h2>
-                <p class="support-intro support-philosophy">
-                    Let's be honest: this is an awful way to make money. No ads. No data mining. No business accounts. No sponsored content. No algorithm optimizing for engagement. We've intentionally removed every profitable lever that makes social media "work."
-                </p>
-                <p class="support-intro support-philosophy">
-                    <strong>That's the point.</strong> Too much business has ruined social spaces. The profiteering of our togetherness is exactly the problem we're trying to solve. So we built something that can't be corrupted by it.
-                </p>
-                <p class="support-intro">
-                    hüm is <strong class="completely-free">completely free</strong> with 3 concurrent quests and all core features. If you believe in what we're building and want to help keep it alive, independent, and permanently ad-free—here's how:
-                </p>
-                <div class="support-tiers">
-                    <div class="tier">
-                        <h4>Coffee Monthly</h4>
-                        <div class="tier-price">$5</div>
-                        <div class="tier-period">/month AUD</div>
-                        <ul>
-                            <li>5 concurrent quests (vs 3 free)</li>
-                            <li>DM access unlocked (30 second messages)</li>
-                            <li>30 second voice notes in posts</li>
-                            <li>30 second video posts</li>
-                            <li>Supporter badge</li>
-                            <li>Support development</li>
-                        </ul>
-                    </div>
-                    <div class="tier">
-                        <h4>Coffee Weekly</h4>
-                        <div class="tier-price">$20</div>
-                        <div class="tier-period">/month AUD</div>
-                        <ul>
-                            <li>7 concurrent quests</li>
-                            <li>DM access unlocked (60 second messages)</li>
-                            <li>60 second voice notes in posts</li>
-                            <li>60 second video posts</li>
-                            <li>Priority support</li>
-                            <li>Special supporter badge</li>
-                        </ul>
-                    </div>
-                    <div class="tier">
-                        <h4>Coffee Daily</h4>
-                        <div class="tier-price">$150</div>
-                        <div class="tier-period">/month AUD</div>
-                        <ul>
-                            <li>Unlimited concurrent quests</li>
-                            <li>DM access unlocked (120 second messages)</li>
-                            <li>120 second voice notes in posts</li>
-                            <li>120 second video posts</li>
-                            <li>Direct line to founders</li>
-                            <li>Premium supporter badge</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Invite System -->
-    <section class="invite-system">
-        <div class="container">
-            <div class="invite-showcase">
-                <div class="invite-content">
-                    <h2>Invite-Only <span class="nowrap">Community</span></h2>
-                    <p class="invite-statement">
-                        No bots. No trolls. No random strangers.<br>
-                        Every member is vouched for by someone already here.
-                    </p>
-                    <p class="invite-detail">
-                        Get your unique referral code and QR. Share with people who get it. Build a community of real humans doing real work.
-                    </p>
-                    <a href="#waitlist" class="btn-cta">Join the Waitlist</a>
-                </div>
-                <div class="screenshot-container">
-                    <img src="assets/screenshots/invite-qr.png" alt="Referral QR code to share hüm with friends" class="app-screenshot">
                 </div>
             </div>
         </div>
@@ -615,8 +632,8 @@
                             <input type="email" id="waitlist-email" placeholder="your@email.com" required>
                         </div>
                         <div class="form-group">
-                            <textarea id="waitlist-why" placeholder="I want to join because..." maxlength="140" required></textarea>
-                            <span class="char-count"><span id="char-count">0</span>/140</span>
+                            <textarea id="waitlist-why" placeholder="Why I want to join..." maxlength="80" required></textarea>
+                            <span class="char-count"><span id="char-count">0</span>/80</span>
                         </div>
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
@@ -633,26 +650,76 @@
 
                 <!-- Success State (hidden by default) -->
                 <div id="waitlist-success" class="waitlist-success" style="display: none;">
-                    <div class="success-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                            <polyline points="22 4 12 14.01 9 11.01"/>
-                        </svg>
-                    </div>
-                    <h3>You're on the list!</h3>
-                    <p>Your current rank: <strong id="user-rank">#--</strong></p>
-                    <div id="progress-container" class="progress-container">
-                        <div class="progress-bar">
-                            <div id="progress-fill" class="progress-fill"></div>
+                    <!-- Hero: QR Invite Card -->
+                    <div class="success-hero">
+                        <div class="success-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            You're on the list
                         </div>
-                        <p id="progress-text" class="progress-text"></p>
+                        <p class="success-rank">Rank <strong id="user-rank">#--</strong></p>
                     </div>
-                    <div class="referral-box">
-                        <p class="referral-label">Share your unique link to climb the leaderboard:</p>
-                        <div class="referral-link-container">
+
+                    <!-- Profile Pic Upload -->
+                    <div class="profile-upload-section">
+                        <div class="profile-upload-avatar" id="profile-upload-avatar">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="8" r="4"/>
+                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                            </svg>
+                            <img id="profile-preview" src="" alt="" style="display: none;">
+                        </div>
+                        <div class="profile-upload-content">
+                            <p class="profile-upload-label">Add a profile photo</p>
+                            <p class="profile-upload-hint">This shows when you invite friends</p>
+                            <label class="profile-upload-btn">
+                                <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
+                                <span id="profile-upload-text">Choose Photo</span>
+                            </label>
+                            <p id="profile-upload-status" class="profile-upload-status"></p>
+                        </div>
+                    </div>
+
+                    <!-- QR Card - The Centerpiece -->
+                    <div class="qr-card-section">
+                        <div class="qr-card" id="qr-card" onclick="openQRFullscreen()">
+                            <div class="qr-card-header">
+                                <img src="assets/logos/hum-logo-dark.svg" alt="hüm" class="qr-card-logo-img">
+                                <span class="qr-card-tagline">human first social</span>
+                            </div>
+                            <div class="qr-code-container">
+                                <div id="qr-code"></div>
+                            </div>
+                            <p class="qr-card-name" id="qr-card-name"></p>
+                            <p class="qr-card-invite">invited you</p>
+                        </div>
+                        <p class="qr-hint">Tap card to enlarge for screenshot</p>
+                    </div>
+
+                    <!-- QR Fullscreen Overlay -->
+                    <div class="qr-fullscreen-overlay" id="qr-fullscreen" onclick="closeQRFullscreen()">
+                        <div class="qr-fullscreen-card" onclick="event.stopPropagation()">
+                            <div class="qr-card-header">
+                                <img src="assets/logos/hum-logo-dark.svg" alt="hüm" class="qr-card-logo-img">
+                                <span class="qr-card-tagline">human first social</span>
+                            </div>
+                            <div class="qr-code-container">
+                                <div id="qr-code-fullscreen"></div>
+                            </div>
+                            <p class="qr-card-name" id="qr-card-name-fullscreen"></p>
+                            <p class="qr-card-invite">invited you</p>
+                        </div>
+                        <p class="qr-fullscreen-hint">Tap anywhere to close</p>
+                    </div>
+
+                    <!-- Share Link -->
+                    <div class="share-link-section">
+                        <p class="share-label">Or copy your invite link</p>
+                        <div class="share-link-box">
                             <input type="text" id="referral-link" readonly>
                             <button id="copy-link" class="copy-btn" title="Copy link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
                                 </svg>
@@ -660,47 +727,45 @@
                         </div>
                         <p id="copy-feedback" class="copy-feedback"></p>
                     </div>
-                    <div class="share-buttons">
-                        <a id="share-whatsapp" href="#" target="_blank" class="share-btn share-whatsapp">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                            WhatsApp
-                        </a>
-                        <a id="share-sms" href="#" class="share-btn share-sms">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                            SMS
-                        </a>
-                        <a id="share-instagram" href="#" class="share-btn share-instagram" onclick="copyForInstagram(event)">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                            Copy for IG
-                        </a>
-                        <a id="share-twitter" href="#" target="_blank" class="share-btn share-twitter">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                            X
-                        </a>
-                    </div>
 
-                    <!-- QR Code Share Card -->
-                    <div class="qr-share-card">
-                        <p class="qr-label">Your personal invite card (screenshot & share)</p>
-                        <div class="qr-card" id="qr-card">
-                            <div class="qr-card-header">
-                                <span class="qr-card-logo">hum</span>
-                                <span class="qr-card-tagline">join the movement</span>
-                            </div>
-                            <div class="qr-code-container">
-                                <canvas id="qr-code"></canvas>
-                            </div>
-                            <p class="qr-card-name" id="qr-card-name"></p>
-                            <p class="qr-card-invite">invited you</p>
-                        </div>
-                        <button id="download-card" class="btn-secondary">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                    <!-- Minimal Share Icons -->
+                    <div class="share-icons">
+                        <a id="share-whatsapp" href="#" target="_blank" class="share-icon" title="WhatsApp">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        </a>
+                        <button id="share-instagram" class="share-icon" title="Instagram" onclick="copyForInstagram(event)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                            </svg>
+                        </button>
+                        <button id="share-tiktok" class="share-icon" title="TikTok" onclick="copyForTikTok(event)">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.04-.1z"/>
+                            </svg>
+                        </button>
+                        <a id="share-sms" href="#" class="share-icon" title="SMS">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </a>
+                        <a id="share-twitter" href="#" target="_blank" class="share-icon" title="X">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <button id="download-card" class="share-icon" title="Download">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                 <polyline points="7 10 12 15 17 10"/>
                                 <line x1="12" y1="15" x2="12" y2="3"/>
                             </svg>
-                            Download Card
                         </button>
+                    </div>
+
+                    <!-- Progress toward top 100 -->
+                    <div id="progress-container" class="progress-section">
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <p id="progress-text" class="progress-text">Share to climb the leaderboard</p>
                     </div>
                 </div>
 
@@ -726,7 +791,97 @@
         </div>
     </section>
 
+    <!-- Support Section -->
+    <section class="support">
+        <div class="container">
+            <div class="support-content">
+                <h2>A Terrible Business Model<br><span class="support-subtitle">(And Why That's the Point)</span></h2>
+                <p class="support-intro support-philosophy">
+                    Let's be honest: this is an awful way to make money. No ads. No data mining. No business accounts. No sponsored content. No algorithm optimizing for engagement. We've intentionally removed every profitable lever that makes social media "work."
+                </p>
+                <p class="support-intro support-philosophy">
+                    <strong>That's the point.</strong> Too much business has ruined social spaces. The profiteering of our togetherness is exactly the problem we're trying to solve. So we built something that can't be corrupted by it.
+                </p>
+                <p class="support-intro">
+                    hüm is <strong class="completely-free">completely free</strong> with 3 concurrent quests and all core features. If you believe in what we're building and want to help keep it alive, independent, and permanently ad-free—here's how:
+                </p>
+                <p class="support-early-access">All supporters get <strong>guaranteed Day 1 access</strong>—skip the waitlist entirely.</p>
+                <div class="support-tiers">
+                    <div class="tier">
+                        <h4>Coffee Monthly</h4>
+                        <div class="tier-price">$5</div>
+                        <div class="tier-period">/month AUD</div>
+                        <ul>
+                            <li class="tier-highlight">Guaranteed early access</li>
+                            <li>5 concurrent quests (vs 3 free)</li>
+                            <li>DM access unlocked (30s messages)</li>
+                            <li>30 second voice notes & videos</li>
+                            <li>Supporter badge</li>
+                        </ul>
+                        <a href="#" class="tier-cta" data-tier="coffee_month">Become a Supporter</a>
+                    </div>
+                    <div class="tier tier-popular">
+                        <h4>Coffee Weekly</h4>
+                        <div class="tier-price">$20</div>
+                        <div class="tier-period">/month AUD</div>
+                        <ul>
+                            <li class="tier-highlight">Guaranteed early access</li>
+                            <li>7 concurrent quests</li>
+                            <li>DM access unlocked (60s messages)</li>
+                            <li>60 second voice notes & videos</li>
+                            <li>Priority support</li>
+                            <li>Special supporter badge</li>
+                        </ul>
+                        <a href="#" class="tier-cta" data-tier="coffee_week">Become a Supporter</a>
+                    </div>
+                    <div class="tier">
+                        <h4>Coffee Daily</h4>
+                        <div class="tier-price">$150</div>
+                        <div class="tier-period">/month AUD</div>
+                        <ul>
+                            <li class="tier-highlight">Guaranteed early access</li>
+                            <li>Unlimited concurrent quests</li>
+                            <li>DM access unlocked (120s messages)</li>
+                            <li>120 second voice notes & videos</li>
+                            <li>Direct line to founders</li>
+                            <li>Premium supporter badge</li>
+                        </ul>
+                        <a href="#" class="tier-cta" data-tier="coffee_day">Become a Supporter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <script>
+        // =====================================================
+        // STRIPE PAYMENT LINKS - Paste your links here
+        // Create these at: https://dashboard.stripe.com/payment-links
+        // =====================================================
+        const STRIPE_PAYMENT_LINKS = {
+            coffee_month: 'https://buy.stripe.com/00wdR2eZ54eK5WH6az0x202',   // $5/mo
+            coffee_week: 'https://donate.stripe.com/28EaEQg39dPketd0Qf0x201', // $20/mo
+            coffee_day: 'https://donate.stripe.com/bJedR28AH6mScl542r0x200'   // $150/mo
+        };
+
+        // Wire up tier buttons to Stripe Payment Links
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.tier-cta').forEach(btn => {
+                const tier = btn.dataset.tier;
+                if (STRIPE_PAYMENT_LINKS[tier]) {
+                    btn.href = STRIPE_PAYMENT_LINKS[tier];
+                    btn.target = '_blank';
+                    btn.rel = 'noopener noreferrer';
+                } else {
+                    // No payment link configured yet - show coming soon
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        alert('Payment coming soon! Join the waitlist above to get notified.');
+                    });
+                }
+            });
+        });
+
         // Theme toggle
         const themeToggle = document.getElementById('theme-toggle');
         const html = document.documentElement;
@@ -734,6 +889,212 @@
         // Page ALWAYS starts with dark theme for the journey experience
         // Theme toggle only works after the cloud transition completes
         let journeyComplete = false;
+
+        // Check for referral link - show referral hero instead of normal journey
+        (function checkReferralSkip() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const referralCode = urlParams.get('ref');
+
+            if (referralCode) {
+                // Store referral code globally
+                window.currentReferralCode = referralCode;
+
+                // Show referral hero, mark journey as complete
+                document.documentElement.classList.add('journey-complete');
+                document.body.classList.add('journey-complete');
+                document.documentElement.setAttribute('data-theme', 'light');
+
+                const clouds = document.getElementById('cloud-transition');
+                if (clouds) clouds.classList.add('clouds-hidden');
+
+                journeyComplete = true;
+
+                // Show referral hero section
+                const referralHero = document.getElementById('referral-hero');
+                if (referralHero) {
+                    referralHero.style.display = 'flex';
+                }
+
+                // Fetch and display referrer info
+                fetchReferrerInfo(referralCode);
+
+                // Fetch community count
+                fetchCommunityCount();
+
+                // Setup referral form handler
+                setupReferralForm(referralCode);
+
+                // Show hands after a moment
+                setTimeout(() => {
+                    if (typeof window.showHandsAfterJourney === 'function') {
+                        window.showHandsAfterJourney();
+                    }
+                    if (typeof window.initPrinciplePanelScrollTriggers === 'function') {
+                        window.initPrinciplePanelScrollTriggers();
+                    }
+                }, 300);
+            }
+        })();
+
+        // Fetch referrer info for the hero section
+        async function fetchReferrerInfo(refCode) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('waitlist')
+                    .select('name, profile_pic')
+                    .eq('referral_code', refCode)
+                    .single();
+
+                if (data && data.name) {
+                    document.getElementById('referrer-name-hero').textContent = data.name;
+
+                    // If they have a profile pic, show it
+                    if (data.profile_pic) {
+                        const avatarEl = document.getElementById('referrer-avatar');
+                        avatarEl.innerHTML = `<img src="${data.profile_pic}" alt="${data.name}">`;
+                    }
+                }
+            } catch (err) {
+                console.log('Could not fetch referrer info');
+            }
+        }
+
+        // Fetch community count
+        async function fetchCommunityCount() {
+            try {
+                const { count, error } = await supabaseClient
+                    .from('waitlist')
+                    .select('*', { count: 'exact', head: true });
+
+                if (count) {
+                    document.getElementById('referral-community-number').textContent = count.toLocaleString();
+                }
+            } catch (err) {
+                console.log('Could not fetch community count');
+            }
+        }
+
+        // Setup referral form submission
+        function setupReferralForm(referralCode) {
+            const form = document.getElementById('referral-signup-form');
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const submitBtn = form.querySelector('.referral-submit-btn');
+                const submitText = form.querySelector('.referral-submit-text');
+                const submitLoading = form.querySelector('.referral-submit-loading');
+                const errorEl = document.getElementById('referral-form-error');
+
+                const formData = new FormData(form);
+                const name = formData.get('name').trim();
+                const email = formData.get('email').trim().toLowerCase();
+
+                // Validate
+                if (!name || !email) {
+                    errorEl.textContent = 'Please fill in all fields';
+                    return;
+                }
+
+                // Show loading
+                submitBtn.disabled = true;
+                submitText.style.display = 'none';
+                submitLoading.style.display = 'inline-flex';
+                errorEl.textContent = '';
+
+                try {
+                    // Generate referral code for new user
+                    const newReferralCode = generateReferralCode();
+
+                    // Validate referral (prevent self-referral)
+                    let validReferredBy = null;
+                    const { data: referrer } = await supabaseClient
+                        .from('waitlist')
+                        .select('email')
+                        .eq('referral_code', referralCode)
+                        .single();
+
+                    if (referrer && referrer.email !== email) {
+                        validReferredBy = referralCode;
+                    }
+
+                    // Insert into database
+                    const { data, error } = await supabaseClient
+                        .from('waitlist')
+                        .insert([{
+                            name,
+                            email,
+                            referral_code: newReferralCode,
+                            referred_by: validReferredBy,
+                            source: 'referral'
+                        }])
+                        .select()
+                        .single();
+
+                    if (error) {
+                        if (error.code === '23505') {
+                            errorEl.textContent = 'This email is already on the waitlist!';
+                        } else {
+                            throw error;
+                        }
+                        submitBtn.disabled = false;
+                        submitText.style.display = 'inline';
+                        submitLoading.style.display = 'none';
+                        return;
+                    }
+
+                    // Success! Show success state
+                    form.style.display = 'none';
+                    document.querySelector('.referral-community-count').style.display = 'none';
+                    document.getElementById('referral-success').style.display = 'block';
+
+                    // Calculate rank
+                    const { data: allUsers } = await supabaseClient
+                        .from('waitlist')
+                        .select('email, referral_count')
+                        .order('referral_count', { ascending: false });
+
+                    if (allUsers) {
+                        const rank = allUsers.findIndex(u => u.email === email) + 1;
+                        document.getElementById('referral-user-rank').textContent = `#${rank}`;
+                    }
+
+                    // Send welcome email
+                    sendWelcomeEmail(name, email, newReferralCode);
+
+                    // Notify referrer (first referral only)
+                    if (validReferredBy) {
+                        notifyReferrer(validReferredBy, name);
+                    }
+
+                    // Celebration!
+                    setTimeout(() => {
+                        const heroRect = document.getElementById('referral-hero').getBoundingClientRect();
+                        if (typeof window.triggerSeaCelebration === 'function') {
+                            window.triggerSeaCelebration(heroRect.left + heroRect.width / 2, heroRect.top + heroRect.height / 2);
+                        }
+                    }, 300);
+
+                } catch (err) {
+                    console.error('Signup error:', err);
+                    errorEl.textContent = 'Something went wrong. Please try again.';
+                    submitBtn.disabled = false;
+                    submitText.style.display = 'inline';
+                    submitLoading.style.display = 'none';
+                }
+            });
+        }
+
+        // Generate referral code (reuse existing function if available)
+        function generateReferralCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
 
         themeToggle.addEventListener('click', () => {
             // Only allow toggle after journey is complete
@@ -747,7 +1108,35 @@
         // Function to mark journey as complete (called after cloud transition)
         window.markJourneyComplete = function() {
             journeyComplete = true;
+
+            // Initialize principle panel ScrollTriggers now that hero is done
+            // (Hero kills all ScrollTriggers, so these must be created after)
+            // Delay ensures sections are fully visible and DOM is ready
+            if (typeof window.initPrinciplePanelScrollTriggers === 'function') {
+                setTimeout(() => {
+                    window.initPrinciplePanelScrollTriggers();
+                }, 300);
+            }
+
         };
+
+        // DEV: Skip journey with Ctrl+Shift+J
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+                document.documentElement.classList.add('journey-complete');
+                document.body.classList.add('journey-complete');
+                document.documentElement.setAttribute('data-theme', 'light');
+                window.scrollTo(0, 0);
+                const clouds = document.getElementById('cloud-transition');
+                if (clouds) clouds.classList.add('clouds-hidden');
+                window.markJourneyComplete();
+                if (typeof window.showHandsAfterJourney === 'function') {
+                    window.showHandsAfterJourney();
+                }
+                console.log('Journey skipped (dev mode)');
+            }
+        });
 
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -760,8 +1149,29 @@
             });
         });
 
-        // Interactive hands that reach towards cursor
+        // Comparison section - Entrance animation (not scroll-based)
+        // Dark side shrinks to reveal light side when section enters viewport
+        const comparisonSection = document.querySelector('.social-comparison');
+        if (comparisonSection) {
+            const comparisonObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Add class to trigger the CSS animation
+                        comparisonSection.classList.add('in-view');
+                        // Only trigger once
+                        comparisonObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.2 // Trigger when 20% of section is visible
+            });
+
+            comparisonObserver.observe(comparisonSection);
+        }
+
+        // Interactive hands that reach towards cursor (LEGACY - only runs if .hands-pattern exists)
         const handsPattern = document.querySelector('.hands-pattern');
+        if (handsPattern) {  // Only run this code if the old hands-pattern element exists
         const handImages = ['hand-1.svg', 'hand-2.svg', 'hand-3.svg', 'hand-4.svg'];
         const hands = [];
         const handAngles = []; // Store previous angles for continuous rotation
@@ -1280,7 +1690,6 @@
             handClickHandler = (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                console.log('Hand overlay clicked!', randomIndex); // Debug log
                 triggerCelebration();
             };
             // Add listeners to overlay (it's already at high z-index)
@@ -1330,11 +1739,13 @@
                 scheduleNextBubble();
             }, 3000);
         }
+        } // End of handsPattern null check
 
         // Flip cards on click - only one at a time
-        document.querySelectorAll('.diff-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const isAlreadyFlipped = card.classList.contains('flipped');
+        document.querySelectorAll('.diff-card').forEach((card, index) => {
+            card.addEventListener('click', (e) => {
+                e.stopPropagation();
+                console.log('Card clicked:', index);
 
                 // Unflip all other cards
                 document.querySelectorAll('.diff-card').forEach(c => {
@@ -1345,7 +1756,17 @@
 
                 // Toggle the clicked card
                 card.classList.toggle('flipped');
+                console.log('Card flipped state:', card.classList.contains('flipped'));
             });
+        });
+
+        // Also add touch support
+        document.querySelectorAll('.diff-card').forEach((card, index) => {
+            card.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                card.click();
+            }, { passive: false });
         });
 
         // Cursor color cycling on click
@@ -1658,15 +2079,82 @@
                     }
                 }
 
+                // Function to notify referrer when someone signs up via their link (FIRST referral only)
+                async function notifyReferrer(referralCode, newUserName) {
+                    try {
+                        // Get referrer's info including their referral count
+                        const { data: referrer } = await supabaseClient
+                            .from('waitlist')
+                            .select('email, name, referral_code, referral_count')
+                            .eq('referral_code', referralCode)
+                            .single();
+
+                        if (!referrer) return;
+
+                        // Only send notification for FIRST referral (count will be 1 after this signup)
+                        // The database trigger increments the count, so we check if it was 0 before
+                        // Since we're checking right after insert, count should now be 1 for first referral
+                        if (referrer.referral_count > 1) {
+                            console.log('Not first referral, skipping notification');
+                            return;
+                        }
+
+                        // Calculate referrer's current rank
+                        const { data: allUsers } = await supabaseClient
+                            .from('waitlist')
+                            .select('email, referral_count')
+                            .order('referral_count', { ascending: false });
+
+                        const rank = allUsers ? allUsers.findIndex(u => u.email === referrer.email) + 1 : 999;
+
+                        // Send first-referral notification email
+                        await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            },
+                            body: JSON.stringify({
+                                action: 'first-referral',
+                                data: {
+                                    email: referrer.email,
+                                    name: referrer.name,
+                                    referral_code: referrer.referral_code,
+                                    referrer_name: newUserName,
+                                    rank: rank
+                                }
+                            }),
+                        });
+                    } catch (err) {
+                        console.log('Could not notify referrer:', err);
+                    }
+                }
+
                 // Check if user already signed up (via localStorage)
                 const savedUser = localStorage.getItem('hum_waitlist_user');
                 if (savedUser) {
-                    try {
-                        const user = JSON.parse(savedUser);
-                        showSuccessState(user);
-                    } catch (e) {
-                        localStorage.removeItem('hum_waitlist_user');
-                    }
+                    (async () => {
+                        try {
+                            let user = JSON.parse(savedUser);
+
+                            // If email is missing (old localStorage), fetch it from DB
+                            if (!user.email && user.referral_code) {
+                                const { data } = await supabaseClient
+                                    .from('waitlist')
+                                    .select('email')
+                                    .eq('referral_code', user.referral_code)
+                                    .single();
+                                if (data?.email) {
+                                    user.email = data.email;
+                                    localStorage.setItem('hum_waitlist_user', JSON.stringify(user));
+                                }
+                            }
+
+                            showSuccessState(user);
+                        } catch (e) {
+                            localStorage.removeItem('hum_waitlist_user');
+                        }
+                    })();
                 }
 
                 // Form submission
@@ -1706,6 +2194,21 @@
                     return;
                 }
 
+                // Validate referral code (prevent self-referral and invalid codes)
+                let validReferredBy = null;
+                if (referredBy) {
+                    const { data: referrer } = await supabaseClient
+                        .from('waitlist')
+                        .select('email')
+                        .eq('referral_code', referredBy)
+                        .single();
+
+                    // Only use referral if it exists and isn't self-referral
+                    if (referrer && referrer.email !== email) {
+                        validReferredBy = referredBy;
+                    }
+                }
+
                 // Insert new waitlist entry
                 const { data, error } = await supabaseClient
                     .from('waitlist')
@@ -1713,7 +2216,7 @@
                         name,
                         email,
                         why,
-                        referred_by: referredBy || null,
+                        referred_by: validReferredBy,
                         rank_notifications: rankNotifications
                     }])
                     .select('referral_code')
@@ -1728,8 +2231,13 @@
                 // Send welcome email (fire and forget)
                 sendWelcomeEmail(name, email, data.referral_code);
 
-                // Show success state
-                showSuccessState(user);
+                // Notify referrer if this signup came from a valid referral link
+                if (validReferredBy) {
+                    notifyReferrer(validReferredBy, name);
+                }
+
+                // Show success state with celebration for NEW signup
+                showSuccessState(user, true);
                 loadLeaderboard();
 
             } catch (error) {
@@ -1740,7 +2248,7 @@
             }
         });
 
-        function showSuccessState(user) {
+        function showSuccessState(user, isNewSignup = false) {
             formContainer.style.display = 'none';
             successContainer.style.display = 'block';
 
@@ -1779,6 +2287,134 @@
 
             // Show total signup count (reveal after registration)
             loadTotalSignups();
+
+            // Only trigger celebration for NEW signups, not returning users
+            if (isNewSignup) {
+                setTimeout(() => {
+                    const successRect = successContainer.getBoundingClientRect();
+                    const centerX = successRect.left + successRect.width / 2;
+                    const centerY = successRect.top + successRect.height / 3;
+                    if (typeof window.triggerSeaCelebration === 'function') {
+                        window.triggerSeaCelebration(centerX, centerY);
+                    }
+                }, 300);
+            }
+
+            // Setup profile pic upload
+            setupProfilePicUpload(user.email);
+        }
+
+        // Profile pic upload handler
+        async function setupProfilePicUpload(userEmail) {
+            const fileInput = document.getElementById('profile-pic-input');
+            const preview = document.getElementById('profile-preview');
+            const avatarSvg = document.querySelector('#profile-upload-avatar svg');
+            const uploadText = document.getElementById('profile-upload-text');
+            const statusEl = document.getElementById('profile-upload-status');
+
+            if (!fileInput) return;
+
+            // Load existing profile pic if any
+            if (userEmail) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('waitlist')
+                        .select('profile_pic')
+                        .eq('email', userEmail)
+                        .single();
+
+                    if (error) {
+                        console.log('Profile pic fetch error:', error);
+                    } else if (data?.profile_pic) {
+                        console.log('Loading existing profile pic:', data.profile_pic);
+                        preview.src = data.profile_pic;
+                        preview.style.display = 'block';
+                        if (avatarSvg) avatarSvg.style.display = 'none';
+                        uploadText.textContent = 'Change photo';
+                    }
+                } catch (err) {
+                    console.log('Profile pic load error:', err);
+                }
+            }
+
+            fileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    statusEl.textContent = 'Please select an image file';
+                    statusEl.className = 'profile-upload-status error';
+                    return;
+                }
+
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    statusEl.textContent = 'Image must be under 5MB';
+                    statusEl.className = 'profile-upload-status error';
+                    return;
+                }
+
+                // Show preview immediately
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    if (avatarSvg) avatarSvg.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+
+                // Upload to Supabase Storage
+                uploadText.textContent = 'Uploading...';
+                statusEl.textContent = '';
+                statusEl.className = 'profile-upload-status';
+
+                try {
+                    // Create unique filename
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `${userEmail.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.${fileExt}`;
+
+                    // Upload to Supabase Storage
+                    const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                        .from('profile-pics')
+                        .upload(fileName, file, {
+                            cacheControl: '3600',
+                            upsert: true
+                        });
+
+                    if (uploadError) throw uploadError;
+
+                    // Get public URL
+                    const { data: urlData } = supabaseClient.storage
+                        .from('profile-pics')
+                        .getPublicUrl(fileName);
+
+                    const publicUrl = urlData.publicUrl;
+
+                    // Update user's profile_pic in database
+                    const { error: updateError } = await supabaseClient
+                        .from('waitlist')
+                        .update({ profile_pic: publicUrl })
+                        .eq('email', userEmail);
+
+                    if (updateError) throw updateError;
+
+                    uploadText.textContent = 'Change Photo';
+                    statusEl.textContent = 'Photo saved!';
+                    statusEl.className = 'profile-upload-status success';
+
+                    // Clear status after 3 seconds
+                    setTimeout(() => {
+                        statusEl.textContent = '';
+                    }, 3000);
+
+                } catch (err) {
+                    console.error('Upload error:', err);
+                    uploadText.textContent = 'Choose Photo';
+                    statusEl.textContent = 'Upload failed. Try again.';
+                    statusEl.className = 'profile-upload-status error';
+                }
+            });
         }
 
         // Generate QR code for referral link
@@ -1794,15 +2430,17 @@
                 const userName = data?.name || 'Someone';
                 document.getElementById('qr-card-name').textContent = userName;
 
-                // Generate QR code on canvas
-                const canvas = document.getElementById('qr-code');
-                await QRCode.toCanvas(canvas, referralLink, {
+                // Generate QR code using qrcodejs
+                const qrContainer = document.getElementById('qr-code');
+                qrContainer.innerHTML = ''; // Clear any existing QR code
+
+                new QRCode(qrContainer, {
+                    text: referralLink,
                     width: 160,
-                    margin: 0,
-                    color: {
-                        dark: '#2C2418',
-                        light: '#FFFFFF'
-                    }
+                    height: 160,
+                    colorDark: '#2C2418',
+                    colorLight: '#FFFFFF',
+                    correctLevel: QRCode.CorrectLevel.M
                 });
 
                 // Set up download button
@@ -1816,15 +2454,49 @@
 
         // Download QR card as image
         function downloadQRCard(userName) {
-            const qrCard = document.getElementById('qr-card');
+            // qrcodejs creates a canvas inside the container
+            const qrContainer = document.getElementById('qr-code');
+            const canvas = qrContainer.querySelector('canvas');
 
-            // Use html2canvas if available, otherwise just download QR
-            const canvas = document.getElementById('qr-code');
-            const link = document.createElement('a');
-            link.download = `hum-invite-${userName.toLowerCase().replace(/\s+/g, '-')}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = `hum-invite-${userName.toLowerCase().replace(/\s+/g, '-')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }
         }
+
+        // QR Fullscreen functions
+        window.openQRFullscreen = function() {
+            const overlay = document.getElementById('qr-fullscreen');
+            const userName = document.getElementById('qr-card-name').textContent;
+            const referralLink = window.humReferralLink;
+
+            // Copy name to fullscreen card
+            document.getElementById('qr-card-name-fullscreen').textContent = userName;
+
+            // Generate QR code for fullscreen (larger)
+            const qrFullscreen = document.getElementById('qr-code-fullscreen');
+            qrFullscreen.innerHTML = '';
+            new QRCode(qrFullscreen, {
+                text: referralLink,
+                width: 220,
+                height: 220,
+                colorDark: '#2C2418',
+                colorLight: '#FFFFFF',
+                correctLevel: QRCode.CorrectLevel.M
+            });
+
+            // Show overlay
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeQRFullscreen = function() {
+            const overlay = document.getElementById('qr-fullscreen');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        };
 
         // Instagram copy function (can't deep link, so copy to clipboard)
         window.copyForInstagram = function(e) {
@@ -1835,7 +2507,18 @@
             setTimeout(() => {
                 document.getElementById('copy-feedback').textContent = '';
             }, 3000);
-        }
+        };
+
+        // TikTok copy function (can't deep link, so copy to clipboard)
+        window.copyForTikTok = function(e) {
+            e.preventDefault();
+            const textToCopy = window.humShareText + '\n\n' + window.humReferralLink;
+            navigator.clipboard.writeText(textToCopy);
+            document.getElementById('copy-feedback').textContent = 'Copied! Paste in your TikTok bio';
+            setTimeout(() => {
+                document.getElementById('copy-feedback').textContent = '';
+            }, 3000);
+        };
 
         async function calculateUserRank(email) {
             try {
@@ -1875,9 +2558,9 @@
             try {
                 const { data, error } = await supabaseClient
                     .from('waitlist')
-                    .select('name, why, referral_count, previous_rank, created_at')
+                    .select('name, email, why, referral_count, previous_rank, created_at, profile_pic')
                     .order('referral_count', { ascending: false })
-                    .limit(100);
+                    .limit(500);
 
                 if (error) throw error;
 
@@ -1886,21 +2569,58 @@
                     return;
                 }
 
-                leaderboardEl.innerHTML = data.map((entry, index) => {
-                    const currentRank = index + 1;
+                // Get current user from localStorage
+                const savedUser = localStorage.getItem('hum_waitlist_user');
+                let currentUserEmail = null;
+                if (savedUser) {
+                    try {
+                        currentUserEmail = JSON.parse(savedUser).email;
+                    } catch (e) {}
+                }
+
+                // Find current user's position
+                let userIndex = -1;
+                if (currentUserEmail) {
+                    userIndex = data.findIndex(entry => entry.email === currentUserEmail);
+                }
+
+                // Filter to show focused view: 2 above, user, 2 below
+                let entriesToShow = data;
+                if (userIndex !== -1) {
+                    const startIndex = Math.max(0, userIndex - 2);
+                    const endIndex = Math.min(data.length, userIndex + 3);
+                    entriesToShow = data.slice(startIndex, endIndex).map((entry, i) => ({
+                        ...entry,
+                        originalIndex: startIndex + i
+                    }));
+                } else {
+                    // If user not found, show top 5
+                    entriesToShow = data.slice(0, 5).map((entry, i) => ({
+                        ...entry,
+                        originalIndex: i
+                    }));
+                }
+
+                leaderboardEl.innerHTML = entriesToShow.map((entry) => {
+                    const currentRank = entry.originalIndex + 1;
+                    const isCurrentUser = currentUserEmail && entry.email === currentUserEmail;
                     const movement = getMovementIndicator(currentRank, entry.previous_rank, entry.created_at);
+                    const avatarHtml = entry.profile_pic
+                        ? `<img src="${entry.profile_pic}" alt="${escapeHtml(entry.name)}">`
+                        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>`;
 
                     return `
-                    <div class="leaderboard-entry ${index < 3 ? 'top-3' : ''}">
+                    <div class="leaderboard-entry ${entry.originalIndex < 3 ? 'top-3' : ''} ${isCurrentUser ? 'current-user' : ''}">
+                        <div class="leaderboard-avatar">${avatarHtml}</div>
                         <div class="leaderboard-rank-container">
                             <div class="leaderboard-rank">#${currentRank}</div>
                             ${movement}
                         </div>
                         <div class="leaderboard-info">
-                            <div class="leaderboard-name">${escapeHtml(entry.name)}</div>
-                            <div class="leaderboard-why">"${escapeHtml(entry.why)}"</div>
+                            <div class="leaderboard-name">${escapeHtml(entry.name)}${isCurrentUser ? ' (you)' : ''}</div>
+                            <div class="leaderboard-why">"${escapeHtml(entry.why || '')}"</div>
                         </div>
-                        <div class="leaderboard-referrals">${entry.referral_count} referral${entry.referral_count !== 1 ? 's' : ''}</div>
+                        <div class="leaderboard-referrals">${entry.referral_count}</div>
                     </div>
                 `}).join('');
 
@@ -1952,12 +2672,15 @@
                 console.error('Waitlist initialization error:', err);
             }
         })();
+
+        // FLIP CARDS - REMOVED DUPLICATE (was causing double-toggle bug)
+        // The flip card handler is already defined earlier in the file
     </script>
 
     <!-- Hero Journey Animations -->
     <script>
         (function initHeroJourney() {
-            gsap.registerPlugin(ScrollTrigger);
+            gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
             // Track animation state
             window.shiftPanelActive = false;
@@ -2016,6 +2739,46 @@
             }
 
             // ========================================
+            // Hero Journey - Wrap words for cascade animation
+            // ========================================
+            document.querySelectorAll('.feeling-line, .system-line, .shift-line').forEach(line => {
+                // Save any SVG elements (like underlines)
+                const svg = line.querySelector('svg');
+                const svgHTML = svg ? svg.outerHTML : '';
+                if (svg) svg.remove();
+
+                // Get the raw text
+                const rawText = line.textContent;
+
+                // Clear the line
+                line.innerHTML = '';
+
+                // Split by word boundaries but preserve spaces
+                const parts = rawText.split(/(\s+)/);
+
+                let wordIndex = 0;
+                parts.forEach(part => {
+                    if (part.match(/\s+/)) {
+                        // It's whitespace - add as plain text node
+                        line.appendChild(document.createTextNode(part));
+                    } else if (part.length > 0) {
+                        // It's a word - wrap in span
+                        const span = document.createElement('span');
+                        span.className = 'hero-word';
+                        span.style.transitionDelay = `${wordIndex * 0.06}s`;
+                        span.textContent = part;
+                        line.appendChild(span);
+                        wordIndex++;
+                    }
+                });
+
+                // Re-add SVG if present
+                if (svgHTML) {
+                    line.insertAdjacentHTML('beforeend', svgHTML);
+                }
+            });
+
+            // ========================================
             // Shift Panel Animation - Reusable trigger function
             // ========================================
             function triggerShiftPanelAnimation(panel) {
@@ -2030,13 +2793,13 @@
                 const umlautDots = panel.querySelector('.umlaut-dots');
                 const humanToHum = panel.querySelector('.human-to-hum');
 
-                // Auto-trigger transformation after a brief moment
+                // Auto-trigger transformation after letting "human" be read
                 setTimeout(() => {
                     humAn.forEach(el => el.classList.add('fade-out'));
                     if (umlautDots) umlautDots.classList.add('visible');
                     // Slide hüm to center
                     if (humanToHum) humanToHum.classList.add('centered');
-                }, 400);
+                }, 900);
 
                 // Then auto-trigger clouds after transformation settles
                 setTimeout(() => {
@@ -2069,6 +2832,13 @@
                                 document.body.style.overflow = '';
                                 document.documentElement.style.overflow = '';
 
+                                // Start hands popping up as clouds part - reveals with the opening
+                                if (typeof window.showHandsAfterJourney === 'function') {
+                                    setTimeout(() => {
+                                        window.showHandsAfterJourney();
+                                    }, 400);
+                                }
+
                                 // Hide clouds after parting animation finishes
                                 setTimeout(() => {
                                     cloudTransition.classList.add('clouds-hidden');
@@ -2096,8 +2866,9 @@
                 const lineCount = lines.length;
                 if (lineCount === 0) return;
 
-                // Pin duration: 100vh scroll per line - slower, easier to read each line
-                const pinDuration = lineCount * 100;
+                // Pin duration: use provided scrollPerLine or default to 80vh per line
+                const scrollPerLine = options.scrollPerLine || 80;
+                const pinDuration = lineCount * scrollPerLine;
 
                 let illustrationDrawn = false;
                 let currentLineIndex = -1; // Track to avoid unnecessary updates
@@ -2200,19 +2971,20 @@
 
             // ========================================
             // Create pinned sections for each panel
+            // UNIFORM SCROLL: 80vh per line for ALL panels
             // ========================================
+            const SCROLL_PER_LINE = 80; // vh per line - consistent across all panels
 
-            // Opening panel - just pin briefly, auto-animation already handled
-            if (openingPanel) {
+            // Opening panel - NO pin, just scrolls naturally
+            // Storytelling mode begins at the Feelings panel
+            if (openingPanel && scrollPrompt) {
+                // Just fade out scroll prompt as user scrolls
                 ScrollTrigger.create({
                     trigger: openingPanel,
                     start: 'top top',
-                    end: '+=25%',
-                    pin: true,
-                    pinSpacing: true,
-                    anticipatePin: 1,
+                    end: 'bottom top',
                     onUpdate: (self) => {
-                        if (scrollPrompt && self.progress > 0.1) {
+                        if (self.progress > 0.1) {
                             scrollPrompt.style.opacity = '0';
                         }
                     }
@@ -2220,52 +2992,167 @@
             }
 
             // Feelings panel - 5 lines
-            createPinnedSection(feelingsPanel);
+            createPinnedSection(feelingsPanel, { scrollPerLine: SCROLL_PER_LINE });
 
             // System panel - 4 lines
-            createPinnedSection(systemPanel);
+            createPinnedSection(systemPanel, { scrollPerLine: SCROLL_PER_LINE });
 
             // Shift panel - 4 lines + human to hum transformation
-            createPinnedSection(shiftPanel, { isShiftPanel: true });
+            createPinnedSection(shiftPanel, { isShiftPanel: true, scrollPerLine: SCROLL_PER_LINE });
 
             // ========================================
-            // Principle Panels - Scroll-driven text reveal
+            // Principle Panels - Apple-Style Scroll Reveals
+            // Sticky scroll storytelling for How It Works
+            // Each panel has 3 lines that reveal one at a time
+            // Words cascade in when each line is revealed
             // ========================================
-            document.querySelectorAll('.principle-panel').forEach(panel => {
-                const lines = panel.querySelectorAll('.principle-line');
-                const lineCount = lines.length;
+            let principlePanelsInitialized = false;
+            window.initPrinciplePanelScrollTriggers = function() {
+                if (principlePanelsInitialized) return;
+                principlePanelsInitialized = true;
 
-                // Create ScrollTrigger for each panel
-                ScrollTrigger.create({
-                    trigger: panel,
-                    start: 'top 80%',
-                    end: 'bottom 20%',
-                    onUpdate: (self) => {
-                        const progress = self.progress;
-                        const currentLine = Math.floor(progress * lineCount);
+                const section = document.querySelector('.how-it-works-journey');
+                const panels = document.querySelectorAll('.principle-panel');
+                const progressDots = document.querySelectorAll('.progress-dot');
+                const progressContainer = document.querySelector('.principle-progress');
 
-                        lines.forEach((line, i) => {
-                            line.classList.remove('current', 'seen');
-                            if (i < currentLine) {
-                                line.classList.add('seen');
-                            } else if (i === currentLine) {
-                                line.classList.add('current');
+                if (!section || panels.length === 0) return;
+
+                const panelCount = panels.length;
+                const linesPerPanel = 3;
+                const totalSteps = panelCount * (1 + linesPerPanel); // 1 for panel intro + 3 lines each = 20 steps
+
+                // Show/hide progress dots based on section visibility
+                const progressObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            progressContainer?.classList.add('visible');
+                        } else {
+                            progressContainer?.classList.remove('visible');
+                        }
+                    });
+                }, { threshold: 0.05 });
+
+                progressObserver.observe(section);
+
+                let lastPanelIndex = -1;
+                let lastLineIndex = -1;
+
+                // Handle scroll-based panel and line switching
+                const handleScroll = () => {
+                    const rect = section.getBoundingClientRect();
+                    const sectionHeight = section.offsetHeight;
+                    const viewportHeight = window.innerHeight;
+                    const headerHeight = viewportHeight; // Header is 100vh
+
+                    // Calculate scroll progress, accounting for header
+                    // Header scrolls away first (0 to headerHeight), then panels begin
+                    const scrolled = -rect.top;
+                    const scrollableDistance = sectionHeight - viewportHeight;
+
+                    // Progress starts after header has scrolled away
+                    const scrollAfterHeader = Math.max(0, scrolled - headerHeight);
+                    const panelScrollDistance = scrollableDistance - headerHeight;
+                    const progress = Math.max(0, Math.min(1, scrollAfterHeader / panelScrollDistance));
+
+                    // Each panel gets equal portion of scroll
+                    // Within each panel: intro (show screenshot/title), then 3 lines
+                    const stepsPerPanel = 1 + linesPerPanel; // 4 steps per panel
+                    const currentStep = progress * totalSteps;
+                    const panelIndex = Math.min(Math.floor(currentStep / stepsPerPanel), panelCount - 1);
+                    const stepWithinPanel = currentStep - (panelIndex * stepsPerPanel);
+
+                    // Step 0: Panel intro (screenshot + title)
+                    // Steps 1-3: Lines 1, 2, 3
+                    const lineIndex = Math.max(0, Math.floor(stepWithinPanel) - 1);
+
+                    // Update panels
+                    panels.forEach((panel, i) => {
+                        const lines = panel.querySelectorAll('.principle-line');
+
+                        if (i === panelIndex) {
+                            // Activate this panel
+                            if (!panel.classList.contains('active')) {
+                                panel.classList.add('active');
+                                // Reset lines when entering new panel
+                                lines.forEach(line => {
+                                    line.classList.remove('revealed', 'dimmed', 'current');
+                                });
                             }
+
+                            // Reveal lines up to current lineIndex, dim previous ones
+                            lines.forEach((line, j) => {
+                                if (j <= lineIndex) {
+                                    line.classList.add('revealed');
+
+                                    // Dim previous lines, highlight current
+                                    if (j < lineIndex) {
+                                        line.classList.add('dimmed');
+                                        line.classList.remove('current');
+                                    } else {
+                                        line.classList.remove('dimmed');
+                                        line.classList.add('current');
+                                    }
+                                } else {
+                                    line.classList.remove('revealed', 'dimmed', 'current');
+                                }
+                            });
+                        } else if (i < panelIndex) {
+                            // Previous panels: hide
+                            panel.classList.remove('active');
+                            lines.forEach(line => line.classList.remove('revealed', 'dimmed', 'current'));
+                        } else {
+                            // Future panels: hide everything
+                            panel.classList.remove('active');
+                            lines.forEach(line => line.classList.remove('revealed', 'dimmed', 'current'));
+                        }
+                    });
+
+                    // Update progress dots
+                    progressDots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === panelIndex);
+                    });
+
+                    lastPanelIndex = panelIndex;
+                    lastLineIndex = lineIndex;
+                };
+
+                // Click on dots to jump to panel
+                progressDots.forEach((dot, i) => {
+                    dot.addEventListener('click', () => {
+                        const sectionTop = section.offsetTop;
+                        const sectionHeight = section.offsetHeight;
+                        const viewportHeight = window.innerHeight;
+                        const headerHeight = viewportHeight; // Header is 100vh
+                        const scrollableDistance = sectionHeight - viewportHeight;
+                        const panelScrollDistance = scrollableDistance - headerHeight;
+                        const stepsPerPanel = 1 + linesPerPanel;
+                        const targetProgress = (i * stepsPerPanel) / totalSteps;
+                        // Add header height to scroll past it first
+                        const targetScroll = sectionTop + headerHeight + (panelScrollDistance * targetProgress);
+
+                        window.scrollTo({
+                            top: targetScroll,
+                            behavior: 'smooth'
                         });
-                    },
-                    onLeave: () => {
-                        lines.forEach(line => {
-                            line.classList.remove('current');
-                            line.classList.add('seen');
+                    });
+                });
+
+                // Throttled scroll handler
+                let ticking = false;
+                window.addEventListener('scroll', () => {
+                    if (!ticking) {
+                        requestAnimationFrame(() => {
+                            handleScroll();
+                            ticking = false;
                         });
-                    },
-                    onLeaveBack: () => {
-                        lines.forEach(line => {
-                            line.classList.remove('current', 'seen');
-                        });
+                        ticking = true;
                     }
                 });
-            });
+
+                // Initial call
+                handleScroll();
+            };
 
             // ========================================
             // Hands - spread across bottom half
@@ -2311,6 +3198,7 @@
                     hand.style.setProperty('--rotation', `${baseRotation}deg`);
                     hand.style.setProperty('--scale', scale);
                     hand.style.setProperty('--depth', depth);
+                    hand.style.setProperty('--wave-delay', Math.random() * 3); // Random delay 0-3s for organic feel
                     hand.style.zIndex = zIndex;
 
                     hand.innerHTML = `
@@ -2319,16 +3207,8 @@
                         </svg>
                     `;
 
-                    hand.addEventListener('click', () => {
-                        hand.classList.add('celebrating');
-                        setTimeout(() => hand.classList.remove('celebrating'), 500);
-                    });
-
                     handsSea.appendChild(hand);
-                    handData.push({ el: hand, baseRotation });
-
-                    // Fade in with stagger
-                    setTimeout(() => hand.classList.add('visible'), i * 5);
+                    handData.push({ el: hand, baseRotation, index: handData.length });
                 }
 
                 // Add straggler hands around the edges - late to the party
@@ -2370,6 +3250,7 @@
                     hand.style.setProperty('--rotation', `${baseRotation}deg`);
                     hand.style.setProperty('--scale', scale);
                     hand.style.setProperty('--depth', depth);
+                    hand.style.setProperty('--wave-delay', Math.random() * 3); // Random delay 0-3s for organic feel
                     hand.style.zIndex = zIndex;
 
                     hand.innerHTML = `
@@ -2378,20 +3259,56 @@
                         </svg>
                     `;
 
-                    hand.addEventListener('click', () => {
-                        hand.classList.add('celebrating');
-                        setTimeout(() => hand.classList.remove('celebrating'), 500);
-                    });
-
                     handsSea.appendChild(hand);
-                    handData.push({ el: hand, baseRotation });
-
-                    // Fade in later with stagger - arriving late!
-                    setTimeout(() => hand.classList.add('visible'), stragglerDelay + i * 80);
+                    handData.push({ el: hand, baseRotation, isStraggler: true });
                 }
 
                 // Track which hands are animating
                 const seaHandsAnimating = new Array(handData.length).fill(false);
+
+                // Track if click handlers have been attached (prevent duplicates)
+                let handsClickHandlersAttached = false;
+
+                // Function to show hands with stagger - called after journey completes
+                window.showHandsAfterJourney = function() {
+                    const mainHandCount = handCount;
+                    const stragglerStartDelay = mainHandCount * 5 + 500;
+
+                    handData.forEach((data, i) => {
+                        if (data.isStraggler) {
+                            // Stragglers appear later
+                            const stragglerIndex = i - mainHandCount;
+                            setTimeout(() => data.el.classList.add('visible'), stragglerStartDelay + stragglerIndex * 80);
+                        } else {
+                            // Main hands with fast stagger
+                            setTimeout(() => data.el.classList.add('visible'), i * 5);
+                        }
+                    });
+
+                    // Only attach click handlers once
+                    if (!handsClickHandlersAttached) {
+                        handsClickHandlersAttached = true;
+
+                        handData.forEach((data, i) => {
+                            // Add click handler - regular tap gets pulse ripple effect
+                            data.el.addEventListener('click', (e) => {
+                                e.stopPropagation();
+
+                                // If this is the waving hand, the waving handler will trigger celebration
+                                // Otherwise, just do pulse ripple on this hand
+                                if (seaWavingHand && seaWavingHand.data && seaWavingHand.data.el === data.el) {
+                                    return; // Let the waving hand handler deal with it
+                                }
+
+                                // Force animation restart by removing and re-adding class
+                                data.el.classList.remove('pulse-ripple');
+                                void data.el.offsetWidth; // Force reflow
+                                data.el.classList.add('pulse-ripple');
+                                setTimeout(() => data.el.classList.remove('pulse-ripple'), 600);
+                            });
+                        });
+                    }
+                };
 
                 // Confetti creation for celebrations
                 function createSeaConfetti(x, y) {
@@ -2437,27 +3354,29 @@
 
                     handDistances.sort((a, b) => a.distance - b.distance);
 
-                    // Wave of 360° spins
+                    // Wave of 360° spins using CSS animation class - fast Mexican wave
                     handDistances.forEach((item, i) => {
-                        const delay = i * 3;
+                        const delay = i * 3; // Fast stagger for Mexican wave effect
 
                         setTimeout(() => {
                             seaHandsAnimating[item.index] = true;
-                            const currentRotation = parseFloat(item.el.style.getPropertyValue('--rotation')) || item.baseRotation;
 
-                            item.el.style.transition = 'transform 0.5s ease-in-out';
-                            item.el.style.setProperty('--rotation', `${currentRotation + 360}deg`);
+                            // Remove class first, force reflow, then add to restart animation
+                            item.el.classList.remove('spin-celebrate');
+                            void item.el.offsetWidth; // Force reflow
+                            item.el.classList.add('spin-celebrate');
 
+                            // Clean up after animation completes
                             setTimeout(() => {
-                                item.el.style.transition = '';
-                                // Normalize angle
-                                const normalized = (currentRotation + 360) % 360;
-                                item.el.style.setProperty('--rotation', `${normalized}deg`);
+                                item.el.classList.remove('spin-celebrate');
                                 seaHandsAnimating[item.index] = false;
                             }, 500);
                         }, delay);
                     });
                 }
+
+                // Expose celebration to global scope for waitlist success
+                window.triggerSeaCelebration = triggerSeaCelebration;
 
                 // Speech bubble system
                 let seaBubble = null;
@@ -2580,6 +3499,29 @@
                         scheduleSeaBubble();
                     }, 5000);
                 }
+            }
+
+            // ENSURE principle panels are initialized after journey completes
+            // Check every 500ms until journey-complete class is added
+            const checkAndInitPanels = setInterval(() => {
+                if (document.body.classList.contains('journey-complete')) {
+                    clearInterval(checkAndInitPanels);
+                    console.log('Journey complete - initializing principle panels');
+                    setTimeout(() => {
+                        if (typeof window.initPrinciplePanelScrollTriggers === 'function') {
+                            window.initPrinciplePanelScrollTriggers();
+                        }
+                    }, 500);
+                }
+            }, 500);
+
+            // Also init immediately if already complete (e.g., page refresh)
+            if (document.body.classList.contains('journey-complete')) {
+                setTimeout(() => {
+                    if (typeof window.initPrinciplePanelScrollTriggers === 'function') {
+                        window.initPrinciplePanelScrollTriggers();
+                    }
+                }, 500);
             }
 
         })();
