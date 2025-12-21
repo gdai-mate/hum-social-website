@@ -408,8 +408,8 @@
         <section class="hero-panel panel-reveal" data-panel="5">
             <div class="panel-content">
                 <h1 class="reveal-logo">hüm</h1>
-                <p class="reveal-tagline">A campfire, not a stage.</p>
-                <p class="reveal-tagline-sub">Social media for humans.</p>
+                <p class="reveal-tagline">Social media for doers. Not viewers.</p>
+                <p class="reveal-tagline-sub">An online community for humans.</p>
                 <a href="#waitlist" class="btn-cta-hero">Join the Waitlist</a>
             </div>
             <!-- Sea of hands -->
@@ -927,6 +927,22 @@
         </div>
     </section>
 
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-links">
+                    <a href="/privacy.html">Privacy</a>
+                    <span class="footer-divider">|</span>
+                    <a href="/terms.html">Terms</a>
+                    <span class="footer-divider">|</span>
+                    <a href="mailto:hello@hum-social.com">Contact</a>
+                </p>
+                <p class="footer-copyright">Made with <svg class="heart-icon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="display:inline-block;vertical-align:middle;margin:-2px 2px 0;color:#d2916f;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> in Australia</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
         // =====================================================
         // STRIPE PAYMENT LINKS - Paste your links here
@@ -939,21 +955,19 @@
         };
 
         // Wire up tier buttons to Stripe Payment Links
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.tier-cta').forEach(btn => {
-                const tier = btn.dataset.tier;
-                if (STRIPE_PAYMENT_LINKS[tier]) {
-                    btn.href = STRIPE_PAYMENT_LINKS[tier];
-                    btn.target = '_blank';
-                    btn.rel = 'noopener noreferrer';
-                } else {
-                    // No payment link configured yet - show coming soon
-                    btn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        alert('Payment coming soon! Join the waitlist above to get notified.');
-                    });
-                }
-            });
+        document.querySelectorAll('.tier-cta').forEach(btn => {
+            const tier = btn.dataset.tier;
+            if (STRIPE_PAYMENT_LINKS[tier]) {
+                btn.href = STRIPE_PAYMENT_LINKS[tier];
+                btn.target = '_blank';
+                btn.rel = 'noopener noreferrer';
+            } else {
+                // No payment link configured yet - show coming soon
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert('Payment coming soon! Join the waitlist above to get notified.');
+                });
+            }
         });
 
         // Theme toggle
@@ -1188,6 +1202,12 @@
         });
 
         // =====================================================
+        // SUPABASE CONFIG (used by login and waitlist)
+        // =====================================================
+        const SUPABASE_URL = 'https://mclksiyohsfwhquhhxcb.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jbGtzaXlvaHNmd2hxdWhoeGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5OTk0NzAsImV4cCI6MjA4MTU3NTQ3MH0.tsMWJGUJUO1hwxMo3eBrletfFuHOGCNybTtHVG5wsVw';
+
+        // =====================================================
         // LOGIN OVERLAY FUNCTIONALITY
         // =====================================================
         const loginBtn = document.getElementById('login-btn');
@@ -1380,19 +1400,40 @@
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.shiftKey && e.key === 'J') {
                 e.preventDefault();
-                document.documentElement.classList.add('journey-complete');
-                document.body.classList.add('journey-complete');
-                document.documentElement.setAttribute('data-theme', 'light');
-                window.scrollTo(0, 0);
-                const clouds = document.getElementById('cloud-transition');
-                if (clouds) clouds.classList.add('clouds-hidden');
-                window.markJourneyComplete();
-                if (typeof window.showHandsAfterJourney === 'function') {
-                    window.showHandsAfterJourney();
-                }
+                skipToWaitlist();
                 console.log('Journey skipped (dev mode)');
             }
         });
+
+        // Skip all animations and go directly to waitlist
+        function skipToWaitlist() {
+            document.documentElement.classList.add('journey-complete');
+            document.body.classList.add('journey-complete');
+            document.documentElement.setAttribute('data-theme', 'light');
+            const clouds = document.getElementById('cloud-transition');
+            if (clouds) clouds.classList.add('clouds-hidden');
+            window.markJourneyComplete();
+            if (typeof window.showHandsAfterJourney === 'function') {
+                window.showHandsAfterJourney();
+            }
+        }
+
+        // Hero CTA button - skip animations and go to waitlist
+        const heroCta = document.querySelector('.btn-cta-hero');
+        if (heroCta) {
+            heroCta.addEventListener('click', (e) => {
+                e.preventDefault();
+                skipToWaitlist();
+                // Jump instantly to waitlist
+                const waitlist = document.getElementById('waitlist');
+                if (waitlist) {
+                    waitlist.scrollIntoView({ behavior: 'instant' });
+                    // Focus the first input
+                    const firstInput = waitlist.querySelector('input');
+                    if (firstInput) firstInput.focus();
+                }
+            });
+        }
 
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -2249,9 +2290,7 @@
         // ============================================
         (function initWaitlist() {
             try {
-                const SUPABASE_URL = 'https://mclksiyohsfwhquhhxcb.supabase.co';
-                const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jbGtzaXlvaHNmd2hxdWhoeGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5OTk0NzAsImV4cCI6MjA4MTU3NTQ3MH0.tsMWJGUJUO1hwxMo3eBrletfFuHOGCNybTtHVG5wsVw';
-
+                // Uses global SUPABASE_URL and SUPABASE_ANON_KEY
                 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
                 // Get referral code from URL if present

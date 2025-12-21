@@ -3,222 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - hüm</title>
-    <meta name="description" content="hüm's Privacy Policy - How we collect, use, and protect your personal information.">
+    <title>Privacy Policy - hum</title>
+    <meta name="description" content="hum's Privacy Policy - the human version. What we collect, why, and what we do with it.">
 
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
 
     <style>
         .legal-page {
-            max-width: 800px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 4rem 2rem;
-            line-height: 1.7;
+            padding: 4rem 2rem 6rem;
+            font-family: var(--font-body);
+            color: var(--text);
+            line-height: 1.8;
         }
+
         .legal-page h1 {
             font-family: 'BigScratchBrush', sans-serif;
-            font-size: 2.5rem;
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .legal-page .subtitle {
+            font-family: 'Ecoplanet', sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-muted);
             margin-bottom: 0.5rem;
         }
+
+        .legal-page .updated {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+            margin-bottom: 3rem;
+        }
+
         .legal-page h2 {
-            font-family: 'BigScratchBrush', sans-serif;
-            font-size: 1.8rem;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        .legal-page h3 {
             font-family: 'Ecoplanet', sans-serif;
-            font-size: 1.3rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
+            font-size: 1.5rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
         }
+
+        .legal-page p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
         .legal-page ul {
-            margin: 1rem 0;
-            padding-left: 2rem;
+            margin: 1rem 0 1.5rem;
+            padding-left: 1.25rem;
         }
+
         .legal-page li {
             margin: 0.5rem 0;
+            color: var(--text);
         }
+
         .legal-page a {
-            color: #5B9CF5;
-            text-decoration: underline;
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease;
         }
-        .updated {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
+
+        .legal-page a:hover {
+            border-bottom-color: var(--accent);
         }
+
+        .legal-page strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .legal-page em {
+            font-style: italic;
+        }
+
+        .summary-box {
+            background: var(--surface-alt, rgba(0,0,0,0.03));
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        [data-theme="dark"] .summary-box {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .summary-box p {
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
         .footer-note {
-            margin-top: 3rem;
+            margin-top: 4rem;
             padding-top: 2rem;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid var(--border);
             text-align: center;
-            color: #666;
-            font-size: 0.9rem;
+        }
+
+        .footer-note a {
+            margin: 0 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .footer-note a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .legal-page {
+                padding: 3rem 1.5rem 4rem;
+            }
+
+            .legal-page h2 {
+                font-size: 1.3rem;
+                margin-top: 2.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="nav">
         <div class="container">
             <div class="nav-content">
                 <a href="/">
-                    <img src="assets/logos/hum-logo-dark.svg" alt="hüm" class="logo-img logo-light">
-                    <img src="assets/logos/hum-logo-light.svg" alt="hüm" class="logo-img logo-dark">
+                    <img src="assets/logos/hum-logo-dark.svg" alt="hum" class="logo-img logo-light">
+                    <img src="assets/logos/hum-logo-light.svg" alt="hum" class="logo-img logo-dark">
                 </a>
-                <a href="https://app.hum-social.com" class="btn-primary">Launch App</a>
             </div>
         </div>
     </nav>
 
     <div class="legal-page">
         <h1>Privacy Policy</h1>
-        <p class="updated">Last updated: December 2, 2025</p>
+        <p class="subtitle">The version you'll actually read.</p>
+        <p class="updated">Last updated: December 21, 2025</p>
 
-        <section>
-            <h2>1. Introduction</h2>
-            <p>Welcome to hüm's Privacy Policy. This policy describes how we collect, use, store, and protect your personal information when you use our voice-first accountability platform.</p>
-            <p>Your privacy is important to us. We are committed to transparency about our data practices and giving you control over your information.</p>
-        </section>
+        <div class="summary-box">
+            <p><strong>We don't sell your data. We don't show you ads. We don't track you across the internet.</strong> We collect what we need to make the app work, nothing more. Your voice recordings get deleted after 24 hours. We're not trying to build a profile of you to sell to advertisers because, well, we don't have advertisers.</p>
+        </div>
 
-        <section>
-            <h2>2. Information We Collect</h2>
+        <p>That's the gist. The rest is the details.</p>
 
-            <h3>Account Information</h3>
-            <ul>
-                <li>Username and display name</li>
-                <li>Email address</li>
-                <li>Profile picture</li>
-                <li>Voice introduction (optional)</li>
-                <li>Bio and interests</li>
-                <li>Referral code (for registration tracking)</li>
-            </ul>
+        <h2>What We Collect</h2>
+        <p>Here's everything we know about you:</p>
 
-            <h3>Content You Create</h3>
-            <ul>
-                <li>Voice recordings (posts, comments, DMs, voice intros)</li>
-                <li>Quest information (titles, tasks, progress data)</li>
-                <li>High fives (likes with optional voice captions)</li>
-                <li>Photos (profile pictures only - no gallery access)</li>
-            </ul>
+        <p><strong>When you sign up:</strong></p>
+        <ul>
+            <li>Your name and email (so we can, you know, contact you)</li>
+            <li>Your profile picture (taken in-app, not from your gallery)</li>
+            <li>A voice intro if you want to record one</li>
+            <li>Who referred you (for the waitlist leaderboard)</li>
+        </ul>
 
-            <h3>Usage Data</h3>
-            <ul>
-                <li>Quest check-in history and streaks</li>
-                <li>Social interactions (vibes, high fives, comments)</li>
-                <li>Device information and browser type</li>
-                <li>IP address and approximate location</li>
-                <li>Usage patterns and feature engagement</li>
-            </ul>
-        </section>
+        <p><strong>When you use the app:</strong></p>
+        <ul>
+            <li>Voice recordings (posts, comments, DMs)</li>
+            <li>Photos you take in-app (we can't access your camera roll)</li>
+            <li>Your quests and progress</li>
+            <li>Who you interact with and how</li>
+        </ul>
 
-        <section>
-            <h2>3. How We Use Your Information</h2>
-            <p>We use your information to:</p>
-            <ul>
-                <li>Provide and improve the hüm platform</li>
-                <li>Enable social features (feed, profiles, DMs, notifications)</li>
-                <li>Track quest progress and calculate streaks</li>
-                <li>Send notifications about platform activity</li>
-                <li>Analyze usage patterns to improve features</li>
-                <li>Prevent fraud, spam, and abuse</li>
-                <li>Comply with legal obligations</li>
-                <li>Provide customer support</li>
-            </ul>
-        </section>
+        <p><strong>Automatically:</strong></p>
+        <ul>
+            <li>Your device type and browser</li>
+            <li>Your IP address (gives us rough location)</li>
+            <li>How you use the app (what features, how often)</li>
+        </ul>
 
-        <section>
-            <h2>4. Voice Data and Audio Processing</h2>
-            <p><strong>24-Hour Audio Lifecycle:</strong> Voice recordings in posts and DMs have a 24-hour lifecycle. After 24 hours:</p>
-            <ul>
-                <li>Audio is transcribed to text using Azure Cognitive Services</li>
-                <li>Original audio file is permanently deleted</li>
-                <li>Text transcript is retained for content moderation and search</li>
-            </ul>
-            <p><strong>Voice Profile (Optional):</strong> Your voice introduction recording is stored indefinitely unless you delete it. It is only played when someone visits your profile.</p>
-            <p><strong>Third-Party Processing:</strong> We use Azure Cognitive Services (Microsoft) for speech-to-text transcription. Microsoft processes audio according to their privacy policy and does not retain audio data after transcription.</p>
-        </section>
+        <h2>What Happens to Your Voice</h2>
+        <p>This is the important bit.</p>
+        <p>When you record a voice post or DM, here's the lifecycle:</p>
+        <ul>
+            <li><strong>0-24 hours:</strong> Your actual voice is stored and playable</li>
+            <li><strong>After 24 hours:</strong> We transcribe it to text, then delete the audio file forever</li>
+            <li><strong>From then on:</strong> Only the text transcript exists</li>
+        </ul>
+        <p>Why? Because storing audio is expensive, and frankly, the ephemeral nature makes people more authentic. You're not building a permanent archive of everything you've ever said.</p>
+        <p>Your voice intro on your profile stays until you delete it. That one's meant to stick around.</p>
 
-        <section>
-            <h2>5. Data Storage and Security</h2>
-            <p><strong>Storage Location:</strong> Your data is stored on Microsoft Azure servers in Australia (East Australia region) to comply with data sovereignty requirements.</p>
-            <p><strong>Security Measures:</strong> We implement industry-standard security practices:</p>
-            <ul>
-                <li>Encrypted data transmission (HTTPS/TLS)</li>
-                <li>Encrypted data storage</li>
-                <li>JWT-based authentication</li>
-                <li>Regular security audits and updates</li>
-                <li>Role-based access controls</li>
-            </ul>
-            <p>While we take security seriously, no system is completely secure. You use hüm at your own risk.</p>
-        </section>
+        <h2>Why We Collect It</h2>
+        <p>Pretty simple:</p>
+        <ul>
+            <li>To make the app work (obviously)</li>
+            <li>To show you your feed, your quests, your streaks</li>
+            <li>To send you notifications when someone interacts with your stuff</li>
+            <li>To figure out what features people actually use so we can make them better</li>
+            <li>To stop spammers and bad actors</li>
+        </ul>
+        <p>We're not analyzing your voice to sell you things. We're not building psychological profiles. We just want to make a social app that doesn't suck.</p>
 
-        <section>
-            <h2>6. Information Sharing</h2>
-            <p><strong>We do NOT sell your personal information.</strong></p>
-            <p>We share your information only in these limited circumstances:</p>
-            <ul>
-                <li><strong>Public Content:</strong> Public posts and quests are visible to other users</li>
-                <li><strong>Service Providers:</strong> Azure (hosting), Microsoft (speech-to-text)</li>
-                <li><strong>Legal Requirements:</strong> When required by law or to protect rights</li>
-                <li><strong>Business Transfers:</strong> In case of merger, acquisition, or asset sale</li>
-            </ul>
-        </section>
+        <h2>Who Sees Your Data</h2>
+        <p><strong>We don't sell your data. Full stop.</strong></p>
+        <p>The only third parties who touch your data:</p>
+        <ul>
+            <li><strong>Microsoft Azure:</strong> Hosts our servers (in Australia). Also does our speech-to-text transcription. They don't keep your audio after processing.</li>
+            <li><strong>Stripe:</strong> If you become a supporter, they handle the payment. We never see your card number.</li>
+            <li><strong>The law:</strong> If someone with a valid legal order demands your data, we have to comply. We'd fight unreasonable requests, but we're not going to jail for you. Sorry.</li>
+        </ul>
+        <p>That's it. No data brokers. No ad networks. No "partners" who want to "enhance your experience."</p>
 
-        <section>
-            <h2>7. Your Privacy Rights</h2>
-            <p>You have the following rights regarding your personal data:</p>
-            <ul>
-                <li><strong>Access:</strong> Request a copy of your data</li>
-                <li><strong>Correction:</strong> Update inaccurate information</li>
-                <li><strong>Deletion:</strong> Delete your account and data</li>
-                <li><strong>Export:</strong> Download your data in portable format</li>
-                <li><strong>Opt-out:</strong> Disable notifications and marketing</li>
-                <li><strong>Visibility Control:</strong> Set quest visibility (Public/Private/Solo)</li>
-            </ul>
-            <p>To exercise these rights, contact us at <a href="mailto:hello@hum-social.com">hello@hum-social.com</a> or use the in-app settings.</p>
-        </section>
+        <h2>Where Your Data Lives</h2>
+        <p>Everything is stored on Microsoft Azure servers in Australia. If you're not in Australia, your data crosses borders to get here. That's how the internet works.</p>
 
-        <section>
-            <h2>8. Camera and Microphone Access</h2>
-            <p><strong>Required Permissions:</strong> hüm requires camera and microphone access for:</p>
-            <ul>
-                <li>Recording voice posts and comments</li>
-                <li>Sending voice direct messages</li>
-                <li>Capturing profile pictures in-app</li>
-                <li>Recording voice introductions</li>
-            </ul>
-            <p><strong>No Gallery Access:</strong> We intentionally do not access your photo gallery. All photos must be captured using the in-app camera to ensure authenticity and prevent misuse.</p>
-            <p>You can revoke these permissions at any time through your device settings, but this will limit app functionality.</p>
-        </section>
+        <h2>How We Protect It</h2>
+        <ul>
+            <li>Everything's encrypted in transit (HTTPS) and at rest</li>
+            <li>We use proper authentication (JWT tokens, not security through obscurity)</li>
+            <li>We don't store passwords in plain text (obviously)</li>
+            <li>We limit who on our team can access what</li>
+        </ul>
+        <p>No system is unhackable. We do our best, but if you're planning a coup, maybe don't discuss it on hum.</p>
 
-        <section>
-            <h2>9. Age Requirements and Minors</h2>
-            <p>hüm is intended for users 18 years and older. We do not knowingly collect personal information from individuals under 18.</p>
-            <p>If we discover that we have collected information from a user under 18, we will delete it immediately. If you believe a minor under 18 has provided us with personal information, please contact us at <a href="mailto:hello@hum-social.com">hello@hum-social.com</a>.</p>
-        </section>
+        <h2>Your Rights</h2>
+        <p>You can:</p>
+        <ul>
+            <li><strong>See your data:</strong> Ask us what we have on you</li>
+            <li><strong>Fix your data:</strong> Correct anything that's wrong</li>
+            <li><strong>Delete your data:</strong> Nuke your account and everything with it</li>
+            <li><strong>Export your data:</strong> Take it with you if you leave</li>
+            <li><strong>Turn off notifications:</strong> We get it, notifications are annoying</li>
+        </ul>
+        <p>Email <a href="mailto:hello@hum-social.com">hello@hum-social.com</a> for any of this. We'll actually respond.</p>
 
-        <section>
-            <h2>10. International Users</h2>
-            <p>hüm is operated from Australia and data is stored on Australian servers. By using hüm, you consent to the transfer and processing of your information in Australia, which may have different data protection laws than your country of residence.</p>
-        </section>
+        <h2>About That Camera Access</h2>
+        <p>Yes, we need your camera and microphone. It's a voice-first app with photos. Kind of essential.</p>
+        <p>What we <em>don't</em> do: access your photo gallery. Every photo on hum was taken in the moment, in the app. No curated selfies from three years ago. No stolen memes. Just real, right-now content.</p>
+        <p>You can revoke camera/mic permissions anytime in your phone settings. The app will be pretty useless, but it's your call.</p>
 
-        <section>
-            <h2>11. Changes to This Policy</h2>
-            <p>We may update this Privacy Policy from time to time. Material changes will be communicated via in-app notification or email. Continued use of hüm after changes constitutes acceptance of the updated policy.</p>
-        </section>
+        <h2>Kids</h2>
+        <p>hum is for adults (18+). If you're under 18, please don't sign up. If we find out you did, we'll delete your account. Nothing personal, it's just the rules.</p>
+        <p>If you're a parent and your kid somehow got on here, email us and we'll sort it out.</p>
 
-        <section>
-            <h2>12. Contact Us</h2>
-            <p>If you have questions or concerns about this Privacy Policy or our data practices, please contact us:</p>
-            <p>Email: <a href="mailto:hello@hum-social.com">hello@hum-social.com</a></p>
-            <p>Address: hüm Platform, Australia</p>
-        </section>
+        <h2>Changes</h2>
+        <p>We might update this policy. If we make big changes, we'll tell you (email or in-app notification). If you keep using hum after that, you're agreeing to the new terms. Standard stuff.</p>
+
+        <h2>Questions?</h2>
+        <p>Email us: <a href="mailto:hello@hum-social.com">hello@hum-social.com</a></p>
+        <p>We're real humans. We'll write back.</p>
 
         <div class="footer-note">
-            <p>By using hüm, you acknowledge that you have read and understood this Privacy Policy.</p>
+            <a href="/">Back to hum</a> | <a href="/terms.html">Terms of Service</a>
         </div>
     </div>
 </body>

@@ -3,246 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service - hüm</title>
-    <meta name="description" content="hüm's Terms of Service - Rules and guidelines for using our platform.">
+    <title>Terms of Service - hum</title>
+    <meta name="description" content="hum's Terms of Service - the rules, explained like a human.">
 
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="style.css">
 
     <style>
         .legal-page {
-            max-width: 800px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 4rem 2rem;
-            line-height: 1.7;
+            padding: 4rem 2rem 6rem;
+            font-family: var(--font-body);
+            color: var(--text);
+            line-height: 1.8;
         }
+
         .legal-page h1 {
             font-family: 'BigScratchBrush', sans-serif;
-            font-size: 2.5rem;
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .legal-page .subtitle {
+            font-family: 'Ecoplanet', sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-muted);
             margin-bottom: 0.5rem;
         }
+
+        .legal-page .updated {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+            margin-bottom: 3rem;
+        }
+
         .legal-page h2 {
-            font-family: 'BigScratchBrush', sans-serif;
-            font-size: 1.8rem;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        .legal-page h3 {
             font-family: 'Ecoplanet', sans-serif;
-            font-size: 1.3rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
+            font-size: 1.5rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
         }
+
+        .legal-page p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
         .legal-page ul {
-            margin: 1rem 0;
-            padding-left: 2rem;
+            margin: 1rem 0 1.5rem;
+            padding-left: 1.25rem;
         }
+
         .legal-page li {
             margin: 0.5rem 0;
+            color: var(--text);
         }
+
         .legal-page a {
-            color: #5B9CF5;
-            text-decoration: underline;
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease;
         }
-        .updated {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
+
+        .legal-page a:hover {
+            border-bottom-color: var(--accent);
         }
+
+        .legal-page strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .legal-page em {
+            font-style: italic;
+        }
+
+        .summary-box {
+            background: var(--surface-alt, rgba(0,0,0,0.03));
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        [data-theme="dark"] .summary-box {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .summary-box p {
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        .warning-box {
+            background: rgba(210, 145, 111, 0.08);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box p {
+            margin: 0 0 0.5rem 0;
+        }
+
+        .warning-box ul {
+            margin: 0;
+        }
+
         .footer-note {
-            margin-top: 3rem;
+            margin-top: 4rem;
             padding-top: 2rem;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid var(--border);
             text-align: center;
-            color: #666;
-            font-size: 0.9rem;
+        }
+
+        .footer-note a {
+            margin: 0 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .footer-note a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .legal-page {
+                padding: 3rem 1.5rem 4rem;
+            }
+
+            .legal-page h2 {
+                font-size: 1.3rem;
+                margin-top: 2.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="nav">
         <div class="container">
             <div class="nav-content">
                 <a href="/">
-                    <img src="assets/logos/hum-logo-dark.svg" alt="hüm" class="logo-img logo-light">
-                    <img src="assets/logos/hum-logo-light.svg" alt="hüm" class="logo-img logo-dark">
+                    <img src="assets/logos/hum-logo-dark.svg" alt="hum" class="logo-img logo-light">
+                    <img src="assets/logos/hum-logo-light.svg" alt="hum" class="logo-img logo-dark">
                 </a>
-                <a href="https://app.hum-social.com" class="btn-primary">Launch App</a>
             </div>
         </div>
     </nav>
 
     <div class="legal-page">
         <h1>Terms of Service</h1>
-        <p class="updated">Last updated: December 2, 2025</p>
+        <p class="subtitle">The rules. In plain English.</p>
+        <p class="updated">Last updated: December 21, 2025</p>
 
-        <section>
-            <h2>1. Acceptance of Terms</h2>
-            <p>By accessing and using hüm ("the App"), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the App.</p>
-            <p>hüm is a voice-first accountability platform designed to help users achieve their personal goals through quests, social engagement, and community support.</p>
-        </section>
+        <div class="summary-box">
+            <p>By using hum, you're agreeing to these terms. If you don't agree, that's okay, but you can't use the app. We're not trying to trick you with fine print. This is genuinely how it works.</p>
+        </div>
 
-        <section>
-            <h2>2. Eligibility</h2>
-            <p><strong>You must be at least 18 years old to use hüm.</strong> By using the App, you represent and warrant that:</p>
+        <h2>Who Can Use This</h2>
+        <p><strong>You need to be 18 or older.</strong> No exceptions.</p>
+        <p>We're building a space for adults to be real with each other. If you're under 18, we'll have to delete your account if we find out. Nothing personal, your time is better spent outdoors and in nature than online on social media anyway.</p>
+        <p>By signing up, you're telling us:</p>
+        <ul>
+            <li>You're at least 18</li>
+            <li>The info you gave us is real</li>
+            <li>You'll keep your login secure</li>
+        </ul>
+
+        <h2>How You Get In</h2>
+        <p>hum is invite-only. You need a referral code from someone who's already here.</p>
+        <p>Why? Because when everyone's accountable to someone, people behave better. It's not exclusivity for its own sake. It's quality control.</p>
+        <p>Your account is your responsibility. If someone else uses it and does something stupid, that's on you.</p>
+
+        <h2>Don't Be Terrible</h2>
+        <p>hum is voice-first. You talk, you don't type. That's the whole point.</p>
+        <p><strong>Your content is yours.</strong> We don't own it. But by posting, you're giving us permission to show it to other users and keep the app running. That's literally the service.</p>
+
+        <div class="warning-box">
+            <p><strong>Don't post:</strong></p>
             <ul>
-                <li>You are at least 18 years of age</li>
-                <li>You have the legal capacity to enter into these Terms</li>
-                <li>You will provide accurate and complete information</li>
-                <li>You will maintain the security of your account</li>
+                <li>Anything illegal, threatening, or harassing</li>
+                <li>Other people's stuff without permission</li>
+                <li>Spam or scams</li>
+                <li>Porn or explicit content</li>
+                <li>Stuff that promotes violence or self-harm</li>
+                <li>Impersonation of others</li>
             </ul>
-            <p>Users under 18 are not permitted to create accounts or use the platform. If we discover an underage account, it will be immediately terminated.</p>
-        </section>
+        </div>
 
-        <section>
-            <h2>3. Account Access</h2>
-            <p><strong>Free Access:</strong> hüm is currently free to use. Access is controlled through an invite-only referral system to maintain community quality.</p>
-            <p><strong>Referral System:</strong> New users must use a referral code from an existing member to register. This ensures community quality and accountability.</p>
-            <p><strong>Account Responsibility:</strong> You are responsible for maintaining the confidentiality of your account credentials and for all activities under your account.</p>
-        </section>
+        <p>Use common sense. Would you say it to someone's face at a dinner party? No? Don't say it here.</p>
 
-        <section>
-            <h2>4. Content and Conduct</h2>
-            <p><strong>Voice-First Platform:</strong> hüm is designed as a voice-first experience. All social interactions (posts, comments, direct messages) use voice recordings, not text.</p>
-            <p><strong>Content Ownership:</strong> You retain ownership of content you create, but grant hüm a worldwide, non-exclusive, royalty-free license to use, display, reproduce, and distribute your content within the platform for the purpose of operating and improving the service.</p>
-            <p><strong>Prohibited Content:</strong> You may not post content that:</p>
-            <ul>
-                <li>Is illegal, harmful, threatening, abusive, or harassing</li>
-                <li>Infringes intellectual property rights</li>
-                <li>Contains malware or harmful code</li>
-                <li>Impersonates others or misrepresents your identity</li>
-                <li>Violates others' privacy</li>
-                <li>Contains spam or unsolicited commercial content</li>
-                <li>Is sexually explicit or pornographic</li>
-                <li>Promotes violence, self-harm, or dangerous activities</li>
-            </ul>
-            <p><strong>Audio Lifecycle:</strong> Voice recordings in social posts and DMs have a 24-hour lifecycle. After 24 hours, audio is transcribed and the original audio file is permanently deleted. Transcripts are retained for content moderation.</p>
-        </section>
+        <h2>Voice Recordings</h2>
+        <p>Quick reminder: your voice posts and DMs get transcribed after 24 hours, then the audio is deleted forever. Only the text sticks around (for moderation and search).</p>
+        <p>This isn't a bug. It's the feature. Be present, not permanent.</p>
 
-        <section>
-            <h2>5. Content Moderation</h2>
-            <p><strong>Moderation Approach:</strong> We actively moderate content to maintain a safe and supportive community. However, we are not responsible for all user-generated content on the platform.</p>
-            <p><strong>Violation Review:</strong> Content policy violations are reviewed on a case-by-case basis by our moderation team. Consequences may include:</p>
-            <ul>
-                <li>Content removal</li>
-                <li>Warning notification</li>
-                <li>Temporary account suspension</li>
-                <li>Permanent account termination</li>
-            </ul>
-            <p><strong>Safe Harbor:</strong> While we moderate content in good faith, we operate under safe harbor provisions and are not liable for user-generated content. We reserve the right to remove any content at our discretion.</p>
-            <p><strong>Reporting:</strong> Users can report violations through in-app reporting tools. We review reports within 48 hours.</p>
-        </section>
+        <h2>Moderation</h2>
+        <p>We moderate content. We have to. But we're not watching everything in real time, so if you see something bad, report it.</p>
+        <p>If you break the rules:</p>
+        <ul>
+            <li>First offense: We might just remove the content and warn you</li>
+            <li>Repeat offenses: Temporary suspension</li>
+            <li>Serious stuff: Permanent ban, no appeals</li>
+        </ul>
+        <p>We make these calls ourselves. It's not a democracy. If you don't like it, there are other apps.</p>
 
-        <section>
-            <h2>6. Quests and Accountability</h2>
-            <p><strong>Quest Rules:</strong> Quests are personal accountability goals with specific rules:</p>
-            <ul>
-                <li>Minimum 30-day duration</li>
-                <li>Daily task check-ins required</li>
-                <li>Quest visibility (Public, Private, or Solo) can be set by the creator</li>
-                <li>Quests can be paused, archived, or deleted by the owner</li>
-                <li>Public quests can be joined by other users</li>
-            </ul>
-            <p><strong>No Guarantees:</strong> hüm is an accountability tool, not a guarantee of results. Your success depends on your own effort and commitment.</p>
-        </section>
+        <h2>Quests</h2>
+        <p>Quests are your personal goals. Minimum 30 days, daily check-ins.</p>
+        <p>You can make them public (anyone can join), private (invite only), or solo (just you).</p>
+        <p><strong>Important:</strong> We're a tool, not a miracle. Whether you hit your goals is entirely up to you. We're just here to help you stay accountable.</p>
 
-        <section>
-            <h2>7. Privacy and Data</h2>
-            <p>Your privacy is important to us. Please review our <a href="/privacy.html">Privacy Policy</a> to understand how we collect, use, and protect your data.</p>
-            <p>We use industry-standard security measures to protect your data, but cannot guarantee absolute security. You use the App at your own risk.</p>
-        </section>
+        <h2>Camera and Mic</h2>
+        <p>We need access to your camera and microphone. That's how a voice-first app works.</p>
+        <p>We <em>don't</em> access your photo gallery. Every photo on hum is taken in the moment. No digging through your camera roll for the perfect shot from 2019.</p>
 
-        <section>
-            <h2>8. Camera and Microphone Access</h2>
-            <p><strong>Required Permissions:</strong> hüm requires access to your device camera and microphone for core functionality (voice posts, voice DMs, profile pictures).</p>
-            <p><strong>No Gallery Access:</strong> hüm intentionally does not access your photo gallery. All content must be captured in-app using the device camera to ensure authenticity and prevent misuse.</p>
-        </section>
+        <h2>Money Stuff</h2>
+        <p>Right now, hum is free. We might add paid features later.</p>
+        <p>If we do:</p>
+        <ul>
+            <li>Prices will be clear before you buy anything</li>
+            <li>No refunds (unless the law says otherwise)</li>
+            <li>Cancel anytime through your phone's settings</li>
+            <li>If we raise prices, you get 30 days' notice</li>
+        </ul>
 
-        <section>
-            <h2>9. Paid Features and Subscriptions</h2>
-            <p><strong>Future Paid Features:</strong> hüm may introduce paid subscription tiers or features in the future. Pricing will be clearly displayed before purchase.</p>
-            <p><strong>No Refunds:</strong> All purchases are final. We do not offer refunds for subscriptions or one-time purchases except where required by law.</p>
-            <p><strong>Subscription Management:</strong> You can cancel subscriptions at any time through your device's subscription settings (App Store or Google Play). Cancellation takes effect at the end of the current billing period.</p>
-            <p><strong>Price Changes:</strong> We reserve the right to change pricing with 30 days' notice. Existing subscribers will be grandfathered at their current price for the remainder of their billing period.</p>
-        </section>
+        <h2>Deleting Your Account</h2>
+        <p><strong>You can delete anytime.</strong> Go to Settings, delete account. It's permanent. Your content disappears. We might keep some data for legal reasons, but your public presence is gone.</p>
+        <p><strong>We can also delete you</strong> if you:</p>
+        <ul>
+            <li>Break these terms</li>
+            <li>Do something illegal or abusive</li>
+            <li>Go inactive for over a year</li>
+            <li>Generally make the community worse</li>
+        </ul>
+        <p>If we ban you for violations, you don't get refunds on anything you paid for.</p>
 
-        <section>
-            <h2>10. Account Termination</h2>
-            <p><strong>By You:</strong> You may delete your account at any time through the Settings page. Account deletion is permanent and cannot be undone. All your content will be deleted except where required for legal compliance.</p>
-            <p><strong>By Us:</strong> We reserve the right to suspend or terminate your account at any time for:</p>
-            <ul>
-                <li>Violation of these Terms of Service</li>
-                <li>Fraudulent, abusive, or illegal activity</li>
-                <li>Prolonged inactivity (12+ months)</li>
-                <li>Any reason at our sole discretion</li>
-            </ul>
-            <p><strong>No Refunds on Termination:</strong> If your account is terminated for violations, you will not receive refunds for any paid subscriptions.</p>
-        </section>
+        <h2>Our Stuff</h2>
+        <p>hum's code, design, logos, and branding belong to us. Don't copy them, don't reverse-engineer the app, don't pretend to be us.</p>
+        <p>Your content is yours. We just have permission to display it on the platform.</p>
 
-        <section>
-            <h2>11. Intellectual Property</h2>
-            <p><strong>hüm IP:</strong> The hüm platform, including its design, code, logos, and branding, is owned by hüm and protected by intellectual property laws. You may not copy, modify, or reverse-engineer any part of the platform.</p>
-            <p><strong>User Content:</strong> You grant hüm a license to your content as described in Section 4, but you retain ownership of your original creations.</p>
-        </section>
+        <h2>The Boring Legal Bits</h2>
+        <p><strong>No warranties.</strong> hum is provided "as is." We do our best, but we can't promise:</p>
+        <ul>
+            <li>The app will always work perfectly</li>
+            <li>Every piece of content is accurate</li>
+            <li>You'll achieve your goals</li>
+        </ul>
+        <p><strong>Not professional advice.</strong> hum is not a substitute for doctors, therapists, lawyers, or financial advisors. If you need professional help, get professional help.</p>
+        <p><strong>Liability cap.</strong> If something goes wrong, our liability is limited to what you paid us in the last 12 months. If you haven't paid anything, it's capped at $100. Sorry, but lawyers made us say this.</p>
 
-        <section>
-            <h2>12. Disclaimers and Limitations</h2>
-            <p><strong>"AS IS" Service:</strong> hüm is provided "as is" without warranties of any kind, express or implied. We do not guarantee:</p>
-            <ul>
-                <li>Uninterrupted or error-free service</li>
-                <li>Accuracy or reliability of content</li>
-                <li>Fitness for a particular purpose</li>
-                <li>Achievement of personal goals</li>
-            </ul>
-            <p><strong>No Medical/Professional Advice:</strong> hüm is not a substitute for professional medical, mental health, therapeutic, or financial advice. Consult qualified professionals for health, legal, or financial concerns.</p>
-            <p><strong>Limitation of Liability:</strong> To the maximum extent permitted by law, hüm and its operators shall not be liable for:</p>
-            <ul>
-                <li>Any indirect, incidental, special, or consequential damages</li>
-                <li>Loss of profits, data, or business opportunities</li>
-                <li>Damages arising from user-generated content</li>
-                <li>Damages exceeding the amount paid to hüm in the past 12 months (or $100 if no payment made)</li>
-            </ul>
-        </section>
+        <h2>If We Disagree</h2>
+        <p>These terms are governed by Australian law. Any legal disputes happen in Australian courts.</p>
+        <p>For small stuff (under $10,000), let's try to work it out like adults before getting lawyers involved.</p>
 
-        <section>
-            <h2>13. Indemnification</h2>
-            <p>You agree to indemnify and hold harmless hüm, its operators, employees, and affiliates from any claims, damages, losses, or expenses (including legal fees) arising from:</p>
-            <ul>
-                <li>Your use of the platform</li>
-                <li>Your violation of these Terms</li>
-                <li>Your violation of any third-party rights</li>
-                <li>Content you post on the platform</li>
-            </ul>
-        </section>
+        <h2>Changes</h2>
+        <p>We might update these terms. If we make big changes, we'll tell you. If you keep using hum after that, you're agreeing to the new terms.</p>
 
-        <section>
-            <h2>14. Governing Law and Disputes</h2>
-            <p><strong>Governing Law:</strong> These Terms are governed by the laws of Australia, without regard to conflict of law principles.</p>
-            <p><strong>Jurisdiction:</strong> Any disputes arising from these Terms or your use of hüm shall be resolved in the courts of Australia.</p>
-            <p><strong>Arbitration:</strong> For disputes under $10,000, parties agree to attempt good-faith resolution through informal negotiation before pursuing legal action.</p>
-        </section>
-
-        <section>
-            <h2>15. Changes to Terms</h2>
-            <p>We may update these Terms of Service from time to time. Material changes will be communicated via in-app notification or email. Continued use of the App after changes constitutes acceptance of the updated terms.</p>
-            <p>The "Last updated" date at the top of this document indicates when these Terms were last revised.</p>
-        </section>
-
-        <section>
-            <h2>16. Severability</h2>
-            <p>If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions will remain in full force and effect.</p>
-        </section>
-
-        <section>
-            <h2>17. Contact</h2>
-            <p>If you have questions about these Terms of Service, please contact us:</p>
-            <p>Email: <a href="mailto:hello@hum-social.com">hello@hum-social.com</a></p>
-            <p>Address: hüm Platform, Australia</p>
-        </section>
+        <h2>Questions?</h2>
+        <p>Email us: <a href="mailto:hello@hum-social.com">hello@hum-social.com</a></p>
+        <p>We read everything. We reply to most things.</p>
 
         <div class="footer-note">
-            <p>By using hüm, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</p>
+            <a href="/">Back to hum</a> | <a href="/privacy.html">Privacy Policy</a>
         </div>
     </div>
 </body>
