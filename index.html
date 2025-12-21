@@ -1328,6 +1328,18 @@
                     }),
                 });
 
+                if (!response.ok) {
+                    const text = await response.text();
+                    console.error('Forgot PIN error:', response.status, text);
+                    try {
+                        const err = JSON.parse(text);
+                        loginError.textContent = err.error || 'Failed to send PIN.';
+                    } catch {
+                        loginError.textContent = 'Failed to send PIN. Please try again.';
+                    }
+                    return;
+                }
+
                 const result = await response.json();
 
                 if (result.error) {
@@ -1341,6 +1353,7 @@
                     }, 5000);
                 }
             } catch (err) {
+                console.error('Forgot PIN fetch error:', err);
                 loginError.textContent = 'Could not send PIN. Try again.';
             }
 
