@@ -702,15 +702,37 @@ async function sendForgotPinEmail(data: { email: string }) {
   }
 
   const user = users[0]
+  let pin = user.pin
 
-  if (!user.pin) {
-    return new Response(
-      JSON.stringify({ error: 'No PIN set for this account. Please contact support.' }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  // If user doesn't have a PIN (signed up before PIN feature), generate one
+  if (!pin) {
+    pin = String(Math.floor(1000 + Math.random() * 9000)) // 4-digit PIN
+
+    // Save the new PIN to database
+    const updateResponse = await fetch(
+      `${SUPABASE_URL}/rest/v1/waitlist?email=eq.${encodeURIComponent(email)}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPABASE_SERVICE_ROLE_KEY,
+          'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal',
+        },
+        body: JSON.stringify({ pin })
+      }
     )
+
+    if (!updateResponse.ok) {
+      return new Response(
+        JSON.stringify({ error: 'Failed to set PIN. Please try again.' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
   }
 
-  const subject = "Your hüm PIN"
+  const isNewPin = !user.pin
+  const subject = isNewPin ? "Your new hüm PIN" : "Your hüm PIN"
 
   const htmlContent = `
 <!DOCTYPE html>
@@ -725,10 +747,10 @@ async function sendForgotPinEmail(data: { email: string }) {
     ${emailHeader}
     <div class="content">
       <p class="greeting">Hey ${user.name},</p>
-      <p>You requested your PIN. Here it is:</p>
+      <p>${isNewPin ? "We've created a PIN for your account:" : "You requested your PIN. Here it is:"}</p>
 
       <div class="highlight-box" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%); border-color: rgba(255, 255, 255, 0.15); text-align: center;">
-        <p style="margin: 0; font-size: 48px; font-weight: 700; letter-spacing: 0.3em; color: #fff; font-family: 'SF Mono', Monaco, monospace;">${user.pin}</p>
+        <p style="margin: 0; font-size: 48px; font-weight: 700; letter-spacing: 0.3em; color: #fff; font-family: 'SF Mono', Monaco, monospace;">${pin}</p>
       </div>
 
       <p style="font-size: 14px; color: rgba(255, 255, 255, 0.5);">Use this to log in and check your referral stats.</p>
@@ -744,9 +766,9 @@ async function sendForgotPinEmail(data: { email: string }) {
 
   const plainTextContent = `Hey ${user.name},
 
-You requested your PIN. Here it is:
+${isNewPin ? "We've created a PIN for your account:" : "You requested your PIN. Here it is:"}
 
-${user.pin}
+${pin}
 
 Use this to log in and check your referral stats.
 
