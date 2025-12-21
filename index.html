@@ -552,7 +552,7 @@
                 <h3 class="principle-title">Quest System</h3>
                 <div class="principle-lines">
                     <p class="principle-line" data-line="1"><span class="line-label">The Problem</span>You scroll through other people's wins and wonder why you're not winning. Meanwhile, your own goals sit in a notes app, untouched.</p>
-                    <p class="principle-line" data-line="2"><span class="line-label">Our Choice</span>Every post ties to something you're doing. Learning guitar. Running a 5k. Reading more. Your feed becomes a journal of things you're proud of.</p>
+                    <p class="principle-line" data-line="2"><span class="line-label">Our Choice</span>Every post ties to something you're doing. Learning guitar. Running a 5k. Reading more. Your profile becomes a journal of things you're proud of.</p>
                     <p class="principle-line" data-line="3"><span class="line-label">Why It Works</span>Following someone's highlight reel isn't connection. Doing a 30-day challenge together is.</p>
                 </div>
             </div>
@@ -891,7 +891,7 @@
                             <li>30 second voice notes & videos</li>
                             <li>Supporter badge</li>
                         </ul>
-                        <a href="#" class="tier-cta" data-tier="coffee_month">Become a Supporter</a>
+                        <a href="https://buy.stripe.com/00wdR2eZ54eK5WH6az0x202" class="tier-cta" target="_blank" rel="noopener noreferrer">Become a Supporter</a>
                     </div>
                     <div class="tier tier-popular">
                         <h4>Coffee Weekly</h4>
@@ -905,7 +905,7 @@
                             <li>Priority support</li>
                             <li>Special supporter badge</li>
                         </ul>
-                        <a href="#" class="tier-cta" data-tier="coffee_week">Become a Supporter</a>
+                        <a href="https://donate.stripe.com/28EaEQg39dPketd0Qf0x201" class="tier-cta" target="_blank" rel="noopener noreferrer">Become a Supporter</a>
                     </div>
                     <div class="tier">
                         <h4>Coffee Daily</h4>
@@ -919,7 +919,7 @@
                             <li>Direct line to founders</li>
                             <li>Premium supporter badge</li>
                         </ul>
-                        <a href="#" class="tier-cta" data-tier="coffee_day">Become a Supporter</a>
+                        <a href="https://donate.stripe.com/bJedR28AH6mScl542r0x200" class="tier-cta" target="_blank" rel="noopener noreferrer">Become a Supporter</a>
                     </div>
                 </div>
                 <p class="support-contact">Questions? <a href="mailto:hello@hum-social.com">hello@hum-social.com</a></p>
@@ -944,32 +944,6 @@
     </footer>
 
     <script>
-        // =====================================================
-        // STRIPE PAYMENT LINKS - Paste your links here
-        // Create these at: https://dashboard.stripe.com/payment-links
-        // =====================================================
-        const STRIPE_PAYMENT_LINKS = {
-            coffee_month: 'https://buy.stripe.com/00wdR2eZ54eK5WH6az0x202',   // $5/mo
-            coffee_week: 'https://donate.stripe.com/28EaEQg39dPketd0Qf0x201', // $20/mo
-            coffee_day: 'https://donate.stripe.com/bJedR28AH6mScl542r0x200'   // $150/mo
-        };
-
-        // Wire up tier buttons to Stripe Payment Links
-        document.querySelectorAll('.tier-cta').forEach(btn => {
-            const tier = btn.dataset.tier;
-            if (STRIPE_PAYMENT_LINKS[tier]) {
-                btn.href = STRIPE_PAYMENT_LINKS[tier];
-                btn.target = '_blank';
-                btn.rel = 'noopener noreferrer';
-            } else {
-                // No payment link configured yet - show coming soon
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    alert('Payment coming soon! Join the waitlist above to get notified.');
-                });
-            }
-        });
-
         // Theme toggle
         const themeToggle = document.getElementById('theme-toggle');
         const html = document.documentElement;
