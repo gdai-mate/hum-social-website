@@ -2552,6 +2552,10 @@ button, a, input, textarea, select {
     max-width: 800px;
     margin: 0 auto 4rem;
     line-height: 1.8;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    hyphens: none;
+    -webkit-hyphens: none;
 }
 
 .solution-intro strong {
@@ -2615,6 +2619,13 @@ button, a, input, textarea, select {
     justify-content: flex-start;
     opacity: 0;
     z-index: 1;
+}
+
+.card-back p {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    hyphens: none;
+    -webkit-hyphens: none;
 }
 
 /* THE FLIP - Simple opacity swap that works everywhere */
