@@ -1181,6 +1181,9 @@
         const SUPABASE_URL = 'https://mclksiyohsfwhquhhxcb.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jbGtzaXlvaHNmd2hxdWhoeGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5OTk0NzAsImV4cCI6MjA4MTU3NTQ3MH0.tsMWJGUJUO1hwxMo3eBrletfFuHOGCNybTtHVG5wsVw';
 
+        // Initialize Supabase client (global for login and waitlist)
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         // =====================================================
         // LOGIN OVERLAY FUNCTIONALITY
         // =====================================================
@@ -2264,8 +2267,7 @@
         // ============================================
         (function initWaitlist() {
             try {
-                // Uses global SUPABASE_URL and SUPABASE_ANON_KEY
-                const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                // Uses global supabaseClient
 
                 // Get referral code from URL if present
                 const urlParams = new URLSearchParams(window.location.search);
@@ -3058,9 +3060,9 @@
                 if (!openingPanel) return;
                 const lines = openingPanel.querySelectorAll('[data-line]');
 
-                // Fade in words one by one (0.2s = 200ms apart, subtext 0.8s after last word)
+                // Fade in words one by one (0.2s = 200ms apart, subtext 0.4s after last word)
                 lines.forEach((line, i) => {
-                    const delay = i < 4 ? i * 200 : (4 * 200) + 800;
+                    const delay = i < 4 ? i * 200 : (4 * 200) + 400;
                     setTimeout(() => {
                         line.classList.add('visible');
                     }, delay);
