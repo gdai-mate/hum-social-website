@@ -1027,7 +1027,9 @@
                     // If they have a profile pic, show it
                     if (data.profile_pic) {
                         const avatarEl = document.getElementById('referrer-avatar');
-                        avatarEl.innerHTML = `<img src="${data.profile_pic}" alt="${data.name}">`;
+                        const svgFallback = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>`;
+                        avatarEl.innerHTML = `<img src="${data.profile_pic}" alt="${data.name}" onerror="this.style.display='none';this.parentElement.innerHTML='${svgFallback}'">`;
+                        console.log('Loaded referrer profile pic:', data.profile_pic);
                     }
                 }
             } catch (err) {
@@ -2792,6 +2794,7 @@
                         .getPublicUrl(fileName);
 
                     const publicUrl = urlData.publicUrl;
+                    console.log('Generated public URL:', publicUrl);
 
                     // Update user's profile_pic in database
                     const { error: updateError } = await supabaseClient
@@ -2800,6 +2803,13 @@
                         .eq('email', userEmail);
 
                     if (updateError) throw updateError;
+
+                    console.log('Profile pic saved to database:', publicUrl);
+
+                    // Update preview with actual uploaded URL
+                    preview.src = publicUrl;
+                    preview.style.display = 'block';
+                    if (avatarSvg) avatarSvg.style.display = 'none';
 
                     uploadText.textContent = 'Change Photo';
                     statusEl.textContent = 'Photo saved!';
@@ -3013,13 +3023,19 @@
 
         async function loadLeaderboard() {
             try {
+                console.log('Loading leaderboard...');
                 const { data, error } = await supabaseClient
                     .from('waitlist')
                     .select('name, email, why, referral_count, previous_rank, created_at, profile_pic')
                     .order('referral_count', { ascending: false })
                     .limit(500);
 
-                if (error) throw error;
+                if (error) {
+                    console.error('Leaderboard query error:', error);
+                    throw error;
+                }
+
+                console.log('Leaderboard data loaded:', data?.length, 'entries');
 
                 if (!data || data.length === 0) {
                     leaderboardEl.innerHTML = '<div class="leaderboard-empty">Be the first to share the movement!</div>';
@@ -3062,9 +3078,10 @@
                     const currentRank = entry.originalIndex + 1;
                     const isCurrentUser = currentUserEmail && entry.email === currentUserEmail;
                     const movement = getMovementIndicator(currentRank, entry.previous_rank, entry.created_at);
+                    const svgFallback = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>`;
                     const avatarHtml = entry.profile_pic
-                        ? `<img src="${entry.profile_pic}" alt="${escapeHtml(entry.name)}">`
-                        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>`;
+                        ? `<img src="${entry.profile_pic}" alt="${escapeHtml(entry.name)}" onerror="this.style.display='none';this.parentElement.innerHTML='${svgFallback}'">`
+                        : svgFallback;
 
                     return `
                     <div class="leaderboard-entry ${entry.originalIndex < 3 ? 'top-3' : ''} ${isCurrentUser ? 'current-user' : ''}">
