@@ -408,6 +408,24 @@ a, button, .diff-card, .clickable, [onclick] {
     opacity: 1;
 }
 
+/* Neon flicker animation for "You already know this" */
+@keyframes neonFlicker {
+    0% { opacity: 0; }
+    5% { opacity: 0.5; }
+    10% { opacity: 0; }
+    20% { opacity: 0.6; }
+    25% { opacity: 0; }
+    40% { opacity: 0.8; }
+    45% { opacity: 0.2; }
+    55% { opacity: 0; }
+    70% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+.panel-opening .hero-subtext.visible {
+    animation: neonFlicker 1s ease-out forwards;
+}
+
 /* Other panels - lines start dim, light up on scroll */
 .panel-feelings [data-line],
 .panel-system [data-line],
@@ -1752,6 +1770,88 @@ button, a, input, textarea, select {
 
 .btn-secondary:hover {
     border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* User Menu (when logged in) */
+.user-menu {
+    position: relative;
+}
+
+.user-menu-btn {
+    padding: 0.625rem 1rem;
+    background: transparent;
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.user-menu-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.user-menu-btn svg {
+    transition: transform 0.2s;
+}
+
+.user-menu.open .user-menu-btn svg {
+    transform: rotate(180deg);
+}
+
+.user-menu-dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s;
+    z-index: 1000;
+}
+
+.user-menu.open .user-menu-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.user-menu-email {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.user-menu-logout {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+}
+
+.user-menu-logout:hover {
+    background: var(--border);
     color: var(--accent);
 }
 

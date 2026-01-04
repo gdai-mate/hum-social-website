@@ -199,6 +199,20 @@
 
                 <button id="login-btn" class="btn-secondary">Login</button>
 
+                <!-- User Menu (shown when logged in) -->
+                <div id="user-menu" class="user-menu" style="display: none;">
+                    <button id="user-menu-btn" class="user-menu-btn">
+                        <span id="user-menu-name">User</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div id="user-menu-dropdown" class="user-menu-dropdown">
+                        <div class="user-menu-email" id="user-menu-email"></div>
+                        <button id="logout-btn" class="user-menu-logout">Log out</button>
+                    </div>
+                </div>
+
                 <!-- Theme Toggle -->
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                     <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1272,8 +1286,13 @@
                 }
 
                 // Success! Save to localStorage and show success state
-                const user = { email, referral_code: data.referral_code };
+                const user = { email, referral_code: data.referral_code, name: data.name };
                 localStorage.setItem('hum_waitlist_user', JSON.stringify(user));
+
+                // Update nav UI to show user menu
+                if (typeof window.updateLoginUI === 'function') {
+                    window.updateLoginUI(user);
+                }
 
                 closeLogin();
 
@@ -1357,6 +1376,75 @@
             loginForgot.disabled = false;
             loginForgot.textContent = 'Forgot PIN? Resend it';
         });
+
+        // =====================================================
+        // USER MENU FUNCTIONALITY
+        // =====================================================
+        const userMenu = document.getElementById('user-menu');
+        const userMenuBtn = document.getElementById('user-menu-btn');
+        const userMenuName = document.getElementById('user-menu-name');
+        const userMenuEmail = document.getElementById('user-menu-email');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // Toggle dropdown
+        userMenuBtn.addEventListener('click', () => {
+            userMenu.classList.toggle('open');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!userMenu.contains(e.target)) {
+                userMenu.classList.remove('open');
+            }
+        });
+
+        // Handle logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('hum_waitlist_user');
+            loginBtn.style.display = 'block';
+            userMenu.style.display = 'none';
+            userMenu.classList.remove('open');
+
+            // Reset waitlist section to form state
+            const formContainer = document.getElementById('waitlist-form-container');
+            const successContainer = document.getElementById('waitlist-success');
+            if (formContainer && successContainer) {
+                formContainer.style.display = 'block';
+                successContainer.style.display = 'none';
+            }
+        });
+
+        // Update UI based on login state
+        function updateLoginUI(user) {
+            if (user && user.email) {
+                loginBtn.style.display = 'none';
+                userMenu.style.display = 'block';
+
+                // Show name or email
+                const displayName = user.name || user.email.split('@')[0];
+                userMenuName.textContent = displayName;
+                userMenuEmail.textContent = user.email;
+            } else {
+                loginBtn.style.display = 'block';
+                userMenu.style.display = 'none';
+            }
+        }
+
+        // Check login state on page load
+        (function checkLoginState() {
+            const user = localStorage.getItem('hum_waitlist_user');
+            if (user) {
+                try {
+                    const userData = JSON.parse(user);
+                    updateLoginUI(userData);
+                } catch (err) {
+                    console.error('Error parsing user data:', err);
+                }
+            }
+        })();
+
+        // Make updateLoginUI globally accessible so login success can call it
+        window.updateLoginUI = updateLoginUI;
 
         // Function to mark journey as complete (called after cloud transition)
         window.markJourneyComplete = function() {
