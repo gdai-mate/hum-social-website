@@ -1,8 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
-const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY')!
-const SENDGRID_FROM_EMAIL = Deno.env.get('SENDGRID_FROM_EMAIL') || 'hello@hum-social.com'
-const SENDGRID_FROM_NAME = Deno.env.get('SENDGRID_FROM_NAME') || 'hüm'
+const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!
+const FROM_EMAIL = Deno.env.get('FROM_EMAIL') || 'hello@hum-social.com'
+const FROM_NAME = Deno.env.get('FROM_NAME') || 'hüm'
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
@@ -787,28 +787,26 @@ hüm — social media that makes you better, not bitter`
 }
 
 // ============================================
-// SEND EMAIL VIA SENDGRID
+// SEND EMAIL VIA RESEND
 // ============================================
 async function sendEmail(to: string, subject: string, htmlContent: string, plainTextContent: string) {
-  const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+  const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${SENDGRID_API_KEY}`,
+      'Authorization': `Bearer ${RESEND_API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      personalizations: [{ to: [{ email: to }] }],
-      from: { email: SENDGRID_FROM_EMAIL, name: SENDGRID_FROM_NAME },
+      from: `${FROM_NAME} <${FROM_EMAIL}>`,
+      to: [to],
       subject,
-      content: [
-        { type: 'text/plain', value: plainTextContent },
-        { type: 'text/html', value: htmlContent },
-      ],
+      html: htmlContent,
+      text: plainTextContent,
     }),
   })
 
   if (!response.ok) {
     const error = await response.text()
-    throw new Error(`SendGrid error: ${response.status} - ${error}`)
+    throw new Error(`Resend error: ${response.status} - ${error}`)
   }
 }
