@@ -282,7 +282,7 @@
                 <h1 class="referral-headline">
                     <span id="referrer-name-hero">Someone</span> invited you
                 </h1>
-                <p class="referral-subtext">to join the movement</p>
+                <p class="referral-subtext">to share the movement</p>
 
                 <div class="referral-community-count">
                     <span id="referral-community-number">--</span> people waiting for launch
@@ -670,7 +670,7 @@
     <section class="waitlist-section" id="waitlist">
         <div class="container">
             <div class="waitlist-content">
-                <h2>Join the Movement</h2>
+                <h2>Share the Movement</h2>
                 <p class="waitlist-intro">Top 100 referrers get first access when we launch. Share your link, climb the leaderboard.</p>
 
                 <!-- Live Signup Counter (hidden until after signup) -->
@@ -681,7 +681,7 @@
 
                 <!-- Referrer Banner (shown when arriving via referral link) -->
                 <div id="referrer-banner" class="referrer-banner" style="display: none;">
-                    <span id="referrer-name"></span> invited you to join the movement
+                    <span id="referrer-name"></span> invited you to share the movement
                 </div>
 
                 <!-- Waitlist Form -->
@@ -1295,6 +1295,16 @@
                 }
 
                 closeLogin();
+
+                // Skip hero journey and go straight to QR code section
+                document.documentElement.classList.add('journey-complete');
+                document.body.classList.add('journey-complete');
+                document.documentElement.setAttribute('data-theme', 'light');
+                const clouds = document.getElementById('cloud-transition');
+                if (clouds) clouds.classList.add('clouds-hidden');
+                if (typeof window.markJourneyComplete === 'function') {
+                    window.markJourneyComplete();
+                }
 
                 // Scroll to waitlist section and show success state
                 const waitlistSection = document.getElementById('waitlist');
@@ -3012,7 +3022,7 @@
                 if (error) throw error;
 
                 if (!data || data.length === 0) {
-                    leaderboardEl.innerHTML = '<div class="leaderboard-empty">Be the first to join the movement!</div>';
+                    leaderboardEl.innerHTML = '<div class="leaderboard-empty">Be the first to share the movement!</div>';
                     return;
                 }
 
