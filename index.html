@@ -1284,10 +1284,10 @@
                 }
 
                 // Trigger success state display
-                if (typeof showSuccessState === 'function') {
-                    showSuccessState(user);
-                    if (typeof loadLeaderboard === 'function') {
-                        loadLeaderboard();
+                if (typeof window.showSuccessState === 'function') {
+                    window.showSuccessState(user);
+                    if (typeof window.loadLeaderboard === 'function') {
+                        window.loadLeaderboard();
                     }
                 }
 
@@ -3026,6 +3026,10 @@
 
         // Auto-refresh leaderboard every 30 seconds
         setInterval(loadLeaderboard, 30000);
+
+                // Make functions globally accessible for login handler
+                window.showSuccessState = showSuccessState;
+                window.loadLeaderboard = loadLeaderboard;
 
             } catch (err) {
                 console.error('Waitlist initialization error:', err);
