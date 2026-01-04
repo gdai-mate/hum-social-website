@@ -371,12 +371,12 @@ async function sendFirstReferralEmail(data: { email: string, name: string, refer
   const spotsAway = rank - 100
 
   const rankMessage = inTop100
-    ? `<p style="color: #4CAF50; font-weight: 500;">You're in the top 100! Keep your spot by sharing more.</p>`
-    : `<p>You're <strong style="color: #d2916f;">${spotsAway} spots</strong> away from Day 1 access. Keep sharing!</p>`
+    ? `<p style="color: #4CAF50; font-weight: 500;">You're in the top 100. Nice.</p>`
+    : `<p><strong style="color: #d2916f;">${spotsAway} spots</strong> from the top 100.</p>`
 
   const rankMessagePlain = inTop100
-    ? `You're in the top 100! Keep your spot by sharing more.`
-    : `You're ${spotsAway} spots away from Day 1 access. Keep sharing!`
+    ? `You're in the top 100. Nice.`
+    : `${spotsAway} spots from the top 100.`
 
   const rankCardClass = inTop100 ? 'rank-card success' : 'rank-card'
 
@@ -404,7 +404,7 @@ async function sendFirstReferralEmail(data: { email: string, name: string, refer
       ${rankMessage}
 
       <div class="referral-section">
-        <p class="referral-label">Keep sharing your link</p>
+        <p class="referral-label">Your link</p>
         <div class="referral-box">
           <span class="referral-link">${referralLink}</span>
         </div>
@@ -412,7 +412,7 @@ async function sendFirstReferralEmail(data: { email: string, name: string, refer
 
       <a href="${SITE_URL}#leaderboard" class="cta-button" style="display: block; text-align: center;">View Leaderboard</a>
 
-      <p class="signature">Keep climbing,<br><strong style="color: #d2916f;">the hüm team</strong></p>
+      <p class="signature">See you soon,<br><strong style="color: #d2916f;">the hüm team</strong></p>
     </div>
     ${emailFooter}
   </div>
@@ -427,10 +427,10 @@ You're #${rank} on the leaderboard.
 
 ${rankMessagePlain}
 
-Your link (keep sharing):
+Your link:
 ${referralLink}
 
-Keep climbing,
+See you soon,
 the hüm team
 
 ---
