@@ -7,7 +7,7 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
 // Brand assets - hosted logo for email clients
-const LOGO_URL = 'https://hum-social.com/assets/logos/hum-logo-dark.svg'
+const LOGO_URL = 'https://hum-social.com/assets/logos/hum-logo-light.svg' // Light logo for dark email background
 const SITE_URL = 'https://hum-social.com'
 
 const corsHeaders = {
@@ -30,10 +30,10 @@ interface WaitlistEntry {
 // SHARED EMAIL STYLES - Premium Brand Design
 // ============================================
 const emailStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
 
   body {
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: #1a1a1a;
     background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
@@ -54,17 +54,20 @@ const emailStyles = `
     background: linear-gradient(180deg, rgba(210, 145, 111, 0.08) 0%, transparent 100%);
   }
   .logo-img {
-    height: 48px;
+    height: 56px;
     width: auto;
+    display: block;
+    margin: 0 auto;
   }
   .logo-text {
-    font-size: 42px;
-    font-weight: 300;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px;
+    font-weight: 600;
     background: linear-gradient(135deg, #fff 0%, #f5f0e8 50%, #d2916f 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    letter-spacing: 4px;
+    letter-spacing: 2px;
     margin: 0;
   }
   .tagline {
@@ -212,15 +215,15 @@ const emailStyles = `
 // Email header with logo
 const emailHeader = `
   <div class="header">
-    <h1 class="logo-text">hüm</h1>
-    <p class="tagline">voice-first social</p>
+    <img src="${LOGO_URL}" alt="hüm" class="logo-img">
+    <p class="tagline">human-first social</p>
   </div>
 `
 
 // Email footer
 const emailFooter = `
   <div class="footer">
-    <p>hüm — social media that makes you better, not bitter</p>
+    <p>hüm — social media for humans</p>
   </div>
 `
 
@@ -267,14 +270,14 @@ async function sendWelcomeEmail(data: { email: string, name: string, referral_co
   const { email, name, referral_code, pin } = data
   const referralLink = `${SITE_URL}?ref=${referral_code}`
 
-  const subject = "You're in. Welcome to the movement."
+  const subject = "You're in."
 
   // PIN section only shown if PIN is provided
   const pinSection = pin ? `
       <div class="highlight-box" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%); border-color: rgba(255, 255, 255, 0.15);">
-        <p style="margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255, 255, 255, 0.5);">Your login PIN</p>
+        <p style="margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255, 255, 255, 0.5);">Your PIN</p>
         <p style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 0.3em; color: #fff; font-family: 'SF Mono', Monaco, monospace;">${pin}</p>
-        <p style="margin: 8px 0 0 0; font-size: 13px; color: rgba(255, 255, 255, 0.5);">Save this — you'll need it to check your stats</p>
+        <p style="margin: 8px 0 0 0; font-size: 13px; color: rgba(255, 255, 255, 0.5);">Save this. You'll need it to log in.</p>
       </div>
   ` : ''
 
@@ -345,7 +348,7 @@ See you on the other side,
 the hüm team
 
 ---
-hüm — social media that makes you better, not bitter`
+hüm — social media for humans`
 
   await sendEmail(email, subject, htmlContent, plainTextContent)
 
@@ -431,7 +434,7 @@ Keep climbing,
 the hüm team
 
 ---
-hüm — social media that makes you better, not bitter`
+hüm — social media for humans`
 
   await sendEmail(email, subject, htmlContent, plainTextContent)
 
@@ -603,7 +606,7 @@ Don't give up,
 the hüm team
 
 ---
-hüm — social media that makes you better, not bitter`
+hüm — social media for humans`
 
   await sendEmail(entry.email, subject, htmlContent, plainTextContent)
 }
@@ -670,7 +673,7 @@ Keep climbing,
 the hüm team
 
 ---
-hüm — social media that makes you better, not bitter`
+hüm — social media for humans`
 
   await sendEmail(entry.email, subject, htmlContent, plainTextContent)
 }
@@ -776,7 +779,7 @@ See you soon,
 the hüm team
 
 ---
-hüm — social media that makes you better, not bitter`
+hüm — social media for humans`
 
   await sendEmail(email, subject, htmlContent, plainTextContent)
 
