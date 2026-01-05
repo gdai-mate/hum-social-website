@@ -209,6 +209,7 @@
                     </button>
                     <div id="user-menu-dropdown" class="user-menu-dropdown">
                         <div class="user-menu-email" id="user-menu-email"></div>
+                        <a href="/invite.html" class="user-menu-item">My Invites</a>
                         <button id="logout-btn" class="user-menu-logout">Log out</button>
                     </div>
                 </div>
@@ -1298,40 +1299,12 @@
                     return;
                 }
 
-                // Success! Save to localStorage and show success state
+                // Success! Save to localStorage and redirect to invite page
                 const user = { email, referral_code: data.referral_code, name: data.name };
                 localStorage.setItem('hum_waitlist_user', JSON.stringify(user));
 
-                // Update nav UI to show user menu
-                if (typeof window.updateLoginUI === 'function') {
-                    window.updateLoginUI(user);
-                }
-
-                closeLogin();
-
-                // Skip hero journey and go straight to QR code section
-                document.documentElement.classList.add('journey-complete');
-                document.body.classList.add('journey-complete');
-                document.documentElement.setAttribute('data-theme', 'light');
-                const clouds = document.getElementById('cloud-transition');
-                if (clouds) clouds.classList.add('clouds-hidden');
-                if (typeof window.markJourneyComplete === 'function') {
-                    window.markJourneyComplete();
-                }
-
-                // Scroll to waitlist section and show success state
-                const waitlistSection = document.getElementById('waitlist');
-                if (waitlistSection) {
-                    waitlistSection.scrollIntoView({ behavior: 'smooth' });
-                }
-
-                // Trigger success state display
-                if (typeof window.showSuccessState === 'function') {
-                    window.showSuccessState(user);
-                    if (typeof window.loadLeaderboard === 'function') {
-                        window.loadLeaderboard();
-                    }
-                }
+                // Redirect to invite page
+                window.location.href = '/invite.html';
 
             } catch (err) {
                 console.error('Login error:', err);

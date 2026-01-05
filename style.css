@@ -1836,6 +1836,24 @@ button, a, input, textarea, select {
     border-bottom: 1px solid var(--border);
 }
 
+.user-menu-item {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+}
+
+.user-menu-item:hover {
+    background: var(--border);
+    color: var(--accent);
+}
+
 .user-menu-logout {
     width: 100%;
     padding: 0.75rem 1rem;
@@ -1853,6 +1871,21 @@ button, a, input, textarea, select {
 .user-menu-logout:hover {
     background: var(--border);
     color: var(--accent);
+}
+
+/* Invite Page */
+.invite-page {
+    min-height: 100vh;
+    background: var(--background);
+}
+
+.invite-main {
+    padding: 6rem 0 4rem;
+}
+
+.invite-content {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 /* Login Overlay */
