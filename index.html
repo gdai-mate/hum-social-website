@@ -2797,14 +2797,26 @@
                     console.log('Generated public URL:', publicUrl);
 
                     // Update user's profile_pic in database
-                    const { error: updateError } = await supabaseClient
+                    console.log('Attempting to update database for email:', userEmail);
+                    const { data: updateData, error: updateError } = await supabaseClient
                         .from('waitlist')
                         .update({ profile_pic: publicUrl })
-                        .eq('email', userEmail);
+                        .eq('email', userEmail)
+                        .select();
 
-                    if (updateError) throw updateError;
+                    console.log('Update response:', { data: updateData, error: updateError });
 
-                    console.log('Profile pic saved to database:', publicUrl);
+                    if (updateError) {
+                        console.error('Database update error:', updateError);
+                        throw updateError;
+                    }
+
+                    if (!updateData || updateData.length === 0) {
+                        console.error('Update succeeded but no rows affected. User email may not exist:', userEmail);
+                        throw new Error('Could not update profile pic - user not found');
+                    }
+
+                    console.log('Profile pic saved to database:', publicUrl, 'Updated rows:', updateData.length);
 
                     // Update preview with actual uploaded URL
                     preview.src = publicUrl;
