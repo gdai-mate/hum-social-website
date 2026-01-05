@@ -3036,6 +3036,11 @@
                 }
 
                 console.log('Leaderboard data loaded:', data?.length, 'entries');
+                console.log('Leaderboard entries:', data?.map(e => ({
+                    name: e.name,
+                    profile_pic: e.profile_pic,
+                    has_pic: !!e.profile_pic
+                })));
 
                 if (!data || data.length === 0) {
                     leaderboardEl.innerHTML = '<div class="leaderboard-empty">Be the first to share the movement!</div>';
@@ -3082,6 +3087,13 @@
                     const avatarHtml = entry.profile_pic
                         ? `<img src="${entry.profile_pic}" alt="${escapeHtml(entry.name)}" onerror="this.style.display='none';this.parentElement.innerHTML='${svgFallback}'">`
                         : svgFallback;
+
+                    if (entry.profile_pic) {
+                        console.log(`Avatar for ${entry.name}:`, {
+                            url: entry.profile_pic,
+                            html: avatarHtml.substring(0, 100)
+                        });
+                    }
 
                     return `
                     <div class="leaderboard-entry ${entry.originalIndex < 3 ? 'top-3' : ''} ${isCurrentUser ? 'current-user' : ''}">
