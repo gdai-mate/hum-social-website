@@ -24,6 +24,21 @@
             </a>
 
             <div class="nav-right">
+                <!-- User Menu -->
+                <div id="user-menu" class="user-menu">
+                    <button id="user-menu-btn" class="user-menu-btn">
+                        <span id="user-menu-name">User</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div id="user-menu-dropdown" class="user-menu-dropdown">
+                        <div class="user-menu-email" id="user-menu-email"></div>
+                        <a href="/" class="user-menu-item">Back to Home</a>
+                        <button id="logout-btn" class="user-menu-logout">Log out</button>
+                    </div>
+                </div>
+
                 <!-- Theme Toggle -->
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                     <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -41,21 +56,6 @@
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                     </svg>
                 </button>
-
-                <!-- User Menu -->
-                <div id="user-menu" class="user-menu">
-                    <button id="user-menu-btn" class="user-menu-btn">
-                        <span id="user-menu-name">User</span>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <div id="user-menu-dropdown" class="user-menu-dropdown">
-                        <div class="user-menu-email" id="user-menu-email"></div>
-                        <a href="/" class="user-menu-item">Back to Home</a>
-                        <button id="logout-btn" class="user-menu-logout">Log out</button>
-                    </div>
-                </div>
             </div>
         </div>
     </nav>
@@ -364,7 +364,7 @@
                     text: referralLink,
                     width: 180,
                     height: 180,
-                    colorDark: '#D2916F', // hüm accent color
+                    colorDark: '#2C2418', // charcoal
                     colorLight: '#FFFFFF',
                     correctLevel: QRCode.CorrectLevel.H
                 });
@@ -393,7 +393,7 @@
                 text: referralLink,
                 width: 240,
                 height: 240,
-                colorDark: '#D2916F', // hüm accent color
+                colorDark: '#2C2418', // charcoal
                 colorLight: '#FFFFFF',
                 correctLevel: QRCode.CorrectLevel.H
             });

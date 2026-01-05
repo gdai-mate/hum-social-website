@@ -1708,6 +1708,18 @@ button, a, input, textarea, select {
     gap: 1.5rem;
 }
 
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 #login-btn {
     margin-left: auto;
 }
@@ -1987,7 +1999,25 @@ button, a, input, textarea, select {
 #qr-code {
     padding: 1rem;
     background: white;
-    border-radius: 1rem;
+    border-radius: 1.25rem;
+    overflow: hidden;
+}
+
+#qr-code img {
+    border-radius: 0.5rem;
+    display: block;
+}
+
+#qr-code-fullscreen {
+    padding: 1.25rem;
+    background: white;
+    border-radius: 1.5rem;
+    overflow: hidden;
+}
+
+#qr-code-fullscreen img {
+    border-radius: 0.75rem;
+    display: block;
 }
 
 .qr-card-footer {
