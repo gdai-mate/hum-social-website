@@ -1039,8 +1039,7 @@
                     // If they have a profile pic, show it
                     if (data.profile_pic) {
                         const avatarEl = document.getElementById('referrer-avatar');
-                        const svgFallback = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>`;
-                        avatarEl.innerHTML = `<img src="${data.profile_pic}" alt="${data.name}" onerror="this.style.display='none';this.parentElement.innerHTML='${svgFallback}'">`;
+                        avatarEl.innerHTML = `<img src="${data.profile_pic}" alt="${data.name}">`;
                         console.log('Loaded referrer profile pic:', data.profile_pic);
                     }
                 }
@@ -3125,16 +3124,13 @@
                     const currentRank = entry.originalIndex + 1;
                     const isCurrentUser = currentUserEmail && entry.email === currentUserEmail;
                     const movement = getMovementIndicator(currentRank, entry.previous_rank, entry.created_at);
-                    const svgFallback = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>`;
-                    const avatarHtml = entry.profile_pic
-                        ? `<img src="${entry.profile_pic}" alt="${escapeHtml(entry.name)}" onerror="this.style.display='none';this.parentElement.innerHTML='${svgFallback}'">`
-                        : svgFallback;
 
+                    let avatarHtml;
                     if (entry.profile_pic) {
-                        console.log(`Avatar for ${entry.name}:`, {
-                            url: entry.profile_pic,
-                            html: avatarHtml.substring(0, 100)
-                        });
+                        avatarHtml = `<img src="${entry.profile_pic}" alt="${escapeHtml(entry.name)}">`;
+                        console.log(`Avatar for ${entry.name}: ${entry.profile_pic}`);
+                    } else {
+                        avatarHtml = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>`;
                     }
 
                     return `
