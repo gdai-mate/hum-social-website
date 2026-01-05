@@ -24,6 +24,24 @@
             </a>
 
             <div class="nav-right">
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+
                 <!-- User Menu -->
                 <div id="user-menu" class="user-menu">
                     <button id="user-menu-btn" class="user-menu-btn">
@@ -46,39 +64,24 @@
     <main class="invite-main">
         <div class="container">
             <div class="invite-content">
-                <!-- Hero: Status Badge -->
-                <div class="success-hero">
-                    <div class="success-badge">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20">
-                            <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                        You're on the list
-                    </div>
-                    <p class="success-rank">Rank <strong id="user-rank">#--</strong></p>
-                </div>
 
-                <!-- Profile Pic Upload -->
-                <div class="profile-upload-section">
-                    <div class="profile-upload-avatar" id="profile-upload-avatar">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="8" r="4"/>
-                            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
-                        </svg>
-                        <img id="profile-preview" src="" alt="" style="display: none;">
+                <!-- Subtle Stats at Top -->
+                <div class="invite-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Your Rank</span>
+                        <span class="stat-value" id="user-rank">#--</span>
                     </div>
-                    <div class="profile-upload-content">
-                        <p class="profile-upload-label">Add a profile photo</p>
-                        <p class="profile-upload-hint">This shows when you invite friends</p>
-                        <label class="profile-upload-btn">
-                            <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
-                            <span id="profile-upload-text">Choose Photo</span>
-                        </label>
-                        <p id="profile-upload-status" class="profile-upload-status"></p>
+                    <div class="stat-item">
+                        <span class="stat-label">Total Waiting</span>
+                        <span class="stat-value" id="total-signups-stat">--</span>
                     </div>
                 </div>
 
-                <!-- QR Card -->
+                <!-- HERO: The Shareable QR Card -->
                 <div class="qr-card-section">
+                    <h1 class="invite-heading">Your Invite Card</h1>
+                    <p class="invite-subheading">Share this to invite friends</p>
+
                     <div class="qr-card" id="qr-card" onclick="openQRFullscreen()">
                         <div class="qr-card-header">
                             <img src="assets/logos/hum-logo-dark.svg" alt="hüm" class="qr-card-logo-img">
@@ -87,16 +90,79 @@
                         <div class="qr-code-container">
                             <div id="qr-code"></div>
                         </div>
-                        <div class="qr-card-avatar" id="qr-card-avatar">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <circle cx="12" cy="8" r="4"/>
-                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
-                            </svg>
+                        <div class="qr-card-footer">
+                            <div class="qr-card-avatar-inline" id="qr-card-avatar">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="12" cy="8" r="4"/>
+                                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                                </svg>
+                            </div>
+                            <p class="qr-card-name" id="qr-card-name">Someone</p>
+                            <p class="qr-card-invite">invited you</p>
                         </div>
-                        <p class="qr-card-name" id="qr-card-name"></p>
-                        <p class="qr-card-invite">invited you</p>
                     </div>
-                    <p class="qr-hint">Tap card to enlarge for screenshot</p>
+                    <p class="qr-hint">Tap to enlarge • Perfect for screenshots</p>
+                </div>
+
+                <!-- Personalization Controls -->
+                <div class="personalization-section">
+                    <div class="personalization-card">
+                        <div class="profile-upload-compact">
+                            <div class="profile-upload-avatar-small" id="profile-upload-avatar">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="12" cy="8" r="4"/>
+                                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                                </svg>
+                                <img id="profile-preview" src="" alt="" style="display: none;">
+                            </div>
+                            <div>
+                                <label class="profile-upload-btn-compact">
+                                    <input type="file" id="profile-pic-input" accept="image/*" style="display: none;">
+                                    <span id="profile-upload-text">Add profile photo</span>
+                                </label>
+                                <p id="profile-upload-status" class="profile-upload-status"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="personalization-card">
+                        <label for="user-why-input" class="personalization-label">Why you want to join</label>
+                        <textarea id="user-why-input" class="personalization-textarea" maxlength="80" placeholder="I want to build better habits..."></textarea>
+                        <p class="personalization-hint"><span id="why-char-count">0</span>/80 characters</p>
+                    </div>
+                </div>
+
+                <!--Share Actions (Subtle) -->
+                <div class="share-actions">
+                    <div class="share-link-box-new">
+                        <input type="text" id="referral-link" readonly>
+                        <button id="copy-link" class="copy-btn-new" title="Copy link">
+                            Copy Link
+                        </button>
+                    </div>
+                    <button id="download-card" class="download-card-btn" title="Download card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Download Card
+                    </button>
+                    <p id="copy-feedback" class="copy-feedback"></p>
+                </div>
+
+                <!-- Impact Stats (Subtle Encouragement) -->
+                <div class="impact-section">
+                    <div class="impact-card">
+                        <span class="impact-number" id="referral-count">0</span>
+                        <span class="impact-label">People joined through you</span>
+                    </div>
+                    <div id="progress-container" class="progress-mini">
+                        <div class="progress-bar-mini">
+                            <div id="progress-fill" class="progress-fill-mini"></div>
+                        </div>
+                        <p id="progress-text" class="progress-text-mini"></p>
+                    </div>
                 </div>
 
                 <!-- QR Fullscreen Overlay -->
@@ -109,39 +175,18 @@
                         <div class="qr-code-container">
                             <div id="qr-code-fullscreen"></div>
                         </div>
-                        <div class="qr-card-avatar" id="qr-card-avatar-fullscreen">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <circle cx="12" cy="8" r="4"/>
-                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
-                            </svg>
+                        <div class="qr-card-footer">
+                            <div class="qr-card-avatar-inline" id="qr-card-avatar-fullscreen">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="12" cy="8" r="4"/>
+                                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                                </svg>
+                            </div>
+                            <p class="qr-card-name" id="qr-card-name-fullscreen">Someone</p>
+                            <p class="qr-card-invite">invited you</p>
                         </div>
-                        <p class="qr-card-name" id="qr-card-name-fullscreen"></p>
-                        <p class="qr-card-invite">invited you</p>
                     </div>
-                    <p class="qr-fullscreen-hint">Tap anywhere to close</p>
-                </div>
-
-                <!-- Share Link -->
-                <div class="share-link-section">
-                    <p class="share-label">Or copy your invite link</p>
-                    <div class="share-link-box">
-                        <input type="text" id="referral-link" readonly>
-                        <button id="copy-link" class="copy-btn" title="Copy link">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <p id="copy-feedback" class="copy-feedback"></p>
-                </div>
-
-                <!-- Progress -->
-                <div id="progress-container" class="progress-section">
-                    <div class="progress-bar">
-                        <div id="progress-fill" class="progress-fill"></div>
-                    </div>
-                    <p id="progress-text" class="progress-text">Share to climb the leaderboard</p>
+                    <p class="qr-fullscreen-hint">Tap outside to close</p>
                 </div>
 
                 <!-- People you referred -->
@@ -223,6 +268,32 @@
             window.location.href = '/';
         });
 
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Character counter for "why" textarea
+        const whyInput = document.getElementById('user-why-input');
+        const whyCharCount = document.getElementById('why-char-count');
+
+        if (whyInput && whyCharCount) {
+            whyInput.addEventListener('input', () => {
+                whyCharCount.textContent = whyInput.value.length;
+            });
+        }
+
         // Initialize invite dashboard
         (async function initInviteDashboard() {
             try {
@@ -285,17 +356,17 @@
                     avatarEl.innerHTML = `<img src="${data.profile_pic}" alt="${userName}">`;
                 }
 
-                // Generate QR code
+                // Generate QR code with hüm branding
                 const qrContainer = document.getElementById('qr-code');
                 qrContainer.innerHTML = '';
 
                 new QRCode(qrContainer, {
                     text: referralLink,
-                    width: 160,
-                    height: 160,
-                    colorDark: '#2C2418',
+                    width: 180,
+                    height: 180,
+                    colorDark: '#D2916F', // hüm accent color
                     colorLight: '#FFFFFF',
-                    correctLevel: QRCode.CorrectLevel.M
+                    correctLevel: QRCode.CorrectLevel.H
                 });
             } catch (err) {
                 console.log('Could not generate QR code:', err);
@@ -315,16 +386,16 @@
             const avatarFullscreenEl = document.getElementById('qr-card-avatar-fullscreen');
             avatarFullscreenEl.innerHTML = avatarEl.innerHTML;
 
-            // Generate fullscreen QR
+            // Generate fullscreen QR with hüm branding
             const qrFullscreen = document.getElementById('qr-code-fullscreen');
             qrFullscreen.innerHTML = '';
             new QRCode(qrFullscreen, {
                 text: referralLink,
-                width: 220,
-                height: 220,
-                colorDark: '#2C2418',
+                width: 240,
+                height: 240,
+                colorDark: '#D2916F', // hüm accent color
                 colorLight: '#FFFFFF',
-                correctLevel: QRCode.CorrectLevel.M
+                correctLevel: QRCode.CorrectLevel.H
             });
 
             overlay.classList.add('active');
@@ -349,8 +420,15 @@
 
                 const userIndex = data.findIndex(u => u.email === email);
                 const rank = userIndex + 1;
+                const referrals = userIndex >= 0 ? data[userIndex].referral_count : 0;
 
                 document.getElementById('user-rank').textContent = `#${rank}`;
+
+                // Update referral count in impact section
+                const referralCountEl = document.getElementById('referral-count');
+                if (referralCountEl) {
+                    referralCountEl.textContent = referrals;
+                }
 
                 // Update progress bar
                 const progressFill = document.getElementById('progress-fill');
@@ -383,6 +461,10 @@
 
                 if (error) throw error;
                 document.getElementById('total-signups').textContent = count;
+                const statEl = document.getElementById('total-signups-stat');
+                if (statEl) {
+                    statEl.textContent = count;
+                }
                 document.getElementById('signup-counter').style.display = 'flex';
             } catch (err) {
                 console.error('Error loading total signups:', err);
