@@ -1,3 +1,32 @@
+/* Mobile scroll fixes */
+html {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+    scroll-behavior: smooth;
+}
+
+body {
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent scroll jump on mobile when address bar shows/hides */
+@media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Use dvh (dynamic viewport height) where supported for mobile */
+    @supports (height: 100dvh) {
+        .referral-hero,
+        .invite-page,
+        .hero {
+            min-height: 100dvh;
+        }
+    }
+}
+
 /* Page Loader */
 .page-loader {
     position: fixed;
