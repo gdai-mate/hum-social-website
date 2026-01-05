@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
 </head>
 <body class="journey-complete invite-page">
     <!-- Navigation -->
@@ -356,18 +356,31 @@
                     avatarEl.innerHTML = `<img src="${data.profile_pic}" alt="${userName}">`;
                 }
 
-                // Generate QR code with hüm branding
+                // Generate QR code with hüm branding and rounded design
                 const qrContainer = document.getElementById('qr-code');
                 qrContainer.innerHTML = '';
 
-                new QRCode(qrContainer, {
-                    text: referralLink,
+                const qrCode = new QRCodeStyling({
                     width: 180,
                     height: 180,
-                    colorDark: '#2C2418', // charcoal
-                    colorLight: '#FFFFFF',
-                    correctLevel: QRCode.CorrectLevel.H
+                    data: referralLink,
+                    dotsOptions: {
+                        color: "#2C2418",
+                        type: "rounded"
+                    },
+                    backgroundOptions: {
+                        color: "#ffffff"
+                    },
+                    cornersSquareOptions: {
+                        color: "#2C2418",
+                        type: "extra-rounded"
+                    },
+                    cornersDotOptions: {
+                        color: "#2C2418",
+                        type: "dot"
+                    }
                 });
+                qrCode.append(qrContainer);
             } catch (err) {
                 console.log('Could not generate QR code:', err);
             }
@@ -386,17 +399,31 @@
             const avatarFullscreenEl = document.getElementById('qr-card-avatar-fullscreen');
             avatarFullscreenEl.innerHTML = avatarEl.innerHTML;
 
-            // Generate fullscreen QR with hüm branding
+            // Generate fullscreen QR with hüm branding and rounded design
             const qrFullscreen = document.getElementById('qr-code-fullscreen');
             qrFullscreen.innerHTML = '';
-            new QRCode(qrFullscreen, {
-                text: referralLink,
+
+            const qrCodeFullscreen = new QRCodeStyling({
                 width: 240,
                 height: 240,
-                colorDark: '#2C2418', // charcoal
-                colorLight: '#FFFFFF',
-                correctLevel: QRCode.CorrectLevel.H
+                data: referralLink,
+                dotsOptions: {
+                    color: "#2C2418",
+                    type: "rounded"
+                },
+                backgroundOptions: {
+                    color: "#ffffff"
+                },
+                cornersSquareOptions: {
+                    color: "#2C2418",
+                    type: "extra-rounded"
+                },
+                cornersDotOptions: {
+                    color: "#2C2418",
+                    type: "dot"
+                }
             });
+            qrCodeFullscreen.append(qrFullscreen);
 
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
