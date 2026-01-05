@@ -2175,48 +2175,135 @@ button, a, input, textarea, select {
     text-align: right;
 }
 
-/* Share Actions */
-.share-actions {
-    display: flex;
-    gap: 0.75rem;
+/* Share Section */
+.share-section {
     margin-bottom: 3rem;
 }
 
-.share-btn {
+.share-link-box-new {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.share-link-box-new input {
     flex: 1;
-    padding: 0.875rem;
-    background: var(--surface);
+    padding: 0.75rem 1rem;
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 8px;
+    background: var(--surface);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--text);
+}
+
+.copy-btn-new,
+.download-card-btn {
+    padding: 0.75rem 1.25rem;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
     font-family: var(--font-body);
     font-size: 0.875rem;
     font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.download-card-btn {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.copy-btn-new:hover,
+.download-card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(210, 145, 111, 0.3);
+}
+
+.copy-feedback {
+    text-align: center;
+    color: var(--accent);
+    font-size: 0.875rem;
+    font-weight: 600;
+    min-height: 1.2em;
+    margin: 0.5rem 0 1rem 0;
+}
+
+/* Social Share Buttons */
+.social-share-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.share-btn {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
     color: var(--text);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-}
-
-.share-btn:hover {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(210, 145, 111, 0.2);
+    text-decoration: none;
 }
 
 .share-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
 }
 
-.share-btn.copied {
-    background: #27ae60;
+.share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.share-whatsapp:hover {
+    background: #25D366;
     color: white;
-    border-color: #27ae60;
+    border-color: #25D366;
+}
+
+.share-instagram:hover {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white;
+    border-color: transparent;
+}
+
+.share-facebook:hover {
+    background: #1877F2;
+    color: white;
+    border-color: #1877F2;
+}
+
+.share-twitter:hover {
+    background: #000000;
+    color: white;
+    border-color: #000000;
+}
+
+.share-tiktok:hover {
+    background: #000000;
+    color: white;
+    border-color: #000000;
+}
+
+.share-sms:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
 }
 
 /* Impact Section */
