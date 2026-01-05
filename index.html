@@ -757,6 +757,12 @@
                             <div class="qr-code-container">
                                 <div id="qr-code"></div>
                             </div>
+                            <div class="qr-card-avatar" id="qr-card-avatar">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="12" cy="8" r="4"/>
+                                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                                </svg>
+                            </div>
                             <p class="qr-card-name" id="qr-card-name"></p>
                             <p class="qr-card-invite">invited you</p>
                         </div>
@@ -772,6 +778,12 @@
                             </div>
                             <div class="qr-code-container">
                                 <div id="qr-code-fullscreen"></div>
+                            </div>
+                            <div class="qr-card-avatar" id="qr-card-avatar-fullscreen">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="12" cy="8" r="4"/>
+                                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                                </svg>
                             </div>
                             <p class="qr-card-name" id="qr-card-name-fullscreen"></p>
                             <p class="qr-card-invite">invited you</p>
@@ -2823,6 +2835,13 @@
                     preview.style.display = 'block';
                     if (avatarSvg) avatarSvg.style.display = 'none';
 
+                    // Also update QR card avatar
+                    const qrCardAvatar = document.getElementById('qr-card-avatar');
+                    if (qrCardAvatar) {
+                        const userName = updateData[0]?.name || 'You';
+                        qrCardAvatar.innerHTML = `<img src="${publicUrl}" alt="${userName}">`;
+                    }
+
                     uploadText.textContent = 'Change Photo';
                     statusEl.textContent = 'Photo saved!';
                     statusEl.className = 'profile-upload-status success';
@@ -2844,15 +2863,21 @@
         // Generate QR code for referral link
         async function generateQRCode(referralLink, email) {
             try {
-                // Get user's name from database
+                // Get user's name and profile pic from database
                 const { data } = await supabaseClient
                     .from('waitlist')
-                    .select('name')
+                    .select('name, profile_pic')
                     .eq('email', email)
                     .single();
 
                 const userName = data?.name || 'Someone';
                 document.getElementById('qr-card-name').textContent = userName;
+
+                // Update avatar if profile pic exists
+                const avatarEl = document.getElementById('qr-card-avatar');
+                if (data?.profile_pic) {
+                    avatarEl.innerHTML = `<img src="${data.profile_pic}" alt="${userName}">`;
+                }
 
                 // Generate QR code using qrcodejs
                 const qrContainer = document.getElementById('qr-code');
@@ -2898,6 +2923,11 @@
 
             // Copy name to fullscreen card
             document.getElementById('qr-card-name-fullscreen').textContent = userName;
+
+            // Copy avatar to fullscreen card
+            const avatarEl = document.getElementById('qr-card-avatar');
+            const avatarFullscreenEl = document.getElementById('qr-card-avatar-fullscreen');
+            avatarFullscreenEl.innerHTML = avatarEl.innerHTML;
 
             // Generate QR code for fullscreen (larger)
             const qrFullscreen = document.getElementById('qr-code-fullscreen');
