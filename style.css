@@ -10,6 +10,33 @@ body {
     -webkit-overflow-scrolling: touch;
 }
 
+/* iOS Safe Area Support */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+
+    /* Extend dark background into safe areas during hero journey */
+    body:not(.journey-complete)::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #1a1a1a;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    /* Nav safe area spacing */
+    .nav {
+        padding-left: max(1.5rem, env(safe-area-inset-left));
+        padding-right: max(1.5rem, env(safe-area-inset-right));
+    }
+}
+
 /* Prevent scroll jump on mobile when address bar shows/hides */
 @media (max-width: 768px) {
     html, body {
@@ -1817,6 +1844,7 @@ button, a, input, textarea, select {
 /* User Menu (when logged in) */
 .user-menu {
     position: relative;
+    margin-left: auto;
 }
 
 .user-menu-btn {
@@ -4605,6 +4633,10 @@ button, a, input, textarea, select {
 .footer-links {
     margin-bottom: 0.75rem;
     font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .footer-links a {
@@ -4620,6 +4652,13 @@ button, a, input, textarea, select {
 .footer-divider {
     margin: 0 0.75rem;
     color: var(--border);
+}
+
+.footer-copyright {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0;
 }
 
 .footer-copyright {
@@ -5961,11 +6000,13 @@ button, a, input, textarea, select {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    align-items: center;
 }
 
 .form-group {
     position: relative;
     text-align: left;
+    width: 100%;
 }
 
 .waitlist-form input,
@@ -7352,105 +7393,151 @@ button, a, input, textarea, select {
     }
 }
 
-/* === 3. HOW IT WORKS - Mobile layout (centered image above, text below) === */
+/* === 3. HOW IT WORKS - Mobile layout (normal scroll flow) === */
 @media (max-width: 768px) {
-    /* Keep scroll height for scroll-pinned animation */
+    /* Normal height - disable sticky scroll on mobile */
     .how-it-works-journey {
-        height: 800vh;
+        height: auto;
+        min-height: 100vh;
     }
 
-    /* Panel layout: single column, centered content */
+    .how-it-works-header {
+        height: auto;
+        min-height: 60vh;
+        padding: 4rem 2rem 3rem;
+    }
+
+    /* Container uses normal flow, not sticky */
+    .panels-container {
+        position: relative;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+        padding: 2rem 0;
+    }
+
+    /* Panels stack vertically with normal flow */
     .principle-panel {
+        position: relative !important; /* Override absolute positioning */
+        opacity: 1 !important; /* Always visible on mobile */
+        pointer-events: auto !important;
         grid-template-columns: 1fr;
-        padding: 1.5rem;
-        padding-right: 3rem; /* Space for progress dots */
-        gap: 1.5rem;
+        padding: 2rem 1.5rem;
+        gap: 2rem;
         text-align: center;
         justify-items: center;
+        height: auto;
+        transition: transform 0.6s ease, opacity 0.6s ease;
     }
 
-    /* Number hidden on mobile - dots serve as indicator */
+    /* Intersection Observer will add 'in-view' class */
+    .principle-panel:not(.in-view) {
+        opacity: 0.3;
+        transform: translateY(30px);
+    }
+
+    .principle-panel.in-view {
+        opacity: 1 !important;
+        transform: translateY(0);
+    }
+
+    /* Number hidden on mobile - title shows principle */
     .principle-number {
         display: none;
     }
 
-    /* Image centered above text, larger */
+    /* Image centered above text */
     .principle-visual {
         position: static;
-        order: -1; /* Image first */
+        order: -1;
         display: flex;
         justify-content: center;
         padding: 0;
     }
 
     .principle-screenshot {
-        max-width: 200px; /* 2x larger than before */
+        max-width: 220px;
         width: 100%;
-        border-radius: 16px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        opacity: 1 !important; /* Always visible */
+        transform: none !important;
+        filter: none !important;
     }
 
-    /* Content below image, full width */
+    /* Content below image */
     .principle-content {
         padding: 0;
-        padding-right: 0;
         text-align: center;
+        max-width: 100%;
     }
 
     .principle-title {
-        font-size: clamp(1.35rem, 5vw, 1.75rem);
-        margin-bottom: 1.25rem;
+        font-size: clamp(1.5rem, 5vw, 1.85rem);
+        margin-bottom: 1.5rem;
         white-space: normal;
     }
 
-    /* Text lines - centered */
+    /* All lines visible on mobile */
+    .principle-lines {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
     .principle-line {
-        font-size: 0.9rem;
-        padding: 0.875rem 1rem;
-        line-height: 1.6;
+        opacity: 1 !important;
+        font-size: 0.95rem;
+        padding: 1rem;
+        line-height: 1.7;
         text-align: left;
         border-left-width: 3px;
+        background: var(--surface);
+        border-radius: 8px;
+        transform: none !important;
+    }
+
+    .principle-line.revealed,
+    .principle-line.dimmed,
+    .principle-line.current {
+        opacity: 1 !important;
     }
 
     .line-label {
-        font-size: 0.65rem;
-        margin-bottom: 0.25rem;
+        font-size: 0.7rem;
+        margin-bottom: 0.35rem;
+        font-weight: 700;
     }
 
-    /* Progress dots - right side, same style as desktop */
+    /* Hide progress dots on mobile - not needed with normal scroll */
     .principle-progress {
-        right: 0.75rem;
-        gap: 0.5rem;
-    }
-
-    .progress-dot {
-        width: 8px;
-        height: 8px;
+        display: none;
     }
 }
 
 @media (max-width: 480px) {
-    .how-it-works-journey {
-        height: 700vh;
+    .panels-container {
+        gap: 3rem;
+        padding: 1.5rem 0;
     }
 
     .principle-panel {
-        padding: 1rem;
-        padding-right: 2.5rem;
-        gap: 1.25rem;
+        padding: 1.5rem 1rem;
+        gap: 1.5rem;
     }
 
     .principle-screenshot {
-        max-width: 180px;
+        max-width: 190px;
     }
 
     .principle-title {
-        font-size: clamp(1.2rem, 5vw, 1.5rem);
+        font-size: clamp(1.35rem, 5vw, 1.6rem);
     }
 
     .principle-line {
-        font-size: 0.85rem;
-        padding: 0.5rem 0 0.5rem 0.625rem;
+        font-size: 0.9rem;
+        padding: 0.875rem;
     }
 }
 

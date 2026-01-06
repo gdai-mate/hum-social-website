@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>hüm - Social Media That Makes You Better, Not Bitter</title>
     <meta name="description" content="Tired of doomscrolling? Join hüm - the invite-only platform where young entrepreneurs build real habits, share real progress, and find their people. Zero AI. Zero bullshit.">
     <meta name="keywords" content="accountability, habits, voice-first, anti-doomscroll, mental health, purpose, entrepreneurship, Gen Z, millennials">
@@ -209,7 +209,7 @@
                     </button>
                     <div id="user-menu-dropdown" class="user-menu-dropdown">
                         <div class="user-menu-email" id="user-menu-email"></div>
-                        <a href="/invite.html" class="user-menu-item">My Invites</a>
+                        <a href="/invite.html" class="user-menu-item">Invite Hub</a>
                         <button id="logout-btn" class="user-menu-logout">Log out</button>
                     </div>
                 </div>
@@ -3515,8 +3515,8 @@
             // ========================================
             // Principle Panels - Apple-Style Scroll Reveals
             // Sticky scroll storytelling for How It Works
-            // Each panel has 3 lines that reveal one at a time
-            // Words cascade in when each line is revealed
+            // Desktop: Complex sticky scroll with line-by-line reveals
+            // Mobile: Simple Intersection Observer for in-view animations
             // ========================================
             let principlePanelsInitialized = false;
             window.initPrinciplePanelScrollTriggers = function() {
@@ -3530,9 +3530,33 @@
 
                 if (!section || panels.length === 0) return;
 
+                // Detect mobile
+                const isMobile = window.innerWidth <= 768;
+
+                if (isMobile) {
+                    // Mobile: Simple Intersection Observer
+                    const panelObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('in-view');
+                            }
+                        });
+                    }, {
+                        threshold: 0.2,
+                        rootMargin: '-10% 0px -10% 0px'
+                    });
+
+                    panels.forEach(panel => {
+                        panelObserver.observe(panel);
+                    });
+
+                    return; // Skip desktop sticky scroll logic
+                }
+
+                // Desktop: Complex sticky scroll
                 const panelCount = panels.length;
                 const linesPerPanel = 3;
-                const totalSteps = panelCount * (1 + linesPerPanel); // 1 for panel intro + 3 lines each = 20 steps
+                const totalSteps = panelCount * (1 + linesPerPanel);
 
                 // Show/hide progress dots based on section visibility
                 const progressObserver = new IntersectionObserver((entries) => {
