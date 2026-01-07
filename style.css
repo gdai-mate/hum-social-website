@@ -200,25 +200,45 @@ body {
     gap: 0.875rem;
 }
 
-.referral-form-row input {
+.referral-form-row {
+    position: relative;
+}
+
+.referral-form-row input,
+.referral-form-row textarea {
     width: 100%;
     padding: 1rem 1.25rem;
-    border: 1px solid var(--border);
+    border: 2px solid var(--border);
     border-radius: 12px;
     background: var(--background);
     font-family: var(--font-body);
     font-size: 1rem;
     color: var(--text);
-    transition: all 0.2s ease;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.referral-form-row input:focus {
+.referral-form-row input:focus,
+.referral-form-row textarea:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(210, 145, 111, 0.1);
+    box-shadow: 0 0 0 3px rgba(210, 145, 111, 0.2);
 }
 
-.referral-form-row input::placeholder {
+.referral-form-row input::placeholder,
+.referral-form-row textarea::placeholder {
+    color: var(--text-muted);
+}
+
+.referral-form-row textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.referral-form-row .char-count {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 1rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
 }
 
@@ -226,6 +246,30 @@ body {
     text-align: center;
     letter-spacing: 0.5em;
     font-weight: 600;
+}
+
+.referral-form-row.checkbox-row {
+    text-align: left;
+}
+
+.referral-form-row .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.referral-form-row .checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.referral-form-row .checkbox-text {
+    user-select: none;
 }
 
 .referral-submit-btn {
