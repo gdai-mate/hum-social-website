@@ -1022,6 +1022,9 @@
                 // Store referral code globally
                 window.currentReferralCode = referralCode;
 
+                // Mark as referral page to prevent scroll animations
+                window.isReferralPage = true;
+
                 // Show referral hero, mark journey as complete
                 document.documentElement.classList.add('journey-complete');
                 document.body.classList.add('journey-complete');
@@ -1509,6 +1512,9 @@
             if (window.pendingReferralCode) {
                 const refCode = window.pendingReferralCode;
                 delete window.pendingReferralCode;
+
+                // Mark as referral page to prevent scroll animations
+                window.isReferralPage = true;
 
                 // Show referral hero section
                 const referralHero = document.getElementById('referral-hero');
@@ -4120,8 +4126,9 @@
 
             // ENSURE principle panels are initialized after journey completes
             // Check every 500ms until journey-complete class is added
+            // Skip if on referral page
             const checkAndInitPanels = setInterval(() => {
-                if (document.body.classList.contains('journey-complete')) {
+                if (document.body.classList.contains('journey-complete') && !window.isReferralPage) {
                     clearInterval(checkAndInitPanels);
                     console.log('Journey complete - initializing principle panels');
                     setTimeout(() => {
@@ -4133,7 +4140,8 @@
             }, 500);
 
             // Also init immediately if already complete (e.g., page refresh)
-            if (document.body.classList.contains('journey-complete')) {
+            // Skip if on referral page
+            if (document.body.classList.contains('journey-complete') && !window.isReferralPage) {
                 setTimeout(() => {
                     if (typeof window.initPrinciplePanelScrollTriggers === 'function') {
                         window.initPrinciplePanelScrollTriggers();
