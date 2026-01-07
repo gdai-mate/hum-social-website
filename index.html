@@ -297,8 +297,18 @@
                     <div class="referral-form-row">
                         <input type="email" name="email" placeholder="Your email" required>
                     </div>
+                    <div class="referral-form-row">
+                        <textarea name="why" placeholder="Why I want to join..." maxlength="80" required></textarea>
+                        <span class="char-count"><span id="referral-char-count">0</span>/80</span>
+                    </div>
                     <div class="referral-form-row pin-row">
                         <input type="text" name="pin" placeholder="Create 4-digit PIN" maxlength="4" pattern="[0-9]{4}" inputmode="numeric" required>
+                    </div>
+                    <div class="referral-form-row checkbox-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="notifications" id="referral-notifications">
+                            <span class="checkbox-text">Notify me if my rank changes</span>
+                        </label>
                     </div>
                     <button type="submit" class="referral-submit-btn">
                         <span class="referral-submit-text">Join the Waitlist</span>
@@ -1022,13 +1032,10 @@
                 // Setup referral form handler
                 setupReferralForm(referralCode);
 
-                // Show hands after a moment
+                // Show hands after a moment (but don't init scroll triggers on referral pages)
                 setTimeout(() => {
                     if (typeof window.showHandsAfterJourney === 'function') {
                         window.showHandsAfterJourney();
-                    }
-                    if (typeof window.initPrinciplePanelScrollTriggers === 'function') {
-                        window.initPrinciplePanelScrollTriggers();
                     }
                 }, 300);
             }
@@ -1087,6 +1094,15 @@
             const form = document.getElementById('referral-signup-form');
             if (!form) return;
 
+            // Character counter for textarea
+            const textarea = form.querySelector('textarea[name="why"]');
+            const charCount = document.getElementById('referral-char-count');
+            if (textarea && charCount) {
+                textarea.addEventListener('input', () => {
+                    charCount.textContent = textarea.value.length;
+                });
+            }
+
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
@@ -1098,10 +1114,12 @@
                 const formData = new FormData(form);
                 const name = formData.get('name').trim();
                 const email = formData.get('email').trim().toLowerCase();
+                const why = formData.get('why').trim();
                 const pin = formData.get('pin').trim();
+                const wantsNotifications = formData.get('notifications') === 'on';
 
                 // Validate
-                if (!name || !email || !pin) {
+                if (!name || !email || !why || !pin) {
                     errorEl.textContent = 'Please fill in all fields';
                     return;
                 }
@@ -1140,7 +1158,9 @@
                         .insert([{
                             name,
                             email,
+                            why,
                             pin,
+                            wants_notifications: wantsNotifications,
                             referral_code: newReferralCode,
                             referred_by: validReferredBy,
                             source: 'referral'
