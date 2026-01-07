@@ -979,6 +979,15 @@
         // Theme toggle only works after the cloud transition completes
         let journeyComplete = false;
 
+        // =====================================================
+        // SUPABASE CONFIG (used by login and waitlist)
+        // =====================================================
+        const SUPABASE_URL = 'https://mclksiyohsfwhquhhxcb.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jbGtzaXlvaHNmd2hxdWhoeGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5OTk0NzAsImV4cCI6MjA4MTU3NTQ3MH0.tsMWJGUJUO1hwxMo3eBrletfFuHOGCNybTtHVG5wsVw';
+
+        // Initialize Supabase client (global for login and waitlist)
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         // Check for referral link - show referral hero instead of normal journey
         (function checkReferralSkip() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -1211,15 +1220,6 @@
             html.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
         });
-
-        // =====================================================
-        // SUPABASE CONFIG (used by login and waitlist)
-        // =====================================================
-        const SUPABASE_URL = 'https://mclksiyohsfwhquhhxcb.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jbGtzaXlvaHNmd2hxdWhoeGNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5OTk0NzAsImV4cCI6MjA4MTU3NTQ3MH0.tsMWJGUJUO1hwxMo3eBrletfFuHOGCNybTtHVG5wsVw';
-
-        // Initialize Supabase client (global for login and waitlist)
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // =====================================================
         // LOGIN OVERLAY FUNCTIONALITY
