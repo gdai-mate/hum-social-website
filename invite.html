@@ -264,7 +264,37 @@
 
         const user = JSON.parse(savedUser);
 
-        // Update user menu
+        // Fetch full user data from Supabase (for name, why, etc.)
+        (async function fetchFullUserData() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('waitlist')
+                    .select('name, why')
+                    .eq('email', user.email)
+                    .single();
+
+                if (data) {
+                    // Update user object with full data
+                    user.name = data.name;
+                    user.why = data.why;
+
+                    // Update user menu with full name
+                    document.getElementById('user-menu-name').textContent = user.name || user.email.split('@')[0];
+
+                    // Pre-fill "why" field
+                    const whyInput = document.getElementById('user-why-input');
+                    const whyCharCount = document.getElementById('why-char-count');
+                    if (whyInput && data.why) {
+                        whyInput.value = data.why;
+                        whyCharCount.textContent = data.why.length;
+                    }
+                }
+            } catch (err) {
+                console.error('Error fetching user data:', err);
+            }
+        })();
+
+        // Update user menu (will be updated with full name once fetched)
         document.getElementById('user-menu-name').textContent = user.name || user.email.split('@')[0];
         document.getElementById('user-menu-email').textContent = user.email;
 
@@ -305,13 +335,30 @@
             localStorage.setItem('theme', newTheme);
         });
 
-        // Character counter for "why" textarea
+        // Character counter and auto-save for "why" textarea
         const whyInput = document.getElementById('user-why-input');
         const whyCharCount = document.getElementById('why-char-count');
+        let whySaveTimeout;
 
         if (whyInput && whyCharCount) {
             whyInput.addEventListener('input', () => {
                 whyCharCount.textContent = whyInput.value.length;
+
+                // Auto-save after 1 second of no typing
+                clearTimeout(whySaveTimeout);
+                whySaveTimeout = setTimeout(async () => {
+                    try {
+                        const { error } = await supabaseClient
+                            .from('waitlist')
+                            .update({ why: whyInput.value.trim() })
+                            .eq('email', user.email);
+
+                        if (error) throw error;
+                        console.log('Why saved successfully');
+                    } catch (err) {
+                        console.error('Error saving why:', err);
+                    }
+                }, 1000);
             });
         }
 
@@ -557,7 +604,7 @@
             try {
                 const { data, error } = await supabaseClient
                     .from('waitlist')
-                    .select('name, why, created_at')
+                    .select('name, why, created_at, profile_pic')
                     .eq('referred_by', referralCode)
                     .order('created_at', { ascending: false });
 
@@ -584,21 +631,25 @@
                     return date.toLocaleDateString('en-AU', { month: 'short', day: 'numeric' });
                 };
 
-                referredList.innerHTML = data.map(person => `
+                referredList.innerHTML = data.map(person => {
+                    const avatarHtml = person.profile_pic
+                        ? `<img src="${person.profile_pic}" alt="${person.name}">`
+                        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+                        </svg>`;
+
+                    return `
                     <div class="referred-entry">
-                        <div class="referred-avatar">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <circle cx="12" cy="8" r="4"/>
-                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
-                            </svg>
-                        </div>
+                        <div class="referred-avatar">${avatarHtml}</div>
                         <div class="referred-info">
                             <p class="referred-name">${person.name}</p>
                             ${person.why ? `<p class="referred-why">"${person.why}"</p>` : ''}
                         </div>
                         <div class="referred-date">${formatDate(person.created_at)}</div>
                     </div>
-                `).join('');
+                    `;
+                }).join('');
             } catch (err) {
                 console.error('Error loading referred people:', err);
             }
