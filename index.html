@@ -1176,11 +1176,10 @@
                         .insert([{
                             name,
                             email,
-                            why,
                             pin,
-                            wants_notifications: wantsNotifications,
-                            referral_code: newReferralCode,
-                            referred_by: validReferredBy
+                            why,
+                            referred_by: validReferredBy,
+                            rank_notifications: wantsNotifications
                         }])
                         .select()
                         .single();
