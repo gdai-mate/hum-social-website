@@ -7,7 +7,7 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
 // Brand assets - hosted logo for email clients
-const LOGO_URL = 'https://hum-social.com/assets/logos/hum-logo-light.svg' // Light logo for dark email background
+const LOGO_URL = 'https://hum-social.com/assets/logos/hum-logo-dark.svg' // Dark logo for light email background
 const SITE_URL = 'https://hum-social.com'
 
 const corsHeaders = {
@@ -36,22 +36,22 @@ const emailStyles = `
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: #1a1a1a;
-    background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+    background: linear-gradient(180deg, #f5f0e8 0%, #faf8f5 100%);
     margin: 0;
     padding: 40px 20px;
   }
   .container {
     max-width: 520px;
     margin: 0 auto;
-    background: linear-gradient(165deg, #1a1a1a 0%, #242424 50%, #1a1a1a 100%);
+    background: #ffffff;
     border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.05);
   }
   .header {
     padding: 48px 40px 32px;
     text-align: center;
-    background: linear-gradient(180deg, rgba(210, 145, 111, 0.08) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(210, 145, 111, 0.06) 0%, transparent 100%);
   }
   .logo-img {
     height: 56px;
@@ -63,7 +63,7 @@ const emailStyles = `
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 48px;
     font-weight: 600;
-    background: linear-gradient(135deg, #fff 0%, #f5f0e8 50%, #d2916f 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #3a3a3a 50%, #d2916f 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -74,7 +74,7 @@ const emailStyles = `
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(210, 145, 111, 0.7);
+    color: #d2916f;
     margin-top: 8px;
   }
   .content {
@@ -82,7 +82,7 @@ const emailStyles = `
   }
   .greeting {
     font-size: 18px;
-    color: #ffffff;
+    color: #1a1a1a;
     margin: 0 0 24px 0;
     font-weight: 500;
   }
@@ -90,26 +90,26 @@ const emailStyles = `
     margin: 0 0 16px 0;
     font-size: 15px;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.7);
+    color: #4a4a4a;
   }
   .highlight-box {
-    background: linear-gradient(135deg, rgba(210, 145, 111, 0.15) 0%, rgba(210, 145, 111, 0.05) 100%);
-    border: 1px solid rgba(210, 145, 111, 0.3);
+    background: linear-gradient(135deg, rgba(210, 145, 111, 0.12) 0%, rgba(210, 145, 111, 0.04) 100%);
+    border: 1px solid rgba(210, 145, 111, 0.25);
     border-radius: 12px;
     padding: 20px 24px;
     margin: 28px 0;
   }
   .highlight-box p {
     margin: 0;
-    color: #fff;
+    color: #1a1a1a;
     font-size: 15px;
   }
   .highlight-box strong {
     color: #d2916f;
   }
   .rank-card {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(145deg, rgba(210, 145, 111, 0.06) 0%, rgba(210, 145, 111, 0.02) 100%);
+    border: 1px solid rgba(210, 145, 111, 0.2);
     border-radius: 16px;
     padding: 28px;
     margin: 28px 0;
@@ -119,13 +119,13 @@ const emailStyles = `
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.5);
+    color: #888;
     margin: 0 0 8px 0;
   }
   .rank-number {
     font-size: 56px;
     font-weight: 700;
-    background: linear-gradient(135deg, #fff 0%, #d2916f 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #d2916f 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -134,12 +134,12 @@ const emailStyles = `
   }
   .rank-sublabel {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.5);
+    color: #888;
     margin: 8px 0 0 0;
   }
   .rank-card.success {
-    background: linear-gradient(145deg, rgba(76, 175, 80, 0.15) 0%, rgba(76, 175, 80, 0.05) 100%);
-    border-color: rgba(76, 175, 80, 0.3);
+    background: linear-gradient(145deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.03) 100%);
+    border-color: rgba(76, 175, 80, 0.25);
   }
   .referral-section {
     margin: 32px 0;
@@ -148,12 +148,12 @@ const emailStyles = `
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: rgba(255, 255, 255, 0.5);
+    color: #888;
     margin: 0 0 12px 0;
   }
   .referral-box {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
     border-radius: 12px;
     padding: 16px 20px;
     display: flex;
@@ -186,24 +186,24 @@ const emailStyles = `
   }
   .divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
     margin: 32px 0;
   }
   .signature {
     margin-top: 32px;
-    color: rgba(255, 255, 255, 0.5);
+    color: #666;
     font-size: 14px;
   }
   .footer {
-    background: rgba(0, 0, 0, 0.3);
+    background: #f5f5f5;
     text-align: center;
     padding: 24px 40px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid #e0e0e0;
   }
   .footer p {
     margin: 0;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.4);
+    color: #888;
     letter-spacing: 0.5px;
   }
   .footer a {
@@ -274,10 +274,10 @@ async function sendWelcomeEmail(data: { email: string, name: string, referral_co
 
   // PIN section only shown if PIN is provided
   const pinSection = pin ? `
-      <div class="highlight-box" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%); border-color: rgba(255, 255, 255, 0.15);">
-        <p style="margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255, 255, 255, 0.5);">Your PIN</p>
-        <p style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 0.3em; color: #fff; font-family: 'SF Mono', Monaco, monospace;">${pin}</p>
-        <p style="margin: 8px 0 0 0; font-size: 13px; color: rgba(255, 255, 255, 0.5);">Save this. You'll need it to log in.</p>
+      <div class="highlight-box" style="background: linear-gradient(135deg, rgba(210, 145, 111, 0.08) 0%, rgba(210, 145, 111, 0.02) 100%); border-color: rgba(210, 145, 111, 0.2);">
+        <p style="margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #888;">Your PIN</p>
+        <p style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 0.3em; color: #1a1a1a; font-family: 'SF Mono', Monaco, monospace;">${pin}</p>
+        <p style="margin: 8px 0 0 0; font-size: 13px; color: #666;">Save this. You'll need it to log in.</p>
       </div>
   ` : ''
 
@@ -305,7 +305,7 @@ YOUR LOGIN PIN: ${pin}
       ${pinSection}
 
       <div class="highlight-box">
-        <p><strong>Top 100 referrers get Day 1 access.</strong><br>Everyone else waits in line.</p>
+        <p style="color: #1a1a1a;"><strong>Top 100 referrers get Day 1 access.</strong><br>Everyone else waits in line.</p>
       </div>
 
       <p>Every friend who joins using your link moves you up the leaderboard. The more you share, the earlier you're in.</p>
@@ -321,7 +321,7 @@ YOUR LOGIN PIN: ${pin}
 
       <div class="divider"></div>
 
-      <p style="font-size: 14px; color: rgba(255, 255, 255, 0.5);">No algorithms. No doomscrolling. No bullshit.<br>Just real people building real habits together.</p>
+      <p style="font-size: 14px; color: #666;">No algorithms. No doomscrolling. No bullshit.<br>Just real people building real habits together.</p>
 
       <p class="signature">See you on the other side,<br><strong style="color: #d2916f;">the hüm team</strong></p>
     </div>
@@ -372,7 +372,7 @@ async function sendFirstReferralEmail(data: { email: string, name: string, refer
 
   const rankMessage = inTop100
     ? `<p style="color: #4CAF50; font-weight: 500;">You're in the top 100. Nice.</p>`
-    : `<p><strong style="color: #d2916f;">${spotsAway} spots</strong> from the top 100.</p>`
+    : `<p style="color: #4a4a4a;"><strong style="color: #d2916f;">${spotsAway} spots</strong> from the top 100.</p>`
 
   const rankMessagePlain = inTop100
     ? `You're in the top 100. Nice.`
@@ -393,7 +393,7 @@ async function sendFirstReferralEmail(data: { email: string, name: string, refer
     ${emailHeader}
     <div class="content">
       <p class="greeting">Hey ${name},</p>
-      <p>Your referral just landed! <strong style="color: #fff;">${referrer_name}</strong> is now on the waitlist because of you.</p>
+      <p>Your referral just landed! <strong style="color: #1a1a1a;">${referrer_name}</strong> is now on the waitlist because of you.</p>
 
       <div class="${rankCardClass}">
         <p class="rank-label">Your position</p>
@@ -572,7 +572,7 @@ async function sendDroppedOutEmail(entry: WaitlistEntry, currentRank: number) {
       </div>
 
       <div class="highlight-box">
-        <p>You need <strong>${referralsNeeded} more referral${referralsNeeded > 1 ? 's' : ''}</strong> to get back into the top 100 and secure Day 1 access.</p>
+        <p style="color: #1a1a1a;">You need <strong>${referralsNeeded} more referral${referralsNeeded > 1 ? 's' : ''}</strong> to get back into the top 100 and secure Day 1 access.</p>
       </div>
 
       <div class="referral-section">
@@ -752,11 +752,11 @@ async function sendForgotPinEmail(data: { email: string }) {
       <p class="greeting">Hey ${user.name},</p>
       <p>${isNewPin ? "We've created a PIN for your account:" : "You requested your PIN. Here it is:"}</p>
 
-      <div class="highlight-box" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%); border-color: rgba(255, 255, 255, 0.15); text-align: center;">
-        <p style="margin: 0; font-size: 48px; font-weight: 700; letter-spacing: 0.3em; color: #fff; font-family: 'SF Mono', Monaco, monospace;">${pin}</p>
+      <div class="highlight-box" style="background: linear-gradient(135deg, rgba(210, 145, 111, 0.08) 0%, rgba(210, 145, 111, 0.02) 100%); border-color: rgba(210, 145, 111, 0.2); text-align: center;">
+        <p style="margin: 0; font-size: 48px; font-weight: 700; letter-spacing: 0.3em; color: #1a1a1a; font-family: 'SF Mono', Monaco, monospace;">${pin}</p>
       </div>
 
-      <p style="font-size: 14px; color: rgba(255, 255, 255, 0.5);">Use this to log in and check your referral stats.</p>
+      <p style="font-size: 14px; color: #666;">Use this to log in and check your referral stats.</p>
 
       <a href="${SITE_URL}" class="cta-button" style="display: block; text-align: center;">Go to hüm</a>
 
