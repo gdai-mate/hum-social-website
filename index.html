@@ -319,6 +319,11 @@
                     <p class="referral-form-error" id="referral-form-error"></p>
                 </form>
 
+                <!-- Journey Link -->
+                <p class="referral-journey-link">
+                    <a href="#" id="experience-journey-link">First time hearing about hüm? Experience the journey →</a>
+                </p>
+
                 <!-- Success State (hidden by default) -->
                 <div id="referral-success" class="referral-success" style="display: none;">
                     <div class="referral-success-badge">
@@ -1002,6 +1007,16 @@
         (function checkReferralSkip() {
             const urlParams = new URLSearchParams(window.location.search);
             const referralCode = urlParams.get('ref');
+            const storedRefCode = sessionStorage.getItem('pendingReferralCode');
+
+            // If there's a stored ref code (from "Experience journey" click), clear it and use it
+            if (storedRefCode && !referralCode) {
+                sessionStorage.removeItem('pendingReferralCode');
+                // Journey has completed, now show referral form
+                // We'll handle this after journey completes via the cloud transition callback
+                window.pendingReferralCode = storedRefCode;
+                return;
+            }
 
             if (referralCode) {
                 // Store referral code globally
@@ -1031,6 +1046,9 @@
 
                 // Setup referral form handler
                 setupReferralForm(referralCode);
+
+                // Setup "Experience journey" link
+                setupExperienceJourneyLink(referralCode);
 
                 // Show hands after a moment (but don't init scroll triggers on referral pages)
                 setTimeout(() => {
@@ -1230,6 +1248,20 @@
                 code += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             return code;
+        }
+
+        // Setup "Experience journey" link
+        function setupExperienceJourneyLink(referralCode) {
+            const journeyLink = document.getElementById('experience-journey-link');
+            if (!journeyLink) return;
+
+            journeyLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Store ref code in sessionStorage
+                sessionStorage.setItem('pendingReferralCode', referralCode);
+                // Reload page without ref parameter to trigger journey
+                window.location.href = window.location.origin + window.location.pathname;
+            });
         }
 
         themeToggle.addEventListener('click', () => {
@@ -1474,6 +1506,37 @@
         // Function to mark journey as complete (called after cloud transition)
         window.markJourneyComplete = function() {
             journeyComplete = true;
+
+            // Check if there's a pending referral code (from "Experience journey" link)
+            if (window.pendingReferralCode) {
+                const refCode = window.pendingReferralCode;
+                delete window.pendingReferralCode;
+
+                // Show referral hero section
+                const referralHero = document.getElementById('referral-hero');
+                if (referralHero) {
+                    referralHero.style.display = 'flex';
+                }
+
+                // Fetch and display referrer info
+                fetchReferrerInfo(refCode);
+
+                // Fetch community count
+                fetchCommunityCount();
+
+                // Setup referral form handler
+                setupReferralForm(refCode);
+
+                // Show hands after journey
+                if (typeof window.showHandsAfterJourney === 'function') {
+                    setTimeout(() => {
+                        window.showHandsAfterJourney();
+                    }, 300);
+                }
+
+                // Don't init scroll triggers for referral pages
+                return;
+            }
 
             // Initialize principle panel ScrollTriggers now that hero is done
             // (Hero kills all ScrollTriggers, so these must be created after)

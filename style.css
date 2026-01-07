@@ -316,6 +316,26 @@ body {
     min-height: 1.25rem;
 }
 
+/* Journey Link */
+.referral-journey-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.referral-journey-link a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.referral-journey-link a:hover {
+    color: var(--accent);
+}
+
 /* Success State */
 .referral-success {
     padding-top: 1rem;
