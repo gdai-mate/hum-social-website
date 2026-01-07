@@ -376,8 +376,8 @@
                 <div class="feeling-lines">
                     <p class="feeling-line" data-line="1">2am. Thumb sore. Brain fried. Still scrolling.</p>
                     <p class="feeling-line" data-line="2">1,000 followers. Zero people to call.</p>
-                    <p class="feeling-line" data-line="3">Dinner with friends. Everyone's on their phone.</p>
-                    <p class="feeling-line" data-line="4">Watching everyone else live. Forgetting to.</p>
+                    <p class="feeling-line" data-line="3">Dinner with friends. Everyone's on&nbsp;their&nbsp;phone.</p>
+                    <p class="feeling-line" data-line="4">Watching everyone else live. Forgetting&nbsp;to.</p>
                     <p class="feeling-line" data-line="5">Loneliness dressed up as connection.</p>
                 </div>
             </div>
@@ -3383,14 +3383,18 @@
                 window.cloudTransitionTriggered = true;
 
                 // LOCK SCROLLING immediately
-                // Save current scroll position for mobile
-                const scrollY = window.scrollY;
                 document.body.style.overflow = 'hidden';
                 document.documentElement.style.overflow = 'hidden';
-                // On mobile, also prevent position change
-                document.body.style.position = 'fixed';
-                document.body.style.top = `-${scrollY}px`;
-                document.body.style.width = '100%';
+
+                // Mobile-specific scroll lock (prevents bounce)
+                const isMobileDevice = window.innerWidth <= 768;
+                let scrollY = 0;
+                if (isMobileDevice) {
+                    scrollY = window.scrollY;
+                    document.body.style.position = 'fixed';
+                    document.body.style.top = `-${scrollY}px`;
+                    document.body.style.width = '100%';
+                }
 
                 const humAn = panel.querySelectorAll('.hum-an');
                 const umlautDots = panel.querySelector('.umlaut-dots');
@@ -3425,12 +3429,7 @@
                             document.documentElement.setAttribute('data-theme', 'light');
 
                             // 3. Scroll to top (now showing reveal section)
-                            // Use smooth behavior on mobile to prevent jarring jump
-                            if (window.innerWidth <= 768) {
-                                window.scrollTo({ top: 0, behavior: 'instant' });
-                            } else {
-                                window.scrollTo(0, 0);
-                            }
+                            window.scrollTo(0, 0);
 
                             // 4. Start clouds parting (theater curtain style)
                             setTimeout(() => {
@@ -3445,14 +3444,14 @@
 
                                 // 5. UNLOCK SCROLLING after clouds have opened (not when they start)
                                 setTimeout(() => {
-                                    // Remove mobile scroll lock
-                                    document.body.style.position = '';
-                                    document.body.style.top = '';
-                                    document.body.style.width = '';
+                                    // Remove mobile scroll lock if applied
+                                    if (isMobileDevice) {
+                                        document.body.style.position = '';
+                                        document.body.style.top = '';
+                                        document.body.style.width = '';
+                                    }
                                     document.body.style.overflow = '';
                                     document.documentElement.style.overflow = '';
-                                    // Ensure we're at top after unlocking
-                                    window.scrollTo(0, 0);
                                 }, 1200);
 
                                 // Hide clouds after parting animation finishes

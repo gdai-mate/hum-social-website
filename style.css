@@ -851,6 +851,8 @@ a, button, .diff-card, .clickable, [onclick] {
     transition:
         opacity 0.5s ease-out,
         filter 0.5s ease-out;
+    /* Prevent words from breaking mid-word */
+    white-space: nowrap;
 }
 
 /* Current line - words cascade in */
@@ -7140,6 +7142,12 @@ button, a, input, textarea, select {
         font-size: clamp(3rem, 18vw, 6rem);
     }
 
+    /* Adjust transform for smaller mobile font size */
+    .human-to-hum.centered {
+        transform: translate3d(1em, 0, 0);
+        -webkit-transform: translate3d(1em, 0, 0);
+    }
+
     /* Opening panel text */
     .word-reveal .story-text-large {
         font-size: clamp(1.5rem, 8vw, 2.5rem);
@@ -7303,6 +7311,12 @@ button, a, input, textarea, select {
     /* Human to Hum - Small mobile */
     .human-to-hum {
         font-size: clamp(2.5rem, 16vw, 4.5rem);
+    }
+
+    /* Larger transform for very small screens */
+    .human-to-hum.centered {
+        transform: translate3d(1.2em, 0, 0);
+        -webkit-transform: translate3d(1.2em, 0, 0);
     }
 
     /* Opening panel */
