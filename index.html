@@ -3383,8 +3383,14 @@
                 window.cloudTransitionTriggered = true;
 
                 // LOCK SCROLLING immediately
+                // Save current scroll position for mobile
+                const scrollY = window.scrollY;
                 document.body.style.overflow = 'hidden';
                 document.documentElement.style.overflow = 'hidden';
+                // On mobile, also prevent position change
+                document.body.style.position = 'fixed';
+                document.body.style.top = `-${scrollY}px`;
+                document.body.style.width = '100%';
 
                 const humAn = panel.querySelectorAll('.hum-an');
                 const umlautDots = panel.querySelector('.umlaut-dots');
@@ -3419,7 +3425,12 @@
                             document.documentElement.setAttribute('data-theme', 'light');
 
                             // 3. Scroll to top (now showing reveal section)
-                            window.scrollTo(0, 0);
+                            // Use smooth behavior on mobile to prevent jarring jump
+                            if (window.innerWidth <= 768) {
+                                window.scrollTo({ top: 0, behavior: 'instant' });
+                            } else {
+                                window.scrollTo(0, 0);
+                            }
 
                             // 4. Start clouds parting (theater curtain style)
                             setTimeout(() => {
@@ -3434,8 +3445,14 @@
 
                                 // 5. UNLOCK SCROLLING after clouds have opened (not when they start)
                                 setTimeout(() => {
+                                    // Remove mobile scroll lock
+                                    document.body.style.position = '';
+                                    document.body.style.top = '';
+                                    document.body.style.width = '';
                                     document.body.style.overflow = '';
                                     document.documentElement.style.overflow = '';
+                                    // Ensure we're at top after unlocking
+                                    window.scrollTo(0, 0);
                                 }, 1200);
 
                                 // Hide clouds after parting animation finishes

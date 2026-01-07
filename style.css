@@ -3815,7 +3815,7 @@ button, a, input, textarea, select {
 /* Mobile - How It Works */
 @media (max-width: 900px) {
     .how-it-works-journey {
-        height: 900vh;
+        /* height: 900vh; */ /* Disabled - conflicts with proper mobile layout at 768px breakpoint */
     }
 
     .principle-panel {
@@ -7160,7 +7160,7 @@ button, a, input, textarea, select {
 
     /* How It Works Journey - Reduced scroll height on mobile */
     .how-it-works-journey {
-        height: 700vh;
+        /* height: 700vh; */ /* Disabled - use height: auto for proper mobile scroll */
     }
 
     .principle-panel {
