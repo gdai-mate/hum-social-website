@@ -507,6 +507,9 @@ a, button, .diff-card, .clickable, [onclick] {
 .hero-journey {
     height: auto;
     position: relative;
+    /* Enable scroll snapping - proximity allows natural scrolling */
+    /* shift panel has scroll-snap-stop: always to force stop there */
+    scroll-snap-type: y proximity;
 }
 
 .hero-panel {
@@ -742,6 +745,12 @@ a, button, .diff-card, .clickable, [onclick] {
 .panel-shift {
     background: #0a0a0a;
     color: #F5EDE3;
+}
+
+/* Shift panel - force browser to snap here even on fast scroll */
+.panel-shift {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
 }
 
 /* Panel 1: Opening - Word by word */
