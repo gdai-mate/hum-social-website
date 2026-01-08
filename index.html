@@ -3519,6 +3519,11 @@
                         if (options.isShiftPanel) {
                             // Lock scrolling before triggering
                             if (!window.cloudTransitionTriggered) {
+                                // FREEZE scroll position - cancels momentum instantly
+                                const currentScroll = window.scrollY;
+                                window.scrollTo(0, currentScroll);
+
+                                // Set overflow hidden as backup
                                 document.body.style.overflow = 'hidden';
                                 document.documentElement.style.overflow = 'hidden';
                             }
@@ -3554,6 +3559,11 @@
                             if (options.isShiftPanel && newLineIndex === lineCount - 1) {
                                 // Lock scrolling immediately to prevent over-scrolling
                                 if (!window.cloudTransitionTriggered) {
+                                    // FREEZE scroll position - cancels momentum instantly
+                                    const currentScroll = window.scrollY;
+                                    window.scrollTo(0, currentScroll);
+
+                                    // Set overflow hidden as backup
                                     document.body.style.overflow = 'hidden';
                                     document.documentElement.style.overflow = 'hidden';
                                 }
