@@ -17,19 +17,31 @@ body {
         padding-right: env(safe-area-inset-right);
     }
 
-    /* Extend dark background into safe areas during hero journey */
-    /* DISABLED - was covering shift panel when scroll locked */
-    /* body:not(.journey-complete)::before {
+    /* Dark safe areas during hero journey */
+    body:not(.journey-complete)::before {
         content: '';
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: #1a1a1a;
+        background: #0a0a0a; /* Match panel-shift background exactly */
         z-index: -1;
         pointer-events: none;
-    } */
+    }
+
+    /* Light safe areas after journey completes */
+    body.journey-complete::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #faf9f7; /* Light background */
+        z-index: -1;
+        pointer-events: none;
+    }
 
     /* Nav safe area spacing */
     .nav {
