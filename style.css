@@ -18,7 +18,8 @@ body {
     }
 
     /* Extend dark background into safe areas during hero journey */
-    body:not(.journey-complete)::before {
+    /* DISABLED - was covering shift panel when scroll locked */
+    /* body:not(.journey-complete)::before {
         content: '';
         position: fixed;
         top: 0;
@@ -28,7 +29,7 @@ body {
         background: #1a1a1a;
         z-index: -1;
         pointer-events: none;
-    }
+    } */
 
     /* Nav safe area spacing */
     .nav {
