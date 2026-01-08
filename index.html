@@ -866,22 +866,6 @@
                     <div class="skip-waitlist-cta">
                         <p>Don't want to wait? <a href="#support">Become a supporter</a> for guaranteed Day 1 access.</p>
                     </div>
-
-                    <!-- People you referred -->
-                    <div id="referred-section" class="referred-section" style="display: none;">
-                        <h3 class="referred-title">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/>
-                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                            </svg>
-                            People you referred
-                        </h3>
-                        <div id="referred-list" class="referred-list">
-                            <p class="referred-empty">Share your link to see your referrals here</p>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Leaderboard -->
@@ -2769,9 +2753,6 @@
             // Show total signup count (reveal after registration)
             loadTotalSignups();
 
-            // Load people this user has referred
-            loadReferredPeople(user.referral_code);
-
             // Only trigger celebration for NEW signups, not returning users
             if (isNewSignup) {
                 setTimeout(() => {
@@ -3073,61 +3054,6 @@
                 }
             } catch (error) {
                 console.error('Error calculating rank:', error);
-            }
-        }
-
-        // Load people referred by this user
-        async function loadReferredPeople(referralCode) {
-            const referredSection = document.getElementById('referred-section');
-            const referredList = document.getElementById('referred-list');
-
-            try {
-                const { data, error } = await supabaseClient
-                    .from('waitlist')
-                    .select('name, why, created_at')
-                    .eq('referred_by', referralCode)
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-
-                if (!data || data.length === 0) {
-                    referredSection.style.display = 'none';
-                    return;
-                }
-
-                referredSection.style.display = 'block';
-
-                // Format date helper
-                const formatDate = (dateStr) => {
-                    const date = new Date(dateStr);
-                    const now = new Date();
-                    const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-
-                    if (diffDays === 0) return 'Today';
-                    if (diffDays === 1) return 'Yesterday';
-                    if (diffDays < 7) return `${diffDays} days ago`;
-                    return date.toLocaleDateString('en-AU', { month: 'short', day: 'numeric' });
-                };
-
-                referredList.innerHTML = data.map(person => `
-                    <div class="referred-entry">
-                        <div class="referred-avatar">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <circle cx="12" cy="8" r="4"/>
-                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
-                            </svg>
-                        </div>
-                        <div class="referred-info">
-                            <p class="referred-name">${person.name}</p>
-                            ${person.why ? `<p class="referred-why">"${person.why}"</p>` : ''}
-                        </div>
-                        <div class="referred-date">${formatDate(person.created_at)}</div>
-                    </div>
-                `).join('');
-
-            } catch (err) {
-                console.error('Error loading referred people:', err);
-                referredSection.style.display = 'none';
             }
         }
 

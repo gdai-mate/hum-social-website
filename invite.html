@@ -291,11 +291,12 @@
                 }
             } catch (err) {
                 console.error('Error fetching user data:', err);
+                // Fallback to email prefix if fetch fails
+                document.getElementById('user-menu-name').textContent = user.email.split('@')[0];
             }
         })();
 
-        // Update user menu (will be updated with full name once fetched)
-        document.getElementById('user-menu-name').textContent = user.name || user.email.split('@')[0];
+        // User email set immediately, name will be set after fetch completes
         document.getElementById('user-menu-email').textContent = user.email;
 
         // User menu toggle
