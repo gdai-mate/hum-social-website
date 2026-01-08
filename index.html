@@ -3400,15 +3400,15 @@
                 const umlautDots = panel.querySelector('.umlaut-dots');
                 const humanToHum = panel.querySelector('.human-to-hum');
 
-                // Auto-trigger transformation after letting "human" be read
+                // LONGER PAUSE: Let user read all 4 lines before transformation
                 setTimeout(() => {
                     humAn.forEach(el => el.classList.add('fade-out'));
                     if (umlautDots) umlautDots.classList.add('visible');
                     // Slide hüm to center
                     if (humanToHum) humanToHum.classList.add('centered');
-                }, 900);
+                }, 2000); // Extended from 900ms to 2000ms
 
-                // Then auto-trigger clouds after transformation settles (longer pause to appreciate hüm)
+                // MUCH LONGER PAUSE: Let user appreciate the transformation before clouds
                 setTimeout(() => {
                     if (cloudTransition) {
                         cloudTransition.classList.add('active');
@@ -3468,7 +3468,7 @@
                             }, 100);
                         }, 1500);
                     }
-                }, 2800);
+                }, 5500); // Extended from 2800ms - gives 3.5s to see transformation
             }
 
             // ========================================
