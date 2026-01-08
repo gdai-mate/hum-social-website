@@ -3386,14 +3386,20 @@
                 document.body.style.overflow = 'hidden';
                 document.documentElement.style.overflow = 'hidden';
 
-                // Mobile-specific scroll lock (prevents bounce)
+                // Mobile: prevent scroll events (don't use position:fixed - shifts content off screen)
                 const isMobileDevice = window.innerWidth <= 768;
-                let scrollY = 0;
+                const preventScroll = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                };
+
                 if (isMobileDevice) {
-                    scrollY = window.scrollY;
-                    document.body.style.position = 'fixed';
-                    document.body.style.top = `-${scrollY}px`;
-                    document.body.style.width = '100%';
+                    // Block touch scroll and wheel events
+                    window.addEventListener('touchmove', preventScroll, { passive: false });
+                    window.addEventListener('wheel', preventScroll, { passive: false });
+                    // Store listeners for cleanup
+                    window._scrollLockListeners = { preventScroll };
                 }
 
                 const humAn = panel.querySelectorAll('.hum-an');
@@ -3444,11 +3450,11 @@
 
                                 // 5. UNLOCK SCROLLING after clouds have opened (not when they start)
                                 setTimeout(() => {
-                                    // Remove mobile scroll lock if applied
-                                    if (isMobileDevice) {
-                                        document.body.style.position = '';
-                                        document.body.style.top = '';
-                                        document.body.style.width = '';
+                                    // Remove mobile event listeners
+                                    if (isMobileDevice && window._scrollLockListeners) {
+                                        window.removeEventListener('touchmove', window._scrollLockListeners.preventScroll);
+                                        window.removeEventListener('wheel', window._scrollLockListeners.preventScroll);
+                                        delete window._scrollLockListeners;
                                     }
                                     document.body.style.overflow = '';
                                     document.documentElement.style.overflow = '';
