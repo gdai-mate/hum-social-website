@@ -3517,6 +3517,11 @@
                         });
                         // SHIFT PANEL: Trigger animation if leaving (even if fast scrolling)
                         if (options.isShiftPanel) {
+                            // Lock scrolling before triggering
+                            if (!window.cloudTransitionTriggered) {
+                                document.body.style.overflow = 'hidden';
+                                document.documentElement.style.overflow = 'hidden';
+                            }
                             triggerShiftPanelAnimation(panel);
                         }
                     },
@@ -3547,6 +3552,11 @@
 
                             // Shift panel: auto-animate when last line is reached
                             if (options.isShiftPanel && newLineIndex === lineCount - 1) {
+                                // Lock scrolling immediately to prevent over-scrolling
+                                if (!window.cloudTransitionTriggered) {
+                                    document.body.style.overflow = 'hidden';
+                                    document.documentElement.style.overflow = 'hidden';
+                                }
                                 triggerShiftPanelAnimation(panel);
                             }
                         }
@@ -3614,6 +3624,31 @@
 
             // Shift panel - 4 lines + human to hum transformation
             createPinnedSection(shiftPanel, { isShiftPanel: true, scrollPerLine: SCROLL_PER_LINE });
+
+            // ========================================
+            // FAIL-SAFE: IntersectionObserver for human→hüm animation
+            // Ensures animation triggers even if user scrolls too fast
+            // ========================================
+            const humanToHumElement = document.querySelector('.human-to-hum');
+            if (humanToHumElement) {
+                const humanToHumObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        // When human→hüm is 40% visible and animation hasn't triggered yet
+                        if (entry.isIntersecting && entry.intersectionRatio >= 0.4 && !window.cloudTransitionTriggered) {
+                            // Lock scrolling
+                            document.body.style.overflow = 'hidden';
+                            document.documentElement.style.overflow = 'hidden';
+                            // Trigger animation
+                            triggerShiftPanelAnimation(shiftPanel);
+                        }
+                    });
+                }, {
+                    threshold: [0.4, 0.5, 0.6, 0.7, 0.8], // Multiple thresholds to catch it
+                    rootMargin: '0px'
+                });
+
+                humanToHumObserver.observe(humanToHumElement);
+            }
 
             // ========================================
             // Principle Panels - Apple-Style Scroll Reveals
